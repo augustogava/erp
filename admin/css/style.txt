@@ -1,0 +1,66 @@
+	BODY, TABLE, TR, TD, SPAN, INPUT, SELECT { font-family:tahoma, verdana,Trebuchet MS, verdana; font-size:11px }
+
+	HR { height:10px; width:100%; border:0;	vertical-align : middle;}
+
+	.wordview {border-bottom: dotted 1px red}
+	h1, .h1style {   font-size : 18px;  font-weight:bold;  color:#386CB8; font-family:tahoma, verdana}
+	h2, .h2style {   font-size : 17px;  font-weight:bold;  color:#386CB8; font-family:tahoma, verdana}
+	h3, .h3style { font-size: 13px; color:#3A405F;}
+	h4, .h4style { font-size: 100%; color:#1E4C99}
+
+	a {text-decoration:none; color:#034AB7; font-size:11px}
+	a:hover {text-decoration:underline; color:red}
+	
+	.navigation_bar_link_on {font-size:14px; text-decoration:underline; font-weight:bold}
+	
+	.navigation_bar_link_off {font-size:14px}
+	.navigation_bar_link_off:hover {}
+
+	.box_title_on {color:white; font-weight:bold; padding-left:8px; background-repeat:repeat-y; background-color:#265CCC}
+	.box_title_off {color:#215DC6; font-weight:bold; padding-left:8px; background-repeat:repeat-y; background-color:#CAD6F8}
+
+	.mode_button {font-size:14px; color:blue; font-weight:bold}
+	
+	
+	SELECT {font-size:13px}
+	.textinput {font-family:verdana; border:inset 1px #a9a9a9; background-color:white; font-size:13px  }
+	.textareainput {border:solid 1px black; font-family:verdana;}
+	.form_note {font-size:10px; color:green;font-family:verdana; font-weight:normal; padding:2px 2px 2px 2px }
+	.form_description {font-family:verdana; }
+	
+	input.button150 {width:150px; height:24px}
+	input.button128 {width:128px; height:24px}
+	input.button64 {width:64px; height:24px}
+	input.buttonaction {width:64px; height:22px}
+	
+	input.minibutton64 { height:20px; width:64px; font-size:10px; }
+	input.minibutton48 { height:20px; width:48px; font-size:10px; }
+	input.minibutton100 { height:20px; width:100px; font-size:10px; }
+	
+	.linkwhite {text-decoration:none; color:white}
+	.linkwhite:hover {text-decoration:underline; color:fafafa}
+	
+	.linkfunction {font-family:courier new; text-decoration:none; color:#0000FF; font-weight:bold; font-size:14px}
+	.linkfunction:hover {font-family:courier new; text-decoration:underline; color:#000080; font-weight:bold; font-size:14px}
+	
+	.listtree_selected 	 { background-color: #316AC5; color:white; border:solid 1px #CE953A}
+	.listtree_unselected { xbackground-color: white; color:black; border:solid 1px white}
+
+	.tabletoolbar {border:solid 1px #D8D2BD; }
+
+	A.main_toolbar {color:#1A0042; font-size:10px}
+	A..main_toolbar:hover {color:blue}
+	
+	.login_info {font-size:10px}
+	.inset_box {background-color:white; border-top:solid 1px #7F9DB9; border-left:solid 1px #7F9DB9; border-right:solid 1px #7F9DB9; border-bottom:solid 1px #7F9DB9; }
+	.info_box { background-color:#FFFFE1; border:solid 1px #C3C39C;  }
+
+	.tableitem_unselected { background-color: white; border:solid 2px white; cursor:default; cursor:hand; }
+	.tableitem_selected { border:solid 2px #FFB52F; background-color: #EFF3FF; cursor:default; cursor:hand; }
+	.tableitem_over { border:solid 2px #FFB52F;	cursor:default; cursor:hand; }
+	.tableitem_out { border:solid 2px white; cursor:default; cursor:hand; }
+
+	.survey_question {font-size: 100%; color:#1E4C99; background-color:#ECE9D8; color:black }
+	.survey_option { border-bottom:dotted 1px #a9a9a9;   background-color:white; }
+
+

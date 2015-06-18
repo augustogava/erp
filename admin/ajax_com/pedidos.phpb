@@ -1,0 +1,927 @@
+<?
+
+header("Content-Type: text/html;  charset=ISO-8859-1",true);
+
+include "../includes/Main.class.php";
+
+// chama a classe principal
+
+$Main = new Main();
+
+$Main->Seguranca->verificaLogado();
+
+$Main->AdicionaPedidos();
+
+
+
+if($_GET["acao"] == "listar"){
+
+	$pedidos = $Main->Pedidos->pegaPedidos($_GET["clientes"], $_GET["status"], "", $_GET["limite"], $_GET["dataIni"], $_GET["dataFim"], $_GET["codigo"], $_GET["ordem"], $_GET["tipoOrdem"], $_GET["dataEnvioIni"], $_GET["dataEnvioFim"]);
+
+	if(empty($_GET["limite"]) || $_GET["limite"] < 0){
+		$limite = "0";
+	}else{
+		$limite = $_GET["limite"]	;
+	}
+
+		
+
+	if(!empty($_GET["tipoOrdem"]) && $_GET["tipoOrdem"] == "asc")
+
+		$tipoOrdem = "desc";
+
+	else
+
+		$tipoOrdem = "asc";
+
+?>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+
+	<tbody>
+
+		<tr class="titulo">
+
+			<td width="96%" class="ColunaInfo" colspan="11">Exibindo de <?=$limite?> a <?=($limite+30)?></td>
+			<td width="4%" align="center"><a href="#" onClick="main.openWindow('exportarPedidos.php?clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=<?=$_GET["ordem"]?>&tipoOrdem=<?=$tipoOrdem?>', '300', '150')"><img src="layout/incones/exportar.gif" border="0" width="36" alt="Exportar"></a></td>
+		</tr>
+
+		<tr class="titulo">
+
+			<td width="45" onclick="doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.codigo&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">C�digo</a></td>
+
+			<td width="42" onclick="doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=clientes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Clientes</a></td>
+
+			<td width="42" onclick="doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=representantes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Representante</a></td>
+
+			<td width="42" onclick="doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.data_cad&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Data</a></td>
+
+			<td width="42" onclick="doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=status_pedidos.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');" ><a href="#">Status</a></td>
+
+			<td width="4%">&nbsp;</td>
+
+			<td width="4%">&nbsp;</td>
+
+			<td width="4%">&nbsp;</td>
+
+			<td width="4%">&nbsp;</td>
+
+			<td width="4%">
+
+				<a href="javascript:doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite-30)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=<?=$_GET["ordem"]?>&tipoOrdem=<?=$_GET["tipoOrdem"]?>',1,'SaidaMain');" href="#">
+
+					<img border="0" alt="Pr�ximo" src="layout/incones/bulletgreenleft.gif"/>
+
+				</a>
+
+			</td>
+
+			<td width="4%" colspan="2">
+
+				<?
+
+				
+				if($Main->Pedidos->pegaQtditens($_GET["clientes"], $_GET["status"], $_GET["dataIni"], $_GET["dataFim"], $_GET["codigo"], $_GET["ordem"], $_GET["tipoOrdem"], $_GET["dataEnvioIni"], $_GET["dataEnvioFim"]) > ($limite+30) ){
+				?>
+                    <a href="javascript:doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite+30)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=<?=$_GET["ordem"]?>&tipoOrdem=<?=$_GET["tipoOrdem"]?>',1,'SaidaMain');" href="#">
+                        <img border="0" alt="Pr�ximo" src="layout/incones/bulletgreen.gif"/>
+                    </a>
+                    
+                <? }else{ ?>
+					 <img border="0" alt="Pr�ximo" src="layout/incones/bulletgreen.gif"/>
+				 <? } ?>
+
+			</td>
+
+		</tr>
+
+		<?
+
+			for($j=0; $j<count($pedidos); $j++){
+
+				if(($j%2) == 0){
+
+					$linha = "linha";
+
+				}else{
+
+					$linha = "linhaMu";
+
+				}
+
+		?>
+
+		<tr id="linhaDataGrid_<?=$j?>" class="<?=$linha?>" width="60%">
+
+			<td width="13%" class="ColunaInfo">
+
+				<?=$pedidos[$j]->getCodigo()?>
+
+			</td>
+
+			<td width="42%"  id="linhaDataGrid_<?=$j?>_0">
+
+				<?=$pedidos[$j]->getClienteNome()?>
+
+			</td>
+
+			<td width="30%" id="linhaDataGrid_<?=$j?>_1"/>
+
+				<?=($pedidos[$j]->getRepresentantesNome()) ? ($pedidos[$j]->getRepresentantesNome()) : "Sem Representante";?>
+
+			</td>
+
+			<td width="42%"  id="linhaDataGrid_<?=$j?>_0">
+
+				<?=$pedidos[$j]->getDataAberta()?>
+
+			</td>
+
+			<td width="20%" id="linhaDataGrid_<?=$j?>_1"/>
+
+				<?=$pedidos[$j]->getStatusNome()?>
+
+			</td>
+
+			<td width="4%" align="center"> 
+
+				<a href="javascript:fecharPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
+
+					<img border="0" src="layout/incones/fechar_22.png" alt="Fechar Pedido" title="Fechar Pedido"/>
+
+				</a>
+
+			</td>
+
+			<td width="4%" align="center"> 
+
+				<a href="javascript:enviarPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
+
+					<img border="0" src="layout/incones/enviarPedido.png" alt="Impresso" title="Enviar"/>
+
+				</a>
+
+			</td>
+
+			<td width="4%" align="center"> 
+
+				<a href="javascript:impressaoPedido(<?=$pedidos[$j]->getId()?>)">
+
+					<img border="0" src="layout/incones/relatorio.png" alt="Impress�o" title="Impress�o"/>
+
+				</a>
+
+			</td>
+
+			<td width="4%" align="center"> 
+
+				<a href="javascript:enviarEmailPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getClienteId()?>)">
+
+					<img border="0" src="layout/incones/email2.png" alt="Enviar Por Email" title="Enviar Por Email"/>
+
+				</a>
+
+			</td>
+
+			<td width="4%" align="center"> 
+
+				<a href="javascript:doAjaxSemRetorno('../ajax_com/pedidos.php?acao=editar&idPedido=<?=$pedidos[$j]->getId()?>',1,'addPop');addPop_open(550);">
+
+					<img border="0" src="layout/incones/edit.png"/>
+
+				</a>
+
+			</td>
+
+			<td  width="4%" align="center" colspan="2"> 
+
+				<a onclick="if(confirm('Deseja Excluir?')){ excluirPedido(<?=$pedidos[$j]->getId()?>);  }" href="#">
+
+					<img border="0" src="layout/incones/button_cancel.png"/>
+
+				</a>
+
+			</td>
+
+		</tr>
+
+		<?
+
+		}
+
+		?>
+
+		
+
+	</tbody>
+
+</table>
+
+<? 
+
+}else if($_GET["acao"] == "adicionar" || $_GET["acao"] == "editar"){ 
+
+	//Adiciona na tabela produtos para ter chave prim�ria para poder adicionar os itens
+
+	if($_GET["acao"] == "adicionar"){
+
+		$idPedido = $Main->Pedidos->adicionarPedido();
+
+	}else if($_GET["acao"] == "editar"){
+
+		$pedidos = $Main->Pedidos->pegaPedidos("", "", $_GET["idPedido"]);
+		$idPedido = $_GET["idPedido"];
+	}
+
+	$clientes = $Main->Pedidos->pegaClientes();
+
+	$status = $Main->Pedidos->pegaListaStatus();
+
+	$formaPagamento = $Main->Pedidos->pegaFormaPagamento();
+
+	$tipoentrega = $Main->Pedidos->pegaTipoEntrega();
+
+	$representantes = $Main->Pedidos->pegaRepresentantes();
+
+	
+
+?>
+
+<div style="border: 1px solid rgb(235, 240, 253);" id="Saida">
+
+	<form id="edit" name="edit" action="">
+
+		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
+
+			<tbody>
+
+				<tr>
+
+					<td align="left" width="40%">
+
+						<h2>Adicionar Cadastro</h2>
+
+					</td>
+
+					<td align="right" width="90%">
+
+						<h3> <a onclick="addPop_close();" href="#"> X </a> </h3>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="center" style="color: red;" id="erro" colspan="3">�</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right"><b>C�digo:</b></td>
+
+					<td align="left" id="td_id_menus">
+
+						<input onkeypress="return false;" type="text" name="codigo" id="codigo"  value="<?if($pedidos[0] && $pedidos[0]->getCodigo() ) print $pedidos[0]->getCodigo(); else print $Main->Pedidos->pegaCodigoNovo(); ?>"  />
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right"><b>Cliente:</b></td>
+
+					<td align="left" id="td_id_menus">
+
+						
+
+						<select id="clientes" name="clientes" title="Clientes" class="erroForm" onChange="pegaRepresentantePedido(this.value); pegaDadosClientePedido(this.value)">
+
+							<option value="">Selecione</option>
+
+							<?
+
+							for($j=0; $j<count($clientes); $j++){
+
+								$selected = ($pedidos[0] && $pedidos[0]->getClienteId() == $clientes[$j]->getId()) ? "selected" : "";
+
+							?>					
+
+							<option value="<?=$clientes[$j]->getId()?>" <?=$selected?>><?=$clientes[$j]->getNome()?></option>
+
+							<?
+
+							}
+
+							?>
+
+						</select> 
+
+						
+
+						<a onclick="javascript:abrirPopVisu('clientes', 'clientes')" href="#"><img border="0" src="layout/incones/visualizar.png"/></a>
+
+						<a onclick="javascript:window.open('buscapopup.php?campoatual=clientes&amp;tabela=clientes', 'Busca', 'height = 300, width = 250, location = no, toolbar = no, menubar=no')" href="#"><img border="0" src="layout/incones/find.png"/></a> 
+
+						<a onclick="javascript:window.open('addpopup.php?campoatual=clientes&amp;tabela=clientes', 'Busca', 'height = 400, width = 550, location = no, toolbar = no')" href="#"><img border="0" src="layout/incones/add16.png"/></a>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="center" id="dadosClientes" colspan="2"></td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right"><b>Representante:</b></td>
+
+					<td align="left" id="td_id_menus">
+
+						
+
+						<select id="representantes" name="representantes" title="Representantes">
+
+							<option value="">Selecione</option>
+
+							<?
+
+							for($j=0; $j<count($representantes); $j++){
+
+								$selected = ($pedidos[0] && $pedidos[0]->getRepresentantesId() == $representantes[$j]->getId()) ? "selected" : "";
+
+							?>					
+
+							<option value="<?=$representantes[$j]->getId()?>" <?=$selected?>><?=$representantes[$j]->getNome()?></option>
+
+							<?
+
+							}
+
+							?>
+
+						</select> 
+
+						
+
+						<a onclick="javascript:abrirPopVisu('representantes', 'representantes')" href="#"><img border="0" src="layout/incones/visualizar.png"/></a>
+
+						<a onclick="javascript:window.open('buscapopup.php?campoatual=representantes&amp;tabela=representantes', 'Busca', 'height = 300, width = 250, location = no, toolbar = no, menubar=no')" href="#"><img border="0" src="layout/incones/find.png"/></a> 
+
+						<a onclick="javascript:window.open('addpopup.php?campoatual=representantes&amp;tabela=representantes', 'Busca', 'height = 400, width = 550, location = no, toolbar = no')" href="#"><img border="0" src="layout/incones/add16.png"/></a>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Forma Pagamento:</b>
+
+					</td>
+
+					<td align="left">
+
+						<select id="formapagamento" name="formapagamento" title="formapagamento" class="erroForm">
+
+							<option value="">Selecione</option>
+
+							<?
+
+							for($j=0; $j<count($formaPagamento); $j++){
+
+								$selected = ($pedidos[0] && $pedidos[0]->getFormaPagamento() == $formaPagamento[$j]->getId()) ? "selected" : "";
+
+							?>					
+
+							<option value="<?=$formaPagamento[$j]->getId()?>" <?=$selected?>><?=$formaPagamento[$j]->getNome()?></option>
+
+							<?
+
+							}
+
+							?>
+
+						</select>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Obs:</b>
+
+					</td>
+
+					<td align="left">
+
+						<input type="text" name="obs" id="obs"  value="<?if($pedidos[0] && $pedidos[0]->getObs() ) print $pedidos[0]->getObs(); ?>"  />
+
+					</td>
+
+				</tr>
+
+				
+
+				<tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Tipo Entrega:</b>
+
+					</td>
+
+					<td align="left">
+
+						<select id="tipoentrega" name="tipoentrega" title="tipoentrega">
+
+							<option value="">Selecione</option>
+
+							<?
+
+							for($j=0; $j<count($tipoentrega); $j++){
+
+								$selected = ($pedidos[0] && $pedidos[0]->getTipoEntregaId() == $tipoentrega[$j]->getId()) ? "selected" : "";
+
+							?>					
+
+							<option value="<?=$tipoentrega[$j]->getId()?>" <?=$selected?>><?=$tipoentrega[$j]->getNome()?></option>
+
+							<?
+
+							}
+
+							?>
+
+						</select>
+
+					</td>
+
+				</tr>
+                
+                <tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Valor Entrega:</b>
+
+					</td>
+
+					<td align="left">
+
+						<input type="text" name="valorEntrega" id="valorEntrega" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getValorEntrega() ) print $pedidos[0]->getValorEntrega(); ?>"  />
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Imposto:</b>
+
+					</td>
+
+					<td align="left">
+
+						<input type="text" name="imposto" id="imposto" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getImposto() ) print $pedidos[0]->getImposto(); ?>"  />
+
+					</td>
+
+				</tr>
+
+                                <tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Comiss�o:</b>
+
+					</td>
+
+					<td align="left">
+
+						<input type="text" name="comissao" id="comissao" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getComissao() ) print $pedidos[0]->getComissao(); ?>"  /> %
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="right" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);">
+
+						<b>Status:</b>
+
+					</td>
+
+					<td align="left">
+
+						<select id="status" name="status" title="Status" >
+
+							<option value="">Selecione</option>
+
+							<?
+
+							for($j=0; $j<count($status); $j++){
+
+
+
+								$selected = (($pedidos[0] && $pedidos[0]->getStatusId() == $status[$j]->getId()) || (!$pedidos[0] && $status[$j]->getId() == 1)) ? "selected" : "";
+
+							?>					
+
+							<option value="<?=$status[$j]->getId()?>" <?=$selected?>><?=$status[$j]->getNome()?></option>
+
+							<?
+
+							}
+
+							?>
+
+						</select>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="left" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);" colspan="2">
+
+						<table width="100%" cellspacing="0" cellpadding="0" border="1" id="bodyID">
+
+						</table>
+
+					</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="center" colspan="3">�</td>
+
+				</tr>
+
+				<tr>
+
+					<td align="center" colspan="3">
+
+						<input type="button" onclick="salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>)" value="Salvar" /> 
+
+						<input type="button" onclick="addPop_close();" value="Cancelar"/>
+
+					</td>
+
+				</tr>
+
+			</tbody>
+
+		</table>
+
+	</form>
+
+	<script>
+
+	doAjaxSemRetorno('../ajax_com/pedidos.php?acao=listarItens&idPedido=<?=$idPedido?>',1,'bodyID');
+
+	<? if($pedidos[0] && $pedidos[0]->getClienteId()){ ?>
+
+		pegaDadosClientePedido(<?=$pedidos[0]->getClienteId()?>);
+
+	<? } ?>
+
+	document.onkeypress = function (evt){
+
+		if(main.procuraTecla(evt,13)){
+
+			if(confirm('Deseja salvar?')){ salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>); }
+
+		}
+
+	}
+
+	</script>
+</div>
+
+<? 
+
+}else if($_GET["acao"] == "listarItens"){
+
+	$dadosPedido = $Main->Pedidos->pegaPedidos("", "", $_GET["idPedido"]);
+
+	$itens = $Main->Pedidos->pegaItensPedido($_GET["idPedido"]);
+
+	//print_r($itens);
+
+	$produtos = $Main->Pedidos->pegaProduto();
+
+?>
+
+	<tr class="titulo">
+
+		<td width="7%" class="ColunaInfo" style="text-align:left;">Qtd</td>
+
+		<td width="40%" class="ColunaInfo" style="text-align:left;">Produto</td>
+
+		<td width="25%" class="ColunaInfo" style="text-align:left;">Comiss�o</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;">Valor</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;">Total</td>
+
+		<td width="5%" class="ColunaInfo" style="text-align:left;">&nbsp;</td>
+
+		<td width="5%" class="ColunaInfo" style="text-align:left;">&nbsp;</td>	
+
+	</tr>
+
+	<?
+
+	for($i=0; $i<count($itens); $i++){
+
+		$produtoItem = $itens[$i]->getProdutos();
+
+		if($produtoItem[0]){
+
+			
+
+			$codigo = $produtoItem[0]->getCodigo();
+
+			
+
+			$precos = "<select id=\"preco".$i."\" name=\"preco[".$itens[$i]->getId()."]\" title=\"preco\" onChange=\"salvaCampo(this.title, this.value, ".$itens[$i]->getId().");calculaPrecoPedido(".$i.")\">";
+
+			$precos .= "<option value=\"0\" selected>Selecione</option> ";
+
+			
+
+			$sel = "";
+
+			if($produtoItem[0]->getPreco1() == $itens[$i]->getPreco())
+
+				$sel = "selected";
+
+				
+
+			$precos .= "<option value=\"".$produtoItem[0]->getPreco1()."\" ".$sel.">".$produtoItem[0]->getPreco1()."</option>";
+
+			
+
+			$sel = "";
+
+			if($produtoItem[0]->getPreco2() == $itens[$i]->getPreco())
+
+				$sel = "selected";
+
+				
+
+			$precos .= "<option value=\"".$produtoItem[0]->getPreco2()."\" ".$sel.">".$produtoItem[0]->getPreco2()."</option>";
+
+			
+
+			$sel = "";
+
+			if($produtoItem[0]->getPreco3() == $itens[$i]->getPreco())
+
+				$sel = "selected";
+
+				
+
+			$precos .= "<option value=\"".$produtoItem[0]->getPreco3()."\" ".$sel.">".$produtoItem[0]->getPreco3()."</option>";
+
+		
+
+			$sel = "";
+
+			if($produtoItem[0]->getPreco4() == $itens[$i]->getPreco())
+
+				$sel = "selected";
+
+				
+
+			$precos .= "<option value=\"".$produtoItem[0]->getPreco4()."\" ".$sel.">".$produtoItem[0]->getPreco4()."</option>";
+
+			$precos .= "</select>";
+
+		}else{
+
+			$codigo = "";
+
+			$precos = "<select id=\"preco".$i."\" name=\"preco[".$itens[$i]->getId()."]\" title=\"preco\" onChange=\"salvaCampo(this.title, this.value, ".$itens[$i]->getId().");calculaPrecoPedido(".$i.")\">";
+
+			$precos .= "<option value=\"0\" selected>Selecione</option> ";
+
+			$precos .= "</select>";
+
+		}
+
+		
+
+		$qtdTotal += $itens[$i]->getQtd();
+
+		$precoTotal += $itens[$i]->getTotal();
+
+		
+
+	?>
+
+	<tr class="linha">
+
+		<td width="7%" class="ColunaInfo" style="text-align:left;">
+
+			<input type="text" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+
+		</td>
+
+		<td width="40%" class="ColunaInfo" style="text-align:left;">
+
+			<select id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
+
+				<option value="0" selected>Selecione</option>
+
+				<?
+
+				for($j=0; $j<count($produtos); $j++){
+
+					$select = (($produtoItem[0] && $produtoItem[0]->getId()) && ($produtoItem[0]->getId()  == $produtos[$j]->getId()) ) ? "selected" : "";
+
+				?>					
+
+				<option value="<?=$produtos[$j]->getId()?>" <?=$select?> ><?=$produtos[$j]->getCodigo()?> - <?=$produtos[$j]->getNome()?></option>
+
+				<?
+
+				}
+
+				?>
+
+			</select>
+
+		</td>
+
+		<td width="25%" class="ColunaInfo" style="text-align:left;">
+
+			<input type="radio" name="tipoComissao<?=$i?>" id="tipoComissao1<?=$i?>" value="1" <? if($itens[$i]->getTipoComissao() == 1) print "checked"; ?> title="tipo_comissao" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);"> %
+
+			<input type="radio" name="tipoComissao<?=$i?>" id="tipoComissao2<?=$i?>" value="2" <? if($itens[$i]->getTipoComissao() == 2) print "checked"; ?> title="tipo_comissao" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);"> Valor
+
+		
+
+			<input type="text" size="2" id="valorComissao<?=$i?>" name="valorComissao[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getValorComissao()?>" title="comissao_valor" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);" onkeypress="mascaras.Formata(this,20,event,2);">
+
+			
+
+		</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;" id="precosProduto_<?=$i?>">
+
+			<input type="text" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+
+		</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;" id ="campoTotal_<?=$i?>">
+
+			<?=$itens[$i]->getTotal();?>
+
+		</td>
+
+		<td width="5%" class="ColunaInfo">
+
+			&nbsp;<? if($i == count($itens)-1){ ?><a onclick="javascript:adicionarItemPedido(<?=$idPedido?>, <?=$i-1?>)" href="#"><img src="layout/incones/add16.png" border="0" alt="Adicioar Item" title="Adicionar Item"></a><? } ?>
+
+		</td>
+
+		<td width="5%" class="ColunaInfo">
+
+			<a href="javascript:excluirItemPedido(<?=$itens[$i]->getId()?>, <?=$_GET["idPedido"]?>);"><img src="layout/incones/button_cancel.png" border="0"></a>
+
+		</td>
+
+	</tr>
+
+<?
+
+	}
+
+?>
+
+	<tr class="linha">
+
+		<td width="7%" class="ColunaInfo" style="text-align:left;" id = "qtdTotalItens">
+
+			<?=$qtdTotal?>
+
+		</td>
+
+		<td width="40%" class="ColunaInfo" style="text-align:left;">&nbsp;
+
+			<input type="hidden" name="totalItens" id="totalItens" value="<?=count($itens)?>">
+
+		</td>
+
+		<td width="25%" class="ColunaInfo" style="text-align:left;">&nbsp;
+
+			
+
+		</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;" >&nbsp;
+
+			
+
+		</td>
+
+		<td width="10%" class="ColunaInfo" style="text-align:left;" id = "precoTotalItens">
+
+			<?=$precoTotal?>
+
+		</td>
+
+		<td width="5%" class="ColunaInfo">&nbsp;
+
+			
+
+		</td>
+
+		<td width="5%" class="ColunaInfo">&nbsp;
+
+			
+
+		</td>
+
+	</tr>
+
+<?
+
+	
+
+}else if($_GET["acao"] == "selecionaProduto"){
+
+	$produtos = $Main->Pedidos->pegaProduto($_GET["idProduto"]);
+
+	print_r($produtos);
+
+	if($produtos){
+
+		$codigo = $produtos[0]->getCodigo();
+
+		
+
+		$precos = "<select id=\"preco".$indice."\" name=\"preco[".$_GET["idItem"]."]\" title=\"preco\" onChange=\"salvaCampo(this.title, this.value, ".$_GET["idItem"].");calculaPrecoPedido(".$indice.")\">";
+
+		$precos .= "<option value=\"0\" selected>Selecione</option> ";
+
+		$precos .= "<option value=\"".$produtos[0]->getPreco1()."\">".$produtos[0]->getPreco1()."</option>";
+
+		$precos .= "<option value=\"".$produtos[0]->getPreco2()."\">".$produtos[0]->getPreco2()."</option>";
+
+		$precos .= "<option value=\"".$produtos[0]->getPreco3()."\">".$produtos[0]->getPreco3()."</option>";
+
+		$precos .= "<option value=\"".$produtos[0]->getPreco4()."\">".$produtos[0]->getPreco4()."</option>";
+
+		$precos .= "</select>";
+
+?>
+
+		<script>
+
+			//$('precosProduto_<?=$_GET["indice"]?>').innerHTML = '<?=$precos?>';
+
+		</script>
+
+<? 
+
+	}else{
+
+		$precos = "<select id=\"preco".$indice."\" name=\"preco[".$_GET["idItem"]."]\" onChange=\"calculaPrecoPedido(".$indice.")\">";
+
+		$precos .= "<option value=\"0\" selected>Selecione</option> ";
+
+		$precos .= "</select>";
+
+?>
+
+		<script>
+
+			//$('precosProduto_<?=$_GET["indice"]?>').innerHTML = '<?=$precos?>';
+
+		</script>
+
+<?
+
+	}
+
+} 
+
+?>

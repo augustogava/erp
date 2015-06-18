@@ -1,0 +1,12 @@
+<ul id="QAMenu" style='display:none'>
+	      <li class='context-class-div-hotspot'>Message Type
+		  	<ul>
+				<li onclick="edit_click()">Editar</li>
+				<li onclick="delete_item()">Remover</li>
+				<li></li>
+				<li onclick="new_answer()">Nova resposta</li>
+				<li onclick="new_folder()">Nova pasta</li>
+				</li>
+			</ul>
+		  </li>
+		 </ul>
