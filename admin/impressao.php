@@ -5,7 +5,6 @@ $Main = new Main();
 $Main->Seguranca->verificaLogado();
 
 if($_GET["cadastro"] == "pedido"){
-	$Main->AdicionaPedidos();
 	$html = $Main->Pedidos->montaHTMLRelatorio($_GET["id"]);
 
 }else if($_GET["cadastro"] == "compra"){

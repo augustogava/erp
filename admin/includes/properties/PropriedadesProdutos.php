@@ -6,7 +6,7 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/1/08
 #  
-#  Classe métodos segurança
+#  Classe mï¿½todos seguranï¿½a
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
@@ -26,6 +26,7 @@ class PropriedadesProdutos  {
 	var $preco2;
 	var $preco3;
 	var $preco4;
+	var $estoqueAtual;
 	
 	public function getId(){
 		return $this->id;
@@ -106,5 +107,14 @@ class PropriedadesProdutos  {
 	public function setPreco4($preco4){
 		$this->preco4 = $preco4;
 	}
+	
+	public function getEstoqueAtual(){
+		return $this->estoqueAtual;
+	}
+	
+	public function setEstoqueAtual($estoqueAtual){
+		$this->estoqueAtual = $estoqueAtual;
+	}
+	
 }
 ?>

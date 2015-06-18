@@ -8,10 +8,10 @@ $Main->AdicionaFluxo();
 $tipoDespesas = $Main->Fluxo->pegaTiposDespesas($_GET["filtro1"], $_GET["filtro2"]);
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
 <title>MultPoint</title>
 <style>
 * {margin:0; padding:0; border: 0;}
@@ -56,6 +56,16 @@ body {
 	font-size: 10px;
 }
 
+.logo {
+  height: 60px;
+  background: url(layout/logo/logo.png);
+  background-size: 220px;
+  background-position: 22px;
+  background-repeat: no-repeat;
+  width: 80px;
+  margin-top: 5px;
+}
+
 </style>
 </head>
 <body>
@@ -64,17 +74,17 @@ body {
 	font-size: 95%;
 	border-bottom: 1px solid #dcdcdc;
 	position:relative;
-	background: #B5CAFF url(http://www.multpoint.ind.br/admin/layout/back_top.gif) repeat-y top left;">
+	background: #006B9C;">
 	<div style="margin: 0 auto;
 							padding: 0px 0 0 20px;
 							text-align: left;">
 		<table border="0" width="100%">
 			 <tr>
 			 	<td width="10%" height="80">
-			 		<a href="http://www.multpoint.ind.br/"><img src="http://www.multpoint.ind.br/layout/logo/logo_MultPointpeq.gif" alt="MultPoint"></a>
+			 		<div class="logo"></div>
 			 	</td>
 			 	<td width="90%">
-			 		<p align="center" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: rgb(56, 61, 68);">Relat�rio Despesas</p>
+			 		<p align="center" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: white;">Relatório Despesas</p>
 			 	</td>
 			</tr>
 	     </table>

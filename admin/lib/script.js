@@ -311,7 +311,7 @@ function excluirPedido(id){
 
 	refreshPedido();
 
-	alert('Exclu?do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -323,7 +323,7 @@ function excluirItemPedido(id, idPedido){
 
 		doAjaxSemRetorno('ajax_com/pedidos.php?acao=listarItens&idPedido=' + idPedido,1, 'bodyID');
 
-		alert('Exclu?do com sucesso!');
+		alert('Excluído com sucesso!');
 
 	}
 
@@ -512,7 +512,7 @@ function verificaPreco(){
 
 		if(precoIten == '0,00'){
 
-			if(confirm('Este produto ? garantia?')){
+			if(confirm('Este produto é garantia?')){
 
 				return true;
 
@@ -544,7 +544,7 @@ function verificaPrecoEspecifico(valorItem){
 
 		if(precoIten == '0,00'){
 
-			if(confirm('Este produto ? garantia?')){
+			if(confirm('Este produto é garantia?')){
 
 				return true;
 
@@ -570,7 +570,7 @@ function verificaPrecoEspecifico(valorItem){
 
 function fecharPedido(idPedido, status){
 
-	if(confirm('Deseja realmente fechar pedido?\nOpera??o n?o pode ser cancelada posteriormente!')){
+	if(confirm('Deseja realmente enviar para separação?\nOperação não pode ser cancelada posteriormente!')){
 
 		if(status != 5){
 
@@ -579,7 +579,6 @@ function fecharPedido(idPedido, status){
 				if(status == 1){
 
 					doAjaxSemRetorno('ajax_com/pedidos_acao.php?acao=fecharPedido&id=' + idPedido, 1 , '');
-
 					doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar',1,'SaidaMain');
 
 				}else{
@@ -590,13 +589,13 @@ function fecharPedido(idPedido, status){
 
 			}else{
 
-				alert('Pedido j? fechado!');
+				alert('Pedido já separando!');
 
 			}
 
 		}else{
 
-			alert('Pedido j? enviado!');
+			alert('Pedido já enviado!');
 
 		}
 
@@ -608,25 +607,24 @@ function fecharPedido(idPedido, status){
 
 function enviarPedido(idPedido, status){
 
-	if(confirm('Deseja realmente mudar status do pedido para enviado?\nOpera??o n?o pode ser cancelada posteriormente!')){
+	if(confirm('Deseja realmente mudar status do pedido para enviado?\nOperação não pode ser cancelada posteriormente!')){
 
 		if(status != 5){
 
-			if(status == 4){
+			if(status == 6){
 
 				doAjaxSemRetorno('ajax_com/pedidos_acao.php?acao=enviarPedido&id=' + idPedido, 1 , '');
-
 				doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar',1,'SaidaMain');
 
 			}else{
 
-				alert('Status do pedido deve estar Fechado para poder ser alterado para enviado.');
+				alert('Status do pedido deve estar Separado para poder ser alterado para enviado.\nFeche todas separações na tela de Ordem de Separação!');
 
 			}
 
 		}else{
 
-			alert('Pedido j? enviado!');
+			alert('Pedido já enviado!');
 
 		}
 
@@ -762,7 +760,7 @@ function excluirEstoque(id){
 
 	refreshEstoque();
 
-	alert('Exclu?do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -796,7 +794,7 @@ function salvaOrdemProducao(){
 
 		if(formm.verificaF(this.id,'erroForm','erro')){
 
-			doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=salvar&descricao=' + $('descricao').value + '&produto=' + $('produto').value + '&id=' + $('id').value + '&pedido=' + $('pedido').value + '&qtd=' + $('qtd').value  + '&status=' + $('status').value + '&data=' + $('data').value, 1 , '');
+			doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=salvar&descricao=' + $('descricao').value + '&produto=' + $('produto').value + '&id=' + $('id').value + '&pedido=' + $('pedido').value + '&qtd=' + $('qtd').value  + '&data=' + $('data').value, 1 , '');
 
 			
 
@@ -838,19 +836,19 @@ function fecharOrdemProducao(id, status){
 			doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=produzirOrdem&id=' + id, 1 , '');
 			refreshOrdemProducao();
 		}else if(status == 4){
-			if(confirm('Deseja realmente fechar Ordem?\nIr? ser dada entrada no estoque\nOpera??o n?o pode ser cancelada posteriormente!')){
+			if(confirm('Deseja realmente fechar Ordem?\nIr? ser dada entrada no estoque\nOperação não pode ser cancelada posteriormente!')){
 				doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=fecharOrdem&id=' + id, 1 , '');
 				refreshOrdemProducao();
 			}
 		}else{
 
-			alert('Status da ordem de produ??o deve estar A fabricar para poder ser fechado.');
+			alert('Status da ordem de produção deve estar A fabricar para poder ser fechado.');
 
 		}
 
 	}else{
 
-		alert('Ordem j? fechado!');
+		alert('Ordem já fechado!');
 
 	}
 
@@ -884,7 +882,7 @@ function salvaOrdemSeparacao(){
 
 		if(formm.verificaF(this.id,'erroForm','erro')){
 
-			doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=salvar&descricao=' + $('descricao').value + '&produto=' + $('produto').value + '&id=' + $('id').value + '&pedido=' + $('pedido').value + '&qtd=' + $('qtd').value  + '&status=' + $('status').value + '&data=' + $('data').value, 1 , '');
+			doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=salvar&descricao=' + $('descricao').value + '&produto=' + $('produto').value + '&id=' + $('id').value + '&pedido=' + $('pedido').value + '&qtd=' + $('qtd').value  + '&data=' + $('data').value, 1 , '');
 
 			refreshOrdemSeparacao();
 
@@ -921,7 +919,7 @@ function fecharOrdemSeparacao(id, status){
 	if(status != 2){
 
 		if(status == 1){
-			if(confirm('Deseja realmente fechar?\nIr? ser dada saida no estoque')){
+			if(confirm('Deseja realmente fechar?\nIrá ser dada saida no estoque')){
 				doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=fecharOrdem&id=' + id, 1 , '');
 				refreshOrdemSeparacao();
 			}
@@ -986,7 +984,7 @@ function excluirFluxo(id){
 
 	refreshFluxo();
 
-	alert('Exclu?do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -1042,13 +1040,13 @@ function excluirFluxoBanco(id, idBanco){
 
 	refreshFluxoBancoFluxo(idBanco);
 
-	alert('Exclu?do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
 function pagarBanco(id, idBanco){
     if(confirm('Deseja Pagar?')){
-        var valorP = prompt('Adicionar alguma informa��o adicional ?');
+        var valorP = prompt('Adicionar alguma informação adicional ?');
         doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=pagar&id=' + id + '&info=' + valorP, 1, '');
         refreshFluxoBancoFluxo(idBanco);
     }
@@ -1166,7 +1164,7 @@ function excluirComposicao(id, idpai){
 
 	refreshComposicao(idpai);
 
-	alert('Exclu?do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -1194,7 +1192,7 @@ function excluirCompraCotacao(id){
 
 	refreshCotacao();
 
-	alert('Exclu�do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -1204,7 +1202,7 @@ function excluirCompraCompra(id){
 
 	refreshCompra();
 
-	alert('Exclu�do com sucesso!');
+	alert('Excluído com sucesso!');
 
 }
 
@@ -1216,7 +1214,7 @@ function excluirItemCompra(id, idCompra){
 
 		doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra=' + idCompra,1, 'bodyID');
 
-		alert('Exclu�do com sucesso!');
+		alert('Excluído com sucesso!');
 
 	}
 
@@ -1230,7 +1228,7 @@ function excluirFormaPgtoCompra(id, idCompra){
 
 		doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra=' + idCompra,1, 'bodyID');
 
-		alert('Exclu�do com sucesso!');
+		alert('Excluído com sucesso!');
 
 	}
 
@@ -1363,7 +1361,7 @@ function salvaCompra(idCompra, status, local){
 
 	if(confirm('Deseja salvar ?')){
 
-		if((status == 1) && !confirm('Est� fechado, certeza que deseja alterar?')){
+		if((status == 1) && !confirm('Está fechado, certeza que deseja alterar?')){
 
 			 return;
 
@@ -1394,7 +1392,7 @@ function salvaCompra(idCompra, status, local){
 
 function virarCompra(idCotacao){
 
-	if(confirm('Deseja realmente fechar cotacao e virar Compra?\nOpera��o n�o pode ser cancelada posteriormente!')){
+	if(confirm('Deseja realmente fechar cotacao e virar Compra?\nOperação não pode ser cancelada posteriormente!')){
 
             doAjaxSemRetorno('ajax_com/compras_acao.php?acao=virarCompra&id=' + idCotacao, 1 , '');
 
@@ -1406,7 +1404,7 @@ function virarCompra(idCotacao){
 
 function fecharCompra(idCompra, status){
 
-	if(confirm('Deseja realmente fechar compra?\nOpera��o n�o pode ser cancelada posteriormente!')){
+	if(confirm('Deseja realmente fechar compra?\nOperação não pode ser cancelada posteriormente!')){
 		
             if(status == 0){
                 if(confirm('Deseja lancar fluxo?')){
@@ -1475,7 +1473,7 @@ function adicionarFormaPgtoCompra(id, itemVerificar){
 
 function pagarContasPagar(id){
     if(confirm('Deseja Pagar?')){
-        var valorP = prompt('Adicionar alguma informa��o adicional ?');
+        var valorP = prompt('Adicionar alguma informação adicional ?');
         doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id + '&info=' + valorP, 1, '');
         refreshContasPagar();
     }
@@ -1483,7 +1481,7 @@ function pagarContasPagar(id){
 
 function descontarContasPagar(id){
     if(confirm('Deseja Descontar?')){
-        var valorP = prompt('Adicionar alguma informa��o adicional ?');
+        var valorP = prompt('Adicionar alguma informação adicional ?');
         doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=' + id + '&info=' + valorP, 1, '');
         refreshContasPagar();
     }
@@ -1491,7 +1489,7 @@ function descontarContasPagar(id){
 
 function pagarContasReceber(id){
     if(confirm('Deseja Pagar?')){
-        var valorP = prompt('Adicionar alguma informa��o adicional ?');
+        var valorP = prompt('Adicionar alguma informação adicional ?');
         doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id + '&info=' + valorP, 1, '');
         refreshContasReceber();
     }
@@ -1499,7 +1497,7 @@ function pagarContasReceber(id){
 
 function descontarContasReceber(id){
     if(confirm('Deseja Descontar?')){
-        var valorP = prompt('Adicionar alguma informa��o adicional ?');
+        var valorP = prompt('Adicionar alguma informação adicional ?');
         doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=' + id + '&info=' + valorP, 1, '');
         refreshContasReceber();
     }

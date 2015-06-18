@@ -5,7 +5,6 @@ include "../includes/Main.class.php";
 $Main = new Main();
 
 if($_GET["tipo"] == "fluxo"){
-	$Main->AdicionaPedidos();
 	$Main->Pedidos->enviaEmailFluxo($_GET["id"], $_GET["email"]);
 }
 mysql_close();

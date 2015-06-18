@@ -4,7 +4,6 @@ require_once("fpdf/fpdf.php");
 include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
-$Main->AdicionaPedidos();
 
 $busca = $Main->Pedidos->pegaClientes();
 // Variaveis de Tamanho

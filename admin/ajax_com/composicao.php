@@ -4,7 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaPedidos();
 $Main->AdicionaComposicao();
 
 if($_GET["acao"] == "listar"){

@@ -50,9 +50,9 @@ class Configuracoes {
  		    $this->BancodeDados = "multpoint1";
 	    }else{
 		    $this->MySQLHostname = "db.cmjg5io1t8yh.sa-east-1.rds.amazonaws.com";
-		    $this->MySQLUsuario = "erp";
-		    $this->MySQLSenha = "-";
-		    $this->BancodeDados = "erp";
+		    $this->MySQLUsuario = "root";
+		    $this->MySQLSenha = "efc#2mvvv";
+		    $this->BancodeDados = "stoik";
 	    }
     }
     

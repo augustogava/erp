@@ -39,7 +39,7 @@ class Template {
 				$Retorno = $this->ConexaoSQL->Select("SELECT menus.* FROM menus INNER JOIN permissoes_niveis ON permissoes_niveis.id_menus = menus.id WHERE permissoes_niveis.id_niveis = '".$_SESSION["niveluser"]."' AND menus.id_menus = '0' ORDER By menus.ordem ASC ");
 				for($i=0; $i<count($Retorno); $i++){
 					$saida .= "<li id=\"".$Retorno[$i]["id"]."\" class=\"ng-scope\" onmouseover=\"changeMenu('".$Retorno[$i]["id"]."')\">
-									<a href=\"\" alt=\"".$Retorno[$i]["nome"]."\"> 
+									<a href=\"#\" alt=\"".$Retorno[$i]["nome"]."\"> 
 										<span class=\"glyphicon fa ".$Retorno[$i]["icone"]."\" aria-hidden=\"true\"></span>
 									</a>
 								</li>";

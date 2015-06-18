@@ -4,7 +4,7 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaOrdemSeparacao();
+
 if($_GET["acao"] == "listar"){
 	$ordem = $Main->OrdemSeparacao->pegaOrdemSeparacao($_GET["produto"], $_GET["pedido"], $_GET["dataIni"], $_GET["dataFim"], "", $_GET["limite"]);
 	if(empty($_GET["limite"]) || $_GET["limite"] < 0)
@@ -14,13 +14,15 @@ if($_GET["acao"] == "listar"){
 <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
 	<tbody>
 		<tr class="titulo">
-			<td width="100%" class="ColunaInfo" colspan="8">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
+			<td width="100%" class="ColunaInfo" colspan="10">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
 		</tr>
 		<tr class="titulo">
 			<td width="20%">Produto</td>
-			<td width="20%">Pedido</td>
-			<td width="5%" >Qtd</td>
+			<td width="10%">Estoque Atual</td>
+			<td width="20%" >Qtd</td>
+			<td width="10%">Pedido</td>
 			<td width="10%" >Data Cadastro</td>
+			<td width="10%" >Data Separado</td>
 			<td width="10%" >Status</td>
 			<td width="4%" >&nbsp;</td>
 			<td width="4%">
@@ -44,13 +46,19 @@ if($_GET["acao"] == "listar"){
 				<?=$produto[0]->codigo;?>
 			</td>
 			<td  id="linhaDataGrid_<?=$j?>_0">
-				<?=$pedido[0]->codigo;?>
+				<?=$produto[0]->getEstoqueAtual();?>
 			</td>
 			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$ordem[$j]->getQtd()?>
 			</td>
+			<td  id="linhaDataGrid_<?=$j?>_0">
+				<?=$pedido[0]->codigo;?>
+			</td>
 			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$ordem[$j]->getDataCad()?>
+			</td>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
+				<?=($ordem[$j]->getDataStatus()=="00/00/0000"?"-":$ordem[$j]->getDataStatus())?>
 			</td>
 			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$ordem[$j]->getStatusNome()?>
@@ -164,29 +172,6 @@ if($_GET["acao"] == "listar"){
 					<td align="right"><b>Data:</b></td>
 					<td align="left">
 						<input type="text" name="data" id="data" size="11" class="form-control input-sm" onkeypress="mascaras.mascara(this,'data')"  value="<? if($ordem[0]) print $ordem[0]->getDataCad()?>">
-					</td>
-				</tr>
-				
-				<tr>
-					<td align="right"><b>Status:</b></td>
-					<td align="left" class="form-inline">
-						<select id="status" name="status" title="Status" class="erroForm form-control input-sm">
-							<option value="">Selecione</option>
-							<?
-							for($j=0; $j<count($status); $j++){
-								if(($_GET["acao"] == "adicionar" && $status[$j]->getId() == 2) || ($ordem[0] && $ordem[0]->getStatusId() != $status[$j]->getId())){
-									continue;
-								}
-								$selected = ($ordem[0] && $ordem[0]->getStatusId() == $status[$j]->getId()) ? "selected" : "";
-							?>					
-							<option value="<?=$status[$j]->getId()?>" <?=$selected?>><?=$status[$j]->getNome()?></option>
-							<?
-							}
-							?>
-						</select>
-						
-						<a onclick="javascript:window.open('buscapopup.php?campoatual=status&amp;tabela=status_ordem', 'Busca', 'height = 300, width = 250, location = no, toolbar = no, menubar=no')" href="#"><img border="0" src="layout/incones/find.png"/></a> 
-						<a onclick="javascript:window.open('addpopup.php?campoatual=status&amp;tabela=status_ordem', 'Busca', 'height = 450, width = 550, location = no, toolbar = no')" href="#"><img border="0" src="layout/incones/add16.png"/></a>
 					</td>
 				</tr>
 				

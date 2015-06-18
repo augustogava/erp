@@ -11,9 +11,6 @@ $Main = new Main();
 
 $Main->Seguranca->verificaLogado();
 
-$Main->AdicionaPedidos();
-
-
 
 if($_GET["acao"] == "listar"){
 
@@ -456,9 +453,9 @@ if($_GET["acao"] == "listar"){
 
 					</td>
 
-					<td align="left">
+					<td align="left" class="form-inline">
 
-						<input class="form-control input-sm" type="text" name="comissao" id="comissao" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getComissao() ) print $pedidos[0]->getComissao(); ?>"  /> %
+						<input class="form-control input-sm fourdigits" type="text" name="comissao" id="comissao" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getComissao() ) print $pedidos[0]->getComissao(); ?>"  /> %
 
 					</td>
 

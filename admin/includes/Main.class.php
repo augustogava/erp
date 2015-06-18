@@ -70,6 +70,10 @@ public $Configuracoes;
 		$this->Email = new Email($this->ConexaoSQL, $this->Formata);
         //prepara o objeto template
 		$this->Template = new Template($this->ConexaoSQL, $this->Formata);
+		
+		$this->AdicionaEstoque();
+		$this->AdicionaPedidos();
+		$this->AdicionaOrdemProducao();
     }
     
     /**
@@ -89,8 +93,8 @@ public $Configuracoes;
 	 */
     public function AdicionaLogin(){
         include "Login.class.php";
-        //prepara o objeto de seguran�a
-		$this->Login = new Login($this->ConexaoSQL, $this->Seguranca);
+
+        $this->Login = new Login($this->ConexaoSQL, $this->Seguranca);
     }
     
     /**
@@ -100,7 +104,7 @@ public $Configuracoes;
 	 */
     public function AdicionaCadastrousuario(){
         include "CadastroUsuario.class.php";
-        //prepara o objeto de seguran�a
+        
 		$this->CadastroUsuario = new CadastroUsuario($this->ConexaoSQL, $this->Seguranca, $this->Formata);
     }
     
@@ -111,7 +115,7 @@ public $Configuracoes;
     public function AdicionaDataGrid(){
         include "DataGrid.class.php";
 		include "Exportacao.class.php";
-        //prepara o objeto de seguran�a
+		
 		$this->DataGrid = new DataGrid($this->ConexaoSQL, $this->Formata, new Exportacao());
     }
 	
@@ -122,8 +126,12 @@ public $Configuracoes;
     public function AdicionaPedidos(){
         include "Pedidos.class.php";
 		include "Exportacao.class.php";
-        //prepara o objeto de seguran�a
-		$this->Pedidos = new Pedidos($this->ConexaoSQL, $this->Formata, $this->Configuracoes, new Exportacao());
+
+		$this->AdicionaOrdemSeparacao();
+		$this->Pedidos = new Pedidos($this->ConexaoSQL, $this->Formata, $this->Configuracoes, $this->OrdemSeparacao, new Exportacao());
+		
+		$this->OrdemSeparacao->setPedidos( $this->Pedidos );
+// 		$this->Pedidos->setOrdemSeparacao( $this->OrdemSeparacao );
     }
     
     /**
@@ -132,8 +140,8 @@ public $Configuracoes;
 	 */
     public function AdicionaEstoque(){
         include "Estoque.class.php";
-        //prepara o objeto de seguran�a
-		$this->Estoque = new Estoque($this->ConexaoSQL, $this->Formata);
+
+        $this->Estoque = new Estoque($this->ConexaoSQL, $this->Formata);
     }
     
      /**
@@ -142,8 +150,8 @@ public $Configuracoes;
 	 */
     public function AdicionaFluxo(){
         include "Fluxo.class.php";
-        //prepara o objeto de seguran�a
-		$this->Fluxo = new Fluxo($this->ConexaoSQL, $this->Formata);
+
+        $this->Fluxo = new Fluxo($this->ConexaoSQL, $this->Formata);
     }
 
     /**
@@ -152,7 +160,7 @@ public $Configuracoes;
 	 */
     public function AdicionaFluxoBanco(){
         include "FluxoBanco.class.php";
-        //prepara o objeto de seguran�a
+
         $this->FluxoBanco = new FluxoBanco($this->ConexaoSQL, $this->Formata);
     }
     
@@ -162,8 +170,8 @@ public $Configuracoes;
 	 */
     public function AdicionaRelatorios(){
         include "Relatorios.class.php";
-        //prepara o objeto de seguran�a
-		$this->Relatorios = new Relatorios($this->ConexaoSQL, $this->Formata);
+
+        $this->Relatorios = new Relatorios($this->ConexaoSQL, $this->Formata);
     }
     
     /**
@@ -171,11 +179,9 @@ public $Configuracoes;
 	 *
 	 */
     public function AdicionaOrdemProducao(){
-        $this->AdicionaPedidos();
-        $this->AdicionaEstoque();
         include "OrdemProducao.class.php";
-        //prepara o objeto de seguran�a
-		$this->OrdemProducao = new OrdemProducao($this->ConexaoSQL, $this->Formata, $this->Pedidos, $this->Estoque);
+
+        $this->OrdemProducao = new OrdemProducao($this->ConexaoSQL, $this->Formata, $this->Pedidos, $this->Estoque);
     }
     
     /**
@@ -183,11 +189,9 @@ public $Configuracoes;
      *
      */
     public function AdicionaOrdemSeparacao(){
-    	$this->AdicionaPedidos();
-    	$this->AdicionaEstoque();
     	include "OrdemSeparacao.class.php";
-    	//prepara o objeto de seguran�a
-    	$this->OrdemSeparacao = new OrdemSeparacao($this->ConexaoSQL, $this->Formata, $this->Pedidos, $this->Estoque);
+
+    	$this->OrdemSeparacao = new OrdemSeparacao($this->ConexaoSQL, $this->Formata, $this->Estoque);
     }
     
     /**
@@ -196,8 +200,8 @@ public $Configuracoes;
 	 */
     public function AdicionaImagem(){
         include "Imagem.class.php";
-        //prepara o objeto de seguran�a
-		$this->Imagem = new Imagem($this->ConexaoSQL, $this->Formata);
+
+        $this->Imagem = new Imagem($this->ConexaoSQL, $this->Formata);
     }
 	
 	 /**
@@ -206,8 +210,8 @@ public $Configuracoes;
 	 */
     public function AdicionaComposicao(){
         include "Composicao.class.php";
-        //prepara o objeto de seguran�a
-		$this->Composicao = new Composicao($this->ConexaoSQL, $this->Formata);
+
+        $this->Composicao = new Composicao($this->ConexaoSQL, $this->Formata);
     }
 
      /**
@@ -216,9 +220,9 @@ public $Configuracoes;
 	 */
     public function AdicionaCompras(){
         include "Compras.class.php";
-	include "Exportacao.class.php";
-        //prepara o objeto de seguran�a
-	$this->Compras = new Compras($this->ConexaoSQL, $this->Formata, $this->Configuracoes, new Exportacao());
+		include "Exportacao.class.php";
+
+		$this->Compras = new Compras($this->ConexaoSQL, $this->Formata, $this->Configuracoes, new Exportacao());
     }
 }
 ?>

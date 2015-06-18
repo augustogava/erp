@@ -8,8 +8,6 @@ $Main = new Main();
 
 $Main->Seguranca->verificaLogado();
 
-$Main->AdicionaPedidos();
-
 //session_unset($_SESSION["Ordena"]);
 
 

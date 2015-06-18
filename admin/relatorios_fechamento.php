@@ -4,15 +4,14 @@ include "includes/Main.class.php";
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
 $Main->AdicionaFluxo();
-$Main->AdicionaPedidos();
 
 $tipoDespesas = $Main->Fluxo->pegaTiposDespesas($_GET["filtro1"], $_GET["filtro2"]);
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
 <title>MultPoint</title>
 <style>
 * {margin:0; padding:0; border: 0;}
@@ -57,6 +56,16 @@ body {
 	font-size: 10px;
 }
 
+.logo {
+  height: 60px;
+  background: url(layout/logo/logo.png);
+  background-size: 220px;
+  background-position: 22px;
+  background-repeat: no-repeat;
+  width: 80px;
+  margin-top: 5px;
+}
+
 </style>
 </head>
 <body>
@@ -65,20 +74,22 @@ body {
 	font-size: 95%;
 	border-bottom: 1px solid #dcdcdc;
 	position:relative;
-	background: #B5CAFF url(http://www.multpoint.ind.br/admin/layout/back_top.gif) repeat-y top left;">
+	background: #006B9C;">
 	<div style="margin: 0 auto;
 							padding: 0px 0 0 20px;
 							text-align: left;">
 		<table border="0" width="100%">
 			 <tr>
 			 	<td width="10%" height="80">
-			 		<a href="http://www.multpoint.ind.br/"><img src="http://www.multpoint.ind.br/layout/logo/logo_MultPointpeq.gif" alt="MultPoint"></a>
+			 			<div class="logo"></div>
 			 	</td>
 			 	<td width="90%">
-			 		<p align="center" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: rgb(56, 61, 68);">Relat�rio Fechamento M�s <? $dt=explode("/", $_GET["filtro1"]); print date("m", mktime($dt[0], $dt[0], $dt[0]))?></p>
+			 		<p align="center" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: white;">Relatório Fechamento Mês <? $dt=explode("/", $_GET["filtro1"]); print date("m", mktime($dt[0], $dt[0], $dt[0]))?></p>
 			 	</td>
 			</tr>
 	     </table>
+	     
+	     
 	</div>
 </div>
 
@@ -114,7 +125,7 @@ body {
         </tr>
 </table>
 
-<p align="left" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: rgb(56, 61, 68);">Sa�da</p>
+<p align="left" style="margin-top:10px;margin-bottom:10px;font-family: Lucida Grande,Verdana,sans-serif; font-size: 19px; color: rgb(56, 61, 68);">Saída</p>
 <table border="1" style="background: #EBF0FD;width:100%;">
         <?
         $total = 0;
@@ -124,7 +135,7 @@ body {
         ?>
 
                 <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;">
-                    <td align="left"><?=(($nome)?$nome:"Sem descri��o")?></td>
+                    <td align="left"><?=(($nome)?$nome:"Sem descrição")?></td>
                 </tr>
                 <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;">
                     <td align="left">

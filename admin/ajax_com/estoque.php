@@ -4,8 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaPedidos();
-$Main->AdicionaEstoque();
 
 if($_GET["acao"] == "listar"){
 	$estoque = $Main->Estoque->pegaEstoque($_GET["produto"], $_GET["tipo"], $_GET["dataIni"], $_GET["dataFim"], "", $_GET["limite"]);

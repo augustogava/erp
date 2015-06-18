@@ -93,9 +93,9 @@ class OrdemProducao  {
 	*/
 	public function salvarOrdemProducao($id = "", $produto = "", $pedido = "", $qtd = "", $descricao = "", $data = "", $status = ""){
 		if(empty($id)){
-			$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, qtd, descricao, id_status_ordem, data_cad) VALUES('".$produto."', '".$pedido."','".$qtd."','".$descricao."', '".$status."', '".$this->Formata->date2banco($data)."')");
+			$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, qtd, descricao, id_status_ordem, data_cad) VALUES('".$produto."', '".$pedido."','".$qtd."','".$descricao."', '1', '".$this->Formata->date2banco($data)."')");
 		}else{
-			$this->ConexaoSQL->updateQuery("UPDATE ordem_producao SET id_produtos = '".$produto."', descricao = '".$descricao."', id_pedido = '".$pedido."', qtd = '".$qtd."', id_status_ordem= '".$status."', data_cad = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
+			$this->ConexaoSQL->updateQuery("UPDATE ordem_producao SET id_produtos = '".$produto."', descricao = '".$descricao."', id_pedido = '".$pedido."', qtd = '".$qtd."', id_status_ordem= '1', data_cad = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
 		}
 	}
 	
@@ -116,7 +116,7 @@ class OrdemProducao  {
 // 		$produto = $ordem[0]->getProdutos();
 // 		$pedido = $ordem[0]->getPedidos();
 	
-		$this->ConexaoSQL->updateQuery("UPDATE ordem_producao SET data_status = NOW(), id_status_ordem = '4' WHERE id = '".$id."'");
+		$this->ConexaoSQL->updateQuery("UPDATE ordem_producao SET id_status_ordem = '4' WHERE id = '".$id."'");
 	}
 	
 	/**

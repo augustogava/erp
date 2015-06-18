@@ -1,111 +1,64 @@
 <?php
-
 # - - - - - - - - - - - - - - - - ERP - - - - - - - - - - - - - - - - - -
-
 # ERP
-
 #
-
 #  Copyright (c) 2008
-
 #  Author: Augusto Gava (augusto_gava@msn.com)
-
 #  Criado: 14/1/08
-
 #  
-
-#  Classe m�todos seguran�a
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
-
 /**
-
  * Classe respons�vel pelos metodos Pedidos.
-
  *
-
  * @author Augusto Gava
-
  * @version 1.0
-
  */
-
  
 
 include_once("properties/PropriedadesItensPedidos.php");
-
 include_once("properties/PropriedadesProdutos.php");
-
 include_once("properties/PropriedadesPedidos.php");
-
 include_once("properties/PropriedadesClientes.php");
-
 include_once("properties/PropriedadesRepresentantes.php");
-
 include_once("properties/PropriedadesPadrao.php");
-
 include_once("properties/PropriedadesFormaPagamento.php");
 
-
-
 class Pedidos  {
-
 	public $ConexaoSQL;
-
     public $Formata;
-
     public $Configuracoes;
-	private $Exportacao;
-
+	public $OrdemSeparacao;
 	
-
+    private $Exportacao;
+    
     /**
-
-	 * M�todo construtor.
-
+	 * Método construtor.
 	 *
-
-	 * @param ConexaoSQL conex�o com o banco
-
+	 * @param ConexaoSQL conexão com o banco
 	 */
 
-    public function Pedidos($ConexaoSQL, $Formata, $Configuracoes, $Exportacao){
-
+    public function Pedidos($ConexaoSQL, $Formata, $Configuracoes, $OrdemSeparacao, $Exportacao){
         $this->ConexaoSQL = $ConexaoSQL;
-
         $this->Formata = $Formata;
-
         $this->Configuracoes = $Configuracoes;
-		
+//         $this->OrdemSeparacao = $OrdemSeparacao;
 		$this->Exportacao = $Exportacao;
-
     }//end function
 
-	
+    public function setOrdemSeparacao($OrdemSeparacao){
+//     	$this->OrdemSeparacao = $OrdemSeparacao;
+    }
 
 	/**
-
 	* retorna lista de clientes.
-
 	*@return array clientes.
-
 	*/
-
 	public function pegaClientes( $id = "" ){
-
-		
-
 		if(!empty($id))
-
 			$where = " AND clientes.id = '".$id."'";
 
-			
-
 		$RetornoConsultaRel = $this->ConexaoSQL->Select("SELECT clientes.*, estado.sigla as estadoNome, cidade.nome as cidadeNome FROM clientes LEFT JOIN estado ON estado.id = clientes.id_estado LEFT JOIN cidade ON cidade.id = clientes.id_cidade WHERE id_status_geral = '1' ".$where." ORDER By clientes.nome ASC");
-
-    	
 
 		if(count($RetornoConsultaRel) > 0){
 
@@ -723,7 +676,7 @@ class Pedidos  {
         if( count($representante) > 0 ){
         	$this->ConexaoSQL->updateQuery("UPDATE fluxo SET valor = valor + '".$valorRepresentante."'  WHERE id = '".$representante[0]["id"]."'");
         }else{
-        	$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '7', '".$idPedido."', 'Comissao Representante: ".$dadosPedido[0]->getRepresentantesNome()."', '".$ultimoDiaDomes."', '2', '".$valorRepresentante."')");
+        	$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '7', '".$idPedido."', 'Comissão Representante: ".$dadosPedido[0]->getRepresentantesNome()."', '".$ultimoDiaDomes."', '2', '".$valorRepresentante."')");
         }
 		//GERA PARCELAS PARA FORMA PAGAMENTO
 
@@ -737,14 +690,14 @@ class Pedidos  {
 				$adicional = $this->Formata->valor2banco( $dadosPedido[0]->getValorEntrega() ); 
 				if( $dadosPedido[0]->getDataImposto() == "00-00-0000" ||  $dadosPedido[0]->getDataImposto() == "00/00/0000" ){
 					$adicional += $this->Formata->valor2banco( $dadosPedido[0]->getImposto() );
-					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
+					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 				}else{
 					//Adiciona conta receber na data desejada					
-					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
-					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
+					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
+					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 				}
 
-				$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '1', '".$idPedido."', 'C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '1', '".( $precoTotal+$adicional )."')");
+				$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '1', '".$idPedido."', 'Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '1', '".( $precoTotal+$adicional )."')");
 
 			}else{
 				$quantidadeParcelas = $formaPagamento[0]->getQtd(); 
@@ -762,17 +715,17 @@ class Pedidos  {
 							$adicional = $this->Formata->valor2banco( $dadosPedido[0]->getValorEntrega() ); 
 							if( $dadosPedido[0]->getDataImposto() == "00-00-0000" || $dadosPedido[0]->getDataImposto() == "00/00/0000" ){
 								$adicional += $this->Formata->valor2banco( $dadosPedido[0]->getImposto() );
-								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
+								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 							}else{
-								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
-								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto C�digo Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
+								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
+								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 							}
 						}
 						
 						
 						$data = date("Y-m-d", mktime(0,0,0, date("m"), date("d") + $datas, date("Y")));
 						
-						$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '1', '".$idPedido."', 'C�digo Pedido: ".$dadosPedido[0]->getCodigo()." <br> parcela ".($k+1)." de ".count($dias)."', '".$data."', '1', '".($valorParcela + $adicional)."')");
+						$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '1', '".$idPedido."', 'Código Pedido: ".$dadosPedido[0]->getCodigo()." <br> parcela ".($k+1)." de ".count($dias)."', '".$data."', '1', '".($valorParcela + $adicional)."')");
 
 					}
 
@@ -786,36 +739,41 @@ class Pedidos  {
 
 	}
 
-	
+	public function voltaEstoqueAntigo($idPedido){
+		
+		//Só apaga ordens de produções abertas, as fechadas já foram feitas e estão no estoque já
+		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$idPedido."' AND id_status_ordem = '1' ");
+		
+		//Só pode remover do historio do estoque, as saidas (separacoes)
+		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$idPedido."' AND tipo = '2'");
+		
+// 		$ordens = $this->OrdemSeparacao->pegaOrdemSeparacao("", $idPedido );
+		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT ordem_separacao.*, status_separacao.nome as statusNome FROM ordem_separacao LEFT JOIN status_separacao ON status_separacao.id = ordem_separacao.id_status_separacao WHERE id = '".$idPedido."' AND id_ordem_status = '2' ORDER By ordem_separacao.id DESC  ");
+		for($j=0; $j<count($ordens); $j++){
+			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '". $RetornoConsulta[$j]["qtd"]."' WHERE id = '". $RetornoConsulta[$j]["id_produtos"]."'");
+		}
+		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id_pedido = '".$idPedido."'");
+	}
 
 	/**
-
 	* Fechar Pedido para separar
-
 	*@param idPedido.
-
 	*/
-
 	public function fecharPedido($idPedido){
 
 		$dadosPedido = $this->pegaPedidos("", "", $idPedido);
 
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT sum(total) as total FROM pedidos_itens WHERE pedidos_itens.id_pedidos = '".$idPedido."' ");
-
-
 		$precoTotal = $RetornoConsulta[0]["total"];
 
 		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET id_status_pedidos = '4', data_fechada = NOW(), valor_total = '".$precoTotal."'  WHERE id = '".$idPedido."'");
 
-
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM pedidos_itens WHERE id_pedidos = '".$idPedido."' ");
-
 		if(count($RetornoConsulta) > 0){
 
 			//Deleta lixo
-
-			$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$idPedido."'");
-			$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$idPedido."'");
+			//normaliza estoque
+			$this->voltaEstoqueAntigo($idPedido);
 
 			//INSERE ESTOQUE
 			for($j=0; $j<count($RetornoConsulta); $j++){
@@ -823,29 +781,26 @@ class Pedidos  {
 				//Saida estoque
 // 				$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_pedidos, descricao, tipo, qtd, preco, data) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ', '2','".$RetornoConsulta[$j]["qtd"]."','".$RetornoConsulta[$j]["preco"]."', NOW())");
 
+				$idOrdemProducao = null; 
 				$qtdEstoque = $this->pegaEstoqueProduto($RetornoConsulta[$j]["id_produtos"]);
 				if( $qtdEstoque > 0 && $qtdEstoque <= $RetornoConsulta[$j]["qtd"]){ // Estoque está acima de 0
 					$qtdEstoque = $RetornoConsulta[$j]["qtd"] - $qtdEstoque;
 					$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
+					$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
 				}else if( $qtdEstoque <= 0 ) {	//Nao tem nada estoque, faz tudo
 					$qtdEstoque = $RetornoConsulta[$j]["qtd"];
 					$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
+					$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
 				}
 				
-				$this->ConexaoSQL->insertQuery("INSERT INTO ordem_separacao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_separacao) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$RetornoConsulta[$j]["qtd"]."', NOW(), '1')");
+				$this->ConexaoSQL->insertQuery("INSERT INTO ordem_separacao (id_produtos, id_pedido, id_ordem_producao, descricao, qtd, data_cad, id_status_separacao) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', '".$idOrdemProducao."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$RetornoConsulta[$j]["qtd"]."', NOW(), '1')");
 				
-				//Adiciona separacao
-
 			}
-
 		}
-
 	}
-
 	
 
 	/**
-
 	* salva Item pedido.
 
 	*@param cliente.
@@ -931,128 +886,72 @@ class Pedidos  {
 	
 
 	/**
-
 	* salva Item pedido.
-
 	*@param cliente.
-
 	*@param status.
-
 	*@return id PK.
-
 	*/
-
 	public function salvarPedido($clientes, $representantes, $id, $tipoComissao, $valorComissao, $formaPagamento, $codigo, $obs, $tipo_entrega, $imposto, $valorEntrega, $comissao, $dataimposto=""){
-
 		//Deleta lixo
-
-		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$id."'");
-
 		$this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_pedidos = '".$id."'");
-
-		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$id."'");
-
-		
 		//print "UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".$this->Formata->valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".$this->Formata->valor2banco($valorComissao)."', valor_entrega = '".$this->Formata->valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".$this->Formata->valor2banco($comissao)."', data_imposto = '".$this->Formata->date2banco($dataimposto)."' WHERE id = '".$id."'";
 		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".$this->Formata->valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".$this->Formata->valor2banco($valorComissao)."', valor_entrega = '".$this->Formata->valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".$this->Formata->valor2banco($comissao)."', data_imposto = '".$this->Formata->date2banco($dataimposto)."' WHERE id = '".$id."'");
-
-		
-
 		$this->verficaFechado($id);
-
+	}
+	
+	
+	public function alteraStatusPedidoSeparado( $id ){
+		print 123;
+		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET status = '6' WHERE id = '".$id."'");
 	}
 
-	
-
 	/**
-
 	 * Verifica se est� fechado, se estiver, fecha o pedido.
-
 	 * @param id
-
 	 */
-
 	public function verficaFechado( $id ){
 
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT id_status_pedidos as status FROM pedidos WHERE id = '".$id."' AND id_status_pedidos IN (4, 5) ");
-
 		if(count($RetornoConsulta) > 0){
 
 			if($RetornoConsulta[0]["status"] == 4 ){
-
 				$this->fecharPedido($id);
-
 			}else if($RetornoConsulta[0]["status"] == 5){
-
 				$this->fecharPedido($id);
-
 				$this->enviarPedido($id);
-
 			}
-
 		}
-
 	}
 
-	
-
 	/**
-
 	* retorna lista de produtos.
-
 	*@param clientes.
-
 	*@param status.
-
 	*@return array clientes.
-
 	*/
-
 	public function pegaProduto($produto = ""){
-
-		
-
 		if($produto != '')
-
 			$busca = " AND id = '".$produto."' ";
-
-			
 
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM produtos WHERE 1 ".$busca." Order By codigo ASC ");
 
-    	
-
 		if(count($RetornoConsulta) > 0){
-
 			for($j=0; $j<count($RetornoConsulta); $j++){
-
 				$Retorno[$j] = new PropriedadesProdutos();
-
 				$Retorno[$j]->setId($RetornoConsulta[$j]["id"]);
-
 				$Retorno[$j]->setIdUsuarios($RetornoConsulta[$j]["id_usuarios"]);
-
 				$Retorno[$j]->setIdCategorias($RetornoConsulta[$j]["id_categorias"]);
-
 				$Retorno[$j]->setCodigo($RetornoConsulta[$j]["codigo"]);
-
 				$Retorno[$j]->setNome($RetornoConsulta[$j]["nome"]);
-
 				$Retorno[$j]->setDescricao($RetornoConsulta[$j]["descricao"]);
-
 				$Retorno[$j]->setPreco1($RetornoConsulta[$j]["preco_1"]);
-
 				$Retorno[$j]->setPreco2($RetornoConsulta[$j]["preco_2"]);
-
 				$Retorno[$j]->setPreco3($RetornoConsulta[$j]["preco_3"]);
-
 				$Retorno[$j]->setPreco4($RetornoConsulta[$j]["preco_4"]);
-
+				$Retorno[$j]->setPreco4($RetornoConsulta[$j]["preco_4"]);
+				$Retorno[$j]->setEstoqueAtual($RetornoConsulta[$j]["estoque_atual"]);
 			}
-
 		}
-
-		
 
 		return $Retorno;
 

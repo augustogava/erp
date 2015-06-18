@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaPedidos();
 
 $clientes = $Main->Pedidos->pegaClientes();
 				

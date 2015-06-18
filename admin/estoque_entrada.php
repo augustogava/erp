@@ -3,8 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaPedidos();
-$Main->AdicionaEstoque();
 
 $produtos = $Main->Pedidos->pegaProduto();
 //SELECT  (SELECT sum(qtd) FROM estoque WHERE tipo = 1) - (SELECT sum(qtd) FROM estoque WHERE tipo = 2)  as total FROM estoque LIMIT 1

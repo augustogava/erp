@@ -47,3 +47,9 @@ UPDATE `stoik`.`menus` SET `icone`='fa-bank' WHERE `id`='4';
 INSERT INTO `stoik`.`menus` (`id_menus`, `nome`, `link`, `ordem`) VALUES ('3', 'Ordem de Separação', 'ordem_separacao.php', '3');
 
 ALTER TABLE `erp`.`funcionarios` ADD COLUMN `salario` DOUBLE NULL AFTER `tel2`;
+
+INSERT INTO `stoik`.`status_pedidos` (`id`, `nome`) VALUES ('6', 'Separado');
+
+ALTER TABLE `stoik`.`ordem_separacao` ADD COLUMN `id_ordem_producao` INT(10) NULL AFTER `id_produtos`;
+
+UPDATE `stoik`.`status_ordem` SET `nome`='Produzido' WHERE `id`='4';

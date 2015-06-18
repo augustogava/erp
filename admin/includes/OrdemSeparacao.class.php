@@ -31,12 +31,16 @@ class OrdemSeparacao  {
 	 * @param ConexaoSQL conex�o com o banco
 	 * @param Formata 
 	 */
-    public function OrdemSeparacao($ConexaoSQL, $Formata, $Pedidos, $Estoque){
+    public function OrdemSeparacao($ConexaoSQL, $Formata, $Estoque){
         $this->ConexaoSQL = $ConexaoSQL;
         $this->Formata = $Formata;
-        $this->Pedidos = $Pedidos;
         $this->Estoque = $Estoque;
     }
+    
+    public function setPedidos($Pedidos){
+    	$this->Pedidos = $Pedidos;    	
+    }
+    
     
     /**
 	* retorna lista de ordens de separacao.
@@ -44,7 +48,8 @@ class OrdemSeparacao  {
 	*@param status.
 	*@return array clientes.
 	*/
-	public function pegaOrdemSeparacao($produto = "", $pedido = "", $dataIni = "", $dataFim = "", $idOrdem = "", $limite = ""){
+	public function pegaOrdemSeparacao($produto = "", $pedido = "", $dataIni = "", $dataFim = "", $idOrdem = "", $limite = "", $status = ""){
+		
 		$qtd = 15;
 		if(!empty($produto))
 			$busca = " AND ordem_separacao.id_produtos = '".$produto."' ";
@@ -58,12 +63,16 @@ class OrdemSeparacao  {
 		if(!empty($dataFim))
 			$busca .= " AND ordem_separacao.data_cad <= '".$this->Formata->date2banco($dataFim)."' ";
 		
+		if(!empty($status))
+			$busca .= " AND ordem_separacao.id_status_separacao = '".$status."' ";
+		
 		if(!empty($idOrdem))
 			$busca .= " AND ordem_separacao.id = '".$idOrdem."' ";
 			
 		if(empty($limite) || $limite < 0)
 			$limite = "0";
 
+// 		print "SELECT ordem_separacao.*, status_separacao.nome as statusNome FROM ordem_separacao LEFT JOIN status_separacao ON status_separacao.id = ordem_separacao.id_status_separacao WHERE 1 ".$busca." ORDER By ordem_separacao.id DESC Limit ".$limite.", ".$qtd." ";
 		$RetornoConsultaRel = $this->ConexaoSQL->Select("SELECT ordem_separacao.*, status_separacao.nome as statusNome FROM ordem_separacao LEFT JOIN status_separacao ON status_separacao.id = ordem_separacao.id_status_separacao WHERE 1 ".$busca." ORDER By ordem_separacao.id DESC Limit ".$limite.", ".$qtd." ");
     	
 		if(count($RetornoConsultaRel) > 0){
@@ -93,9 +102,9 @@ class OrdemSeparacao  {
 	*/
 	public function salvarOrdemSeparacao($id = "", $produto = "", $pedido = "", $qtd = "", $descricao = "", $data = "", $status = ""){
 		if(empty($id)){
-			$this->ConexaoSQL->insertQuery("INSERT INTO ordem_separacao (id_produtos, id_pedido, qtd, descricao, id_status_separacao, data_cad) VALUES('".$produto."', '".$pedido."','".$qtd."','".$descricao."', '".$status."', '".$this->Formata->date2banco($data)."')");
+			$this->ConexaoSQL->insertQuery("INSERT INTO ordem_separacao (id_produtos, id_pedido, qtd, descricao, id_status_separacao, data_cad) VALUES('".$produto."', '".$pedido."','".$qtd."','".$descricao."', '1', '".$this->Formata->date2banco($data)."')");
 		}else{
-			$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET id_produtos = '".$produto."', descricao = '".$descricao."', id_pedido = '".$pedido."', qtd = '".$qtd."', id_status_separacao= '".$status."', data_cad = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
+			$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET id_produtos = '".$produto."', descricao = '".$descricao."', id_pedido = '".$pedido."', qtd = '".$qtd."', id_status_separacao= '1', data_cad = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
 		}
 	}
 	
@@ -108,28 +117,25 @@ class OrdemSeparacao  {
 	}
 	
 	/**
-	 * produzir ordem separacao
-	 * @param $id
-	 */
-	public function produzirOrdem($id){
-// 		$ordem = $this->pegaOrdemSeparacao("", "", "", "", $id);
-// 		$produto = $ordem[0]->getProdutos();
-// 		$pedido = $ordem[0]->getPedidos();
-	
-		$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET data_status = NOW(), id_status_separacao = '4' WHERE id = '".$id."'");
-	}
-	
-	/**
 	* fechar ordem separacao
 	* @param $id
 	*/
 	public function fecharOrdem($id){
 		$ordem = $this->pegaOrdemSeparacao("", "", "", "", $id);
 		$produto = $ordem[0]->getProdutos();
-		$pedido = $ordem[0]->getPedidos();
-		
-		$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET data_status = NOW(), id_status_separacao = '2' WHERE id = '".$id."'");
-		$this->Estoque->adicionaEstoque( $produto[0]->id, $pedido[0]->id, "Ordem Separação: ".$ordem[0]->getId()." para o pedido: ".$pedido[0]->codigo , $ordem[0]->getQtd() );
+		if( $produto[0]->getEstoqueAtual() >= $ordem[0]->getQtd()  ){
+			$pedido = $ordem[0]->getPedidos();
+			
+			$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET data_status = NOW(), id_status_separacao = '2' WHERE id = '".$id."'");
+			$this->Estoque->removeEstoque( $produto[0]->id, $pedido[0]->id, "Ordem Separação: ".$ordem[0]->getId()." para o pedido: ".$pedido[0]->codigo , $ordem[0]->getQtd() );
+			
+			$lstOrdens = $this->pegaOrdemSeparacao("", $pedido[0]->id, "","","","", 1);// pega todas ordens pra esse pedido que esteja aberta
+			if( count($lstOrdens) == 0){//não exste nenhuma aberta, altera status pedido
+				$this->Pedidos->alteraStatusPedidoSeparado( $pedido[0]->id );
+			}
+		}else{
+			print "<script>window.alert('Não existe estoque suficiente para este produto Estoque atual: ".$produto[0]->getEstoqueAtual()." ');</script>";
+		}
 	}
 	
 	/**

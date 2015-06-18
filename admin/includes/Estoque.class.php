@@ -112,7 +112,15 @@ class Estoque  {
 	* @param $id
 	*/
 	public function excluir($id){
-			$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id = '".$id."'");
+
+		$stq = $this->pegaEstoque(null, null, null, null, $id, null );
+		if( $stq[0]->getTipo() == 1 ){ //se foi estoque de entrada, agora tira pois está excluindo
+			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$stq[0]->getQtd()."' WHERE id = '".$stq[0]->getProdutoId()."'");
+		}else if( $stq[0]->getTipo() == 2 ){ //se foi estoque de saida, agora adiciona pois está excluindo
+			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$stq[0]->getQtd()."' WHERE id = '".$stq[0]->getProdutoId()."'");
+		}
+		
+		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id = '".$id."'");
 	}
 	
 	/**
@@ -132,7 +140,7 @@ class Estoque  {
 	public function removeEstoque( $idProduto, $idPedido, $descr, $qtd ){
 		$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$qtd."' WHERE id = '".$idProduto."'");
 		
-		$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_pedidos, descricao, tipo, qtd, preco, data) VALUES('".$idProduto."', '".$idPedido."', $descr, '2', '".$qtd."','', NOW())");
+		$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_pedidos, descricao, tipo, qtd, preco, data) VALUES('".$idProduto."', '".$idPedido."', '".$descr."', '2', '".$qtd."','', NOW())");
 	}
 	
 }

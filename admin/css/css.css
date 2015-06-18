@@ -156,7 +156,7 @@ a.more {
 #content {
 	width: 100%;
 	float: left;
-	padding: 10px 0 0 10px;
+	padding: 10px 10px 0 10px;
 /* 	margin-left: 88px; */
 	overflow: hidden;
 }
