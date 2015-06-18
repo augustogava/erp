@@ -44,7 +44,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						<label for="edit_id_cidade">Cidade</label>
 						<span id="td_id_cidade">
 							<select id="edit_id_cidade" name="edit_id_cidade" class="form-control input-sm normalsizeSelect">
-								<option value="0">Selecione</optioa
+								<option value="0">Selecione</option>
 							</select>
 					</div>
 				</form>
