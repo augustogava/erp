@@ -17,6 +17,10 @@ foreach($Colunas as $Valor){
 	$Main->DataGrid->setColunas($Valor);
 }
 
+$collumnsCurrency = explode(",", $_GET["collumnsCurrency"]);
+foreach($collumnsCurrency as $Valor){
+	$Main->DataGrid->addCollumnsCurrency($Valor);
+}
 
 if(!empty($_GET["cadastroExtras"])){
 	$cadastroExtra = explode("|", $_GET["cadastroExtras"]);

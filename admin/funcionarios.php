@@ -16,6 +16,9 @@ $Main->DataGrid->setColunas("funcionarios.nome.like");
 $Main->DataGrid->setColunas("funcionarios.cpf.like");
 $Main->DataGrid->setColunas("funcionarios.rg.like");
 $Main->DataGrid->setColunas("funcionarios.data_contratado");
+
+$Main->DataGrid->addCollumnsCurrency("salario");
+
 $Main->DataGrid->setLimite(15);
 $Main->DataGrid->setEditar("1");
 $Main->DataGrid->setExcluir("1");

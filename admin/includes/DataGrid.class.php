@@ -33,6 +33,7 @@ class DataGrid {
 	private $Tabela;
 	private $Exportar = 1;
 	private $Colunas = array();
+	private $collumnsCurrency = array();
 	private $CadastroExtra = array();
 	private $camposIgnoradosVisu = array("");
 	private $camposIgnorados = array("");
@@ -66,7 +67,7 @@ class DataGrid {
     				if(!empty($p[1])){
 						if(eregi("data", $p[1]) || eregi("nascimento", $p[1])){
 							$fields[$p[1]] =  $this->Formata->date2banco($v);
-						}else if(eregi("preco", $p[1])){
+						}else if(eregi("preco", $p[1]) || $this->isCurrencyCollumn($p[1]) ){
 							$fields[$p[1]] =  $this->Formata->valor2banco($v);
 						}else{
 							$fields[$p[1]] =  $v;
@@ -186,7 +187,7 @@ class DataGrid {
 		$filtros = array("valor", "preco");
 
 		foreach($filtros as $valor){
-			if(eregi($valor, $nome)){
+			if(eregi($valor, $nome) || $this->isCurrencyCollumn($nome) ){
 				return "onKeyPress=\"mascaras.Formata(this,20,event,2)\"";
 			}
 		}
@@ -212,7 +213,6 @@ class DataGrid {
      */
     public function editaAddDataGrid($Acao, $Campo = ""){
     	$this->Html .= "<form action=\"\" name=\"edit\" id =\"edit\"><table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
-    	
     	$this->Html .= "<tr>";
 		
 		if($Acao == "adicionarPopUp"){
@@ -273,7 +273,7 @@ class DataGrid {
 				if(eregi("data", $Campos[$i]) || eregi("nascimento", $Campos[$i])){
 					$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[0][$Campos[$i]]);
 					$camposData[] = "edit_".$Campos[$i];
-				}else if(eregi("preco", $Campos[$i])){
+				}else if(eregi("preco", $Campos[$i]) || $this->isCurrencyCollumn($Campos[$i]) ){
 					$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[0][$Campos[$i]]);
 				}else{
 					$valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
@@ -477,7 +477,7 @@ class DataGrid {
 					//Formata Valor e data
 					if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
 						$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
-					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna))){
+					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna)){
 						$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else{
 						$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
@@ -537,7 +537,7 @@ class DataGrid {
 
 					if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
 						$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
-					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna))){
+					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna) ){
 						$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else{
 						$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
@@ -604,7 +604,7 @@ class DataGrid {
 				//Formata Valor e data
 				if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
 					$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
-				}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna))){
+				}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna)){
 					$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 				}else{
 					$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
@@ -870,7 +870,7 @@ class DataGrid {
                     if(eregi("data", $Campos[$i]) || eregi("nascimento", $Campos[$i])){
                             $valorFormatado =  $this->Formata->banco2date($RetornoConsulta[0][$Campos[$i]]);
                             $camposData[] = "edit_".$Campos[$i];
-                    }else if(eregi("preco", $Campos[$i])){
+                    }else if(eregi("preco", $Campos[$i]) || $this->isCurrencyCollumn($Campos[$i]) ){
                             $valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[0][$Campos[$i]]);
                     }else{
                             $valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
@@ -962,6 +962,8 @@ class DataGrid {
      */
     public function montaParametros(){
     	$Colunas = implode(",",$this->Colunas);
+    	$collumnsCurrency = implode(",",$this->collumnsCurrency);
+    	
 		if(isset($this->CadastroExtra)){
 			foreach($this->CadastroExtra as $res){
 				$cadastrosExtra[] = implode(",", $res);
@@ -973,7 +975,7 @@ class DataGrid {
 			
 		}
 		
-    	return "&query=".$this->Query."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
+    	return "&query=".$this->Query."&collumnsCurrency=".$collumnsCurrency."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
     }//end function
 	
 	/*
@@ -1025,6 +1027,20 @@ class DataGrid {
 		$this->FlagRefresh = $flagRefresh;
 		$_SESSION["FlagRefresh"] = $flagRefresh;
 	}//end Function
+	
+	/**
+	 * Returns if Collums is currency type.
+	 * 
+	 * @param unknown $collumn
+	 */
+	public function isCurrencyCollumn($collumn){
+		foreach($this->collumnsCurrency as $v){
+			if( $collumn == $v)
+				return true;
+		}
+		
+		return false;
+	}
 	
 	 /**
      * Pegar nome Tabela.
@@ -1258,7 +1274,7 @@ class DataGrid {
 	 */
 	public function setColunas($coluna){
 		$this->Colunas[] = $coluna;
-	}//end Function
+	}
 	
 	/**
      *
@@ -1267,7 +1283,27 @@ class DataGrid {
 	 */
 	public function getColunas(){
 		return $this->Colunas;
-	}//end Function
+	}
+	
+	/**
+	 *
+	 * Set Colunas currency.
+	 *
+	 * @param Colunas a user usada
+	 *
+	 */
+	public function addCollumnsCurrency($coluna){
+		$this->collumnsCurrency[] = $coluna;
+	}
+	
+	/**
+	 *
+	 * Set colunas.
+	 *
+	 */
+	public function getCollumnsCurrency(){
+		return $this->collumnsCurrency;
+	}
 	
 	/**
      *
