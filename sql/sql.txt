@@ -1,0 +1,47 @@
+UPDATE `stoik`.`param` SET `valor`='logo.png' WHERE `id`='4';
+UPDATE `stoik`.`param` SET `valor`='http://www.stoik.com.br/admin/' WHERE `id`='5';
+
+UPDATE `stoik`.`status_pedidos` SET `nome`='Separando' WHERE `id`='4';
+INSERT INTO `stoik`.`status_ordem` (`id`, `nome`) VALUES ('4', 'Produzindo');
+
+ALTER TABLE `stoik`.`produtos` ADD COLUMN `estoque_atual` INT(20) NULL DEFAULT 0 AFTER `data_cad`;
+
+
+
+/** New Tables */
+CREATE TABLE `status_separacao` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Status Ordem Separação';
+
+
+CREATE TABLE `ordem_separacao` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id_pedido` int(10) NOT NULL,
+  `id_produtos` int(10) NOT NULL,
+  `descricao` longtext COLLATE latin1_general_ci NOT NULL,
+  `qtd` int(5) NOT NULL,
+  `id_status_separacao` int(10) NOT NULL,
+  `data_cad` date NOT NULL,
+  `data_status` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Ordens de separação';
+
+
+INSERT INTO `stoik`.`status_separacao` (`id`, `nome`) VALUES ('1', 'Á Separar');
+INSERT INTO `stoik`.`status_separacao` (`id`, `nome`) VALUES ('2', 'Separado');
+
+ALTER TABLE `stoik`.`menus` ADD COLUMN `icone` VARCHAR(45) NULL AFTER `ordem`;
+
+UPDATE `stoik`.`menus` SET `icone`='fa-home' WHERE `id`='1';
+UPDATE `stoik`.`menus` SET `icone`='fa-file' WHERE `id`='2';
+UPDATE `stoik`.`menus` SET `icone`='fa-list-alt' WHERE `id`='3';
+UPDATE `stoik`.`menus` SET `icone`='fa-gears' WHERE `id`='5';
+UPDATE `stoik`.`menus` SET `icone`='fa-money' WHERE `id`='48';
+UPDATE `stoik`.`menus` SET `icone`='fa-area-chart' WHERE `id`='18';
+UPDATE `stoik`.`menus` SET `icone`='fa-credit-card' WHERE `id`='47';
+UPDATE `stoik`.`menus` SET `icone`='fa-bank' WHERE `id`='4';
+
+
+INSERT INTO `stoik`.`menus` (`id_menus`, `nome`, `link`, `ordem`) VALUES ('3', 'Ordem de Separação', 'ordem_separacao.php', '3');
