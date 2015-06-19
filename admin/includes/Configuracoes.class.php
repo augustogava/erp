@@ -48,7 +48,7 @@ class Configuracoes {
 	    }else{
 		    $this->MySQLHostname = "db.cmjg5io1t8yh.sa-east-1.rds.amazonaws.com";
 		    $this->MySQLUsuario = "root";
-		    $this->MySQLSenha = "efc#2mvvv";
+		    $this->MySQLSenha = "-";
 		    $this->BancodeDados = "stoik";
 	    }
     }
