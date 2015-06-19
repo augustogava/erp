@@ -2,12 +2,7 @@
 include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
-
 session_unset($_SESSION["Ordena"]);
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from pedidos_itens ");
 $Main->DataGrid->setTabela("pedidos_itens");
 $Main->DataGrid->setColunas("pedidos_itens.id_pedidos");

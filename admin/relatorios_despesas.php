@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxo();
 
 $tipoDespesas = $Main->Fluxo->pegaTiposDespesas($_GET["filtro1"], $_GET["filtro2"]);
 
@@ -101,7 +100,7 @@ body {
         ?>
 
                 <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;height:26px;">
-                    <td align="left"><?=(($nome)?$nome:"Sem descri��o")?></td>
+                    <td align="left"><?=(($nome)?$nome:"Sem descrição")?></td>
                 </tr>
                 <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;height:26px;">
                     <td align="left">

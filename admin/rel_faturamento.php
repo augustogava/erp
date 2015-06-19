@@ -52,7 +52,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					<script>
 						document.onkeypress = function (evt){
 							if(main.procuraTecla(evt,13)){
-								if(confirm('Deseja gerar o relat�rio?')){ abrirRelatorioFaturamento() }
+								if(confirm('Deseja gerar o relatório?')){ abrirRelatorioFaturamento() }
 							}
 						}
 						

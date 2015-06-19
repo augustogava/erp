@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxo();
 
 $clientes = $Main->Pedidos->pegaClientes();
 $tipoFluxo = $Main->Fluxo->pegaTipoFluxo();
@@ -33,10 +32,11 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	<div id="content">
 	
 			<div class="linhaConfig" id="busca">  
-				<a href="javascript:main.trocad('buscaDiv');" class="button"><span>Consultar</span></a> 
-				
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=adicionar',1,'addPop');addPop_open(630);" class="button"><span>Incluir</span></a><br /><br /> 
-				
+				<ul class="nav nav-tabs" role="tablist">
+    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab">Consultar</a></li>
+    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/fluxo.php?acao=adicionar',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab">Cadastrar Novo</a></li>
+    			</ul>
+    			
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="clienteBusca">Cliente</label>
@@ -67,7 +67,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						<select id="tipoBusca" class="form-control input-sm normalsizeSelect" name="tipoBusca">
 							<option value="">Selecione</option>
 							<option value="1">Entrada</option>
-							<option value="2">Sa�da</option>
+							<option value="2">Saída</option>
 						</select>
 						<br>
 						<label for="dataIni">Data Inicial</label>
@@ -77,9 +77,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						<input type="text" class="form-control input-sm" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
 						
 						
-						<a href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=' + $('clienteBusca').value + '&tipo=' + $('tipoBusca').value + '&tipoFluxo=' + $('tipoFluxoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');" href="#">
-							<img border="0" src="layout/incones/find.png"/>
-						</a>
+						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=' + $('clienteBusca').value + '&tipo=' + $('tipoBusca').value + '&tipoFluxo=' + $('tipoFluxoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');">Buscar</button>
 					</div>
 				</div>
 			</div>

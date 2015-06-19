@@ -4,9 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery($_GET["query"]);
 $Main->DataGrid->setId($_GET["id"]);
 $Main->DataGrid->setTabela($_GET["tabelaBD"]);
@@ -37,7 +34,7 @@ if(!empty($_GET["cadastroExtras"])){
 
 $Main->DataGrid->setOrder($_GET["ordena"]);
 
-//pagina��o
+//paginação
 $Main->DataGrid->setLimiteAtual($_GET["limiteatual"]);
 $Main->DataGrid->setLimite($_GET["limite"]);
 $Main->DataGrid->setBusca($_GET["busca"]);

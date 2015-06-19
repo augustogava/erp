@@ -3,10 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from formas_pagamento ");
 $Main->DataGrid->setTabela("formas_pagamento");
 $Main->DataGrid->setColunas("formas_pagamento.nome.like");

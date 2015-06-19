@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxo();
 
 $tipoDespesas = $Main->Fluxo->pegaTiposDespesas($_GET["filtro1"], $_GET["filtro2"]);
 

@@ -3,9 +3,8 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxoBanco();
-
 $clientes = $Main->Pedidos->pegaClientes();
+
 $tipoFluxo = $Main->FluxoBanco->pegaTipoFluxo();
 		
 include($Main->Configuracoes->HEADER_NADMIN);  
@@ -28,12 +27,14 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	
 	<div id="content">
 			<div class="linhaConfig" id="busca">  
-			<?
-                                    if($_GET["idBanco"] > 0){
-                                ?>
-                                <a href="javascript:main.trocad('buscaDiv');" class="button"><span>Consultar</span></a>
-				
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=adicionar&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(630);" class="button"><span>Incluir</span></a><br /><br />
+				<?
+                 	if($_GET["idBanco"] > 0){
+                 ?>
+						<ul class="nav nav-tabs" role="tablist">
+		    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab">Consultar</a></li>
+		    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=adicionar&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab">Cadastrar Novo</a></li>
+		    			</ul>
+		    			
 			<?
                                     }
                                 ?>
@@ -55,7 +56,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					<select id="tipoBusca" class="form-control input-sm normalsizeSelect" name="tipoBusca">
 						<option value="">Selecione</option>
 						<option value="1">Entrada</option>
-						<option value="2">Sa�da</option>
+						<option value="2">Saída</option>
 					</select>
 					
 					
@@ -78,7 +79,6 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	
 </div> <!-- end #main-body -->
 <script>
-    dragA.criar_dragEl('drag1',0);
     <?
         if($_GET["idBanco"] > 0){
     ?>

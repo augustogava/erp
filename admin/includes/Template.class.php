@@ -17,16 +17,14 @@
  */
 class Template {
     public $ConexaoSQL;
-    public $Formata;
 	
     /**
 	 * M�todo construtor.
 	 *
 	 * @param ConexaoSQL conex�o com o banco
 	 */
-    public function Template($ConexaoSQL, $Formata){
+    public function Template($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }//end function
     
     /**

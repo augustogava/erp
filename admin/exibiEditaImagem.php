@@ -3,8 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaImagem();
-
 
 include($Main->Configuracoes->HEADER_POPBUSCA);  
 

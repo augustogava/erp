@@ -12,7 +12,7 @@ if($_GET["acao"] == "listar"){
 		$limite = "0";
 		
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="10">Exibindo de <?=$limite?> a <?=($limite+15)?></td>

@@ -28,10 +28,11 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	<div id="content">
 	
 			<div class="linhaConfig" id="busca">  
-				<a href="javascript:main.trocad('buscaDiv');" class="button"><span>Consultar</span></a> 
-				
-				<a href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=adicionar',1,'addPop');addPop_open(630);" class="button"><span>Incluir</span></a><br /><br /> 
-				
+				<ul class="nav nav-tabs" role="tablist">
+    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab">Consultar</a></li>
+    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=adicionar',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab">Cadastrar Novo</a></li>
+    			</ul>
+    			
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="produtoBusca">Produtos</label>
@@ -64,9 +65,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						<label for="dataFim">Data Final</label>
 						<input type="text" class="form-control input-sm" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
 						
-						<a href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=' + $('produtoBusca').value + '&pedido=' + $('pedidoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');" href="#">
-							<img border="0" src="layout/incones/find.png"/>
-						</a>
+						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=' + $('produtoBusca').value + '&pedido=' + $('pedidoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');">Buscar</button>
 					</div>
 				</div>
 			</div>

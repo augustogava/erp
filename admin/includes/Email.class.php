@@ -6,11 +6,11 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 16/12/08
 #  
-#  Classe métodos email
+#  Classe mï¿½todos email
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Classe responsável pelos metodos Email.
+ * Classe responsï¿½vel pelos metodos Email.
  *
  * @author Augusto Gava
  * @version 1.0
@@ -24,13 +24,12 @@ class Email  {
     private $remetente;
 	
     /**
-	 * Método construtor.
+	 * Mï¿½todo construtor.
 	 *
-	 * @param ConexaoSQL conexão com o banco
+	 * @param ConexaoSQL conexï¿½o com o banco
 	 */
-    public function Email($ConexaoSQL, $Formata){
+    public function Email($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }
     
 	/**

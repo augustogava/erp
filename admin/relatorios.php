@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main ();
 $Main->Seguranca->verificaLogado ();
-$Main->AdicionaRelatorios ();
 
 $dados = $Main->Relatorios->geraRelatorio ( $_GET );
 // print_r($dados);

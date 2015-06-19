@@ -3,7 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaComposicao();
 
 $produtos = $Main->Pedidos->pegaProduto($_GET["id"]);
 
@@ -13,7 +12,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	<div class="title">
 		<div class="row">
 	  		<div class="col-md-10">
-	  			<p class="titlePage" id="recent">Composi��o Produtos -  <?=$produtos[0]->getCodigo()." ".$produtos[0]->getNome()?></p>
+	  			<p class="titlePage" id="recent">Composição Produtos -  <?=$produtos[0]->getCodigo()." ".$produtos[0]->getNome()?></p>
 			</div>
 		</div>
 	</div>

@@ -3,10 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from cidade ");
 $Main->DataGrid->setTabela("cidade");
 $Main->DataGrid->setColunas("cidade.id");

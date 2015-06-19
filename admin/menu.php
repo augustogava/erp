@@ -3,10 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from menus ");
 $Main->DataGrid->setTabela("menus");
 $Main->DataGrid->setColunas("menus.id_menus");

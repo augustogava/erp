@@ -10,10 +10,6 @@ $Main = new Main();
 
 $Main->Seguranca->verificaLogado();
 
-$Main->AdicionaCompras();
-
-
-
 if($_GET["acao"] == "listarCotacao"){
 
 	$compras = $Main->Compras->pegaCotacao("", $_GET["fornecedores"], $_GET["limite"], $_GET["dataIni"], $_GET["dataFim"], $_GET["codigo"], $_GET["ordem"], $_GET["tipoOrdem"]);
@@ -29,7 +25,7 @@ if($_GET["acao"] == "listarCotacao"){
 		$tipoOrdem = "asc";
 ?>
 
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="96%" class="ColunaInfo" colspan="8">Exibindo de <?=$limite?> a <?=($limite+30)?></td>
@@ -54,7 +50,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 				<a href="javascript:doAjaxSemRetorno('ajax_com/compras.php?acao=listarCotacao&fornecedores=<?=$_GET["fornecedores"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&ordem=<?=$_GET["ordem"]?>&tipoOrdem=<?=$_GET["tipoOrdem"]?>&limite=<?=($limite-30)?>',1,'SaidaMain');" href="#">
 
-					<img border="0" alt="Pr�ximo" src="layout/incones/bulletgreenleft.gif"/>
+					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
 
 				</a>
 
@@ -206,7 +202,7 @@ if($_GET["acao"] == "listarCotacao"){
 		$tipoOrdem = "asc";
 
 ?>
-    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 
 	<tbody>
 
@@ -234,7 +230,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 				<a href="javascript:doAjaxSemRetorno('ajax_com/compras.php?acao=listarCompras&fornecedores=<?=$_GET["fornecedores"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&ordem=<?=$_GET["ordem"]?>&tipoOrdem=<?=$_GET["tipoOrdem"]?>&limite=<?=($limite-30)?>',1,'SaidaMain');" href="#">
 
-					<img border="0" alt="Pr�ximo" src="layout/incones/bulletgreenleft.gif"/>
+					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
 
 				</a>
 

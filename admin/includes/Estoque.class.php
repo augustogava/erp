@@ -21,16 +21,14 @@ include_once("properties/PropriedadesPadrao.php");
 
 class Estoque  {
 	public $ConexaoSQL;
-    public $Formata;
 	
     /**
 	 * M�todo construtor.
 	 *
 	 * @param ConexaoSQL conex�o com o banco
 	 */
-    public function Estoque($ConexaoSQL, $Formata){
+    public function Estoque($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }
     
     /**
@@ -48,10 +46,10 @@ class Estoque  {
 			$busca .= " AND estoque.tipo = '".$tipo."' ";
 			
 		if(!empty($dataIni))
-			$busca .= " AND estoque.data >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND estoque.data >= '".Formata::date2banco($dataIni)."' ";
 			
 		if(!empty($dataFim))
-			$busca .= " AND estoque.data <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND estoque.data <= '".Formata::date2banco($dataFim)."' ";
 		
 		if(!empty($idEstoque))
 			$busca .= " AND estoque.id = '".$idEstoque."' ";
@@ -69,8 +67,8 @@ class Estoque  {
 				$Retorno[$j]->setProdutoNome($RetornoConsultaRel[$j]["codigoProduto"]." ".$RetornoConsultaRel[$j]["nomeProduto"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setQtd($RetornoConsultaRel[$j]["qtd"]);
-				$Retorno[$j]->setPreco($this->Formata->banco2valor($RetornoConsultaRel[$j]["preco"]));
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setPreco(Formata::banco2valor($RetornoConsultaRel[$j]["preco"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
 				$Retorno[$j]->setDescricao($RetornoConsultaRel[$j]["descricao"]);
 			}
 		}
@@ -85,7 +83,7 @@ class Estoque  {
 	*/
 	public function salvarEstoque($id = "", $produto = "", $tipo = "", $qtd = "", $preco = "", $data = "", $descricao = ""){
 		if(empty($id)){
-			$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, tipo, qtd, preco, data, descricao) VALUES('".$produto."', '".$tipo."','".$qtd."','".$this->Formata->valor2banco($preco)."', '".$this->Formata->date2banco($data)."','".$descricao."')");
+			$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, tipo, qtd, preco, data, descricao) VALUES('".$produto."', '".$tipo."','".$qtd."','".Formata::valor2banco($preco)."', '".Formata::date2banco($data)."','".$descricao."')");
 			
 			if( $tipo == 1 )
 				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual += '".$qtd."' WHERE id = '".$produto."'");
@@ -103,7 +101,7 @@ class Estoque  {
 			else 
 				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$diff."' WHERE id = '".$produto."'");
 			
-			$this->ConexaoSQL->updateQuery("UPDATE estoque SET id_produtos = '".$produto."', descricao = '".$descricao."', tipo = '".$tipo."', qtd = '".$qtd."', preco = '".$this->Formata->valor2banco($preco)."', data = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
+			$this->ConexaoSQL->updateQuery("UPDATE estoque SET id_produtos = '".$produto."', descricao = '".$descricao."', tipo = '".$tipo."', qtd = '".$qtd."', preco = '".Formata::valor2banco($preco)."', data = '".Formata::date2banco($data)."' WHERE id = '".$id."'");
 		}
 	}
 	

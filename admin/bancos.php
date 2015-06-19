@@ -3,12 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//session_unset($_SESSION["Ordena"]);
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from bancos ");
 $Main->DataGrid->setTabela("bancos");
 $Main->DataGrid->setColunas("bancos.nome.like");

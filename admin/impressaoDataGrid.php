@@ -3,9 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
 include($Main->Configuracoes->HEADER_POPBUSCA);
 
 $Main->DataGrid->setQuery($_GET["query"]);
@@ -45,14 +42,10 @@ $Main->DataGrid->setOrder($_GET["ordena"]);
 
 $Main->DataGrid->setNomeTable($_GET["tabela"]);
 ?>
-<div id="main-body">
 	<div id="contentPopUp">
-	
-		
 		
 			<? $Main->DataGrid->montaImpressao(); ?>
 		
 
 	</div> <!-- end #content -->
 	
-</div> <!-- end #main-body -->

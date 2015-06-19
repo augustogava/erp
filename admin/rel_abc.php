@@ -59,7 +59,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					<script>
 						document.onkeypress = function (evt){
 							if(main.procuraTecla(evt,13)){
-								if(confirm('Deseja gerar o relat�rio?')){ abrirRelatorioCurvaABC() }
+								if(confirm('Deseja gerar o relatório?')){ abrirRelatorioCurvaABC() }
 							}
 						}
 						

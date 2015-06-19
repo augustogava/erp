@@ -5,9 +5,6 @@ $Main = new Main();
 $Main->Seguranca->verificaLogado();
 
 if($_GET["acao"] == "exportar"){
-	//Chama DataGrid
-	$Main->AdicionaDataGrid();
-	
 	$Main->DataGrid->setQuery($_GET["query"]);
 	$Main->DataGrid->setId($_GET["edit_id"]);
 	$Main->DataGrid->setTabela($_GET["tabelaBD"]);

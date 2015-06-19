@@ -6,28 +6,26 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/01/08
 #  
-#  Classe responsável que busca parametros padroes
+#  Classe responsï¿½vel que busca parametros padroes
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 include_once("properties/PropriedadesPadrao.php");
 
 /**
- * Classe responsável que busca parametros padroes
+ * Classe responsï¿½vel que busca parametros padroes
  *
  * @author Augusto Gava
  * @version 1.0
  */
 class Padrao {
     public $ConexaoSQL;
-    public $Formata;
 	
     /**
-	 * Método construtor.
+	 * Mï¿½todo construtor.
 	 *
-	 * @param ConexaoSQL conexão com o banco
+	 * @param ConexaoSQL conexï¿½o com o banco
 	 */
-    public function Padrao($ConexaoSQL, $Formata){
+    public function Padrao($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
         
         $this->pegarParametros();
     }//end function
@@ -46,23 +44,23 @@ class Padrao {
     }//end function
     
     /**
-     * Pega nome do perfil de permissão do usuário logado.
+     * Pega nome do perfil de permissï¿½o do usuï¿½rio logado.
      */
     public function pegaNomePerfil(){
     	$RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM niveis WHERE id = '".$_SESSION["niveluser"]."'");
     	if(count($RetornoConsulta) > 0)
     		return $RetornoConsulta[0]["nome"];
     	else
-    		return "Não Achado";
+    		return "NÃ£o Achado";
     }
     
     /**
-     * Pega último login usuário.
+     * Pega Ãºltimo login usuÃ¡rio.
      */
     public function pegaUltimoLogin(){
     	$RetornoConsulta = $this->ConexaoSQL->Select("SELECT data FROM auditoria WHERE acao = 'login' AND id_usuarios = '".$_SESSION["niveluser"]."' ORDER By data DESC Limit 1, 1");
     	if(count($RetornoConsulta) > 0)
-    		return $this->Formata->banco2date($RetornoConsulta[0]["data"]);
+    		return Formata::banco2date($RetornoConsulta[0]["data"]);
     	else
     		return "Primeiro Acesso";
     }

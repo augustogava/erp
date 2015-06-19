@@ -4,9 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery($_GET["query"]);
 $Main->DataGrid->setId($_GET["edit_id"]);
 $Main->DataGrid->setTabela($_GET["tabelaBD"]);

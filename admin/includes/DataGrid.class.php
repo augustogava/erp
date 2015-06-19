@@ -17,8 +17,6 @@
  */
 class DataGrid {
 	private $ConexaoSQL;
-	private $Formata;
-	private $Exportacao;
 	private $Query = '';
 	private $Limite = '';
 	private $LimiteAtual = 0;
@@ -47,10 +45,8 @@ class DataGrid {
 	 * @param ConexaoSQL com o banco
      * @param Formata formata
 	 */
-    public function DataGrid($ConexaoSQL, $Formata, $Exportacao){
+    public function DataGrid($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
-		$this->Exportacao = $Exportacao;
     }//end function
     
     /**
@@ -66,9 +62,9 @@ class DataGrid {
     				$p = explode("edit_",$k);
     				if(!empty($p[1])){
 						if(eregi("data", $p[1]) || eregi("nascimento", $p[1])){
-							$fields[$p[1]] =  $this->Formata->date2banco($v);
+							$fields[$p[1]] =  Formata::date2banco($v);
 						}else if(eregi("preco", $p[1]) || $this->isCurrencyCollumn($p[1]) ){
-							$fields[$p[1]] =  $this->Formata->valor2banco($v);
+							$fields[$p[1]] =  Formata::valor2banco($v);
 						}else{
 							$fields[$p[1]] =  $v;
 						}
@@ -260,7 +256,7 @@ class DataGrid {
 				
 			}else if(!is_int($Campos[$i]) && $Campos[$i]!="id" && !eregi("^id",$Campos[$i]) && !in_array($Campos[$i] , $this->camposIgnorados) ){
 				$this->Html .= "<tr>";
-    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst($this->Formata->removeCaractres($Campos[$i])).":</b></td>";
+    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst(Formata::removeCaractres($Campos[$i])).":</b></td>";
 				if($ret = $this->verificaFiltro($Campos[$i])){
 					$valida = "onkeypress=\"mascaras.mascara(this,'".$ret["nome"]."')\" maxlength=\"".$ret["tamanho"]."\"";
 				}else if($ret = $this->verificaFiltroReal($Campos[$i])){
@@ -271,10 +267,10 @@ class DataGrid {
 				
 				//Formata Valor e data
 				if(eregi("data", $Campos[$i]) || eregi("nascimento", $Campos[$i])){
-					$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[0][$Campos[$i]]);
+					$valorFormatado =  Formata::banco2date($RetornoConsulta[0][$Campos[$i]]);
 					$camposData[] = "edit_".$Campos[$i];
 				}else if(eregi("preco", $Campos[$i]) || $this->isCurrencyCollumn($Campos[$i]) ){
-					$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[0][$Campos[$i]]);
+					$valorFormatado =  Formata::banco2valor($RetornoConsulta[0][$Campos[$i]]);
 				}else{
 					$valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
 				}
@@ -304,14 +300,14 @@ class DataGrid {
 						$queyCidade = " WHERE id_estado = '".$RetornoConsulta[0]["id_estado"]."' "; 
 					}
 				}
-				$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Campos[$i]);
+				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Campos[$i]);
 				
 				$QueryRel = " SELECT * FROM ".$NomeTabelaRelacionamento." ".$queyCidade." Order By id ASC ";
 				$CamposRela = $this->ConexaoSQL->pegaCamposTabela($NomeTabelaRelacionamento);
     			$RetornoConsultaRel = $this->ConexaoSQL->Select($QueryRel);
     			if(count($RetornoConsultaRel) > 0){
 					$this->Html .= "<tr>";
-	    			$this->Html .= "<td align=\"right\"><b>".ucfirst( $this->Formata->removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
+	    			$this->Html .= "<td align=\"right\"><b>".ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
 	    			$this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\" class=\"form-inline\">";
 	    			$this->Html .= "<select class=\"form-control input-sm size-80\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" title=\"".ucfirst($NomeTabelaRelacionamento)."\" class=\"".$requerido."\" ".$onChangeEstado.">";
 		    		//Se for campo tipo cidade e estiver inserindo nao exibi alista intera
@@ -403,22 +399,22 @@ class DataGrid {
     public function exportar($tipo){
     	
 		if($tipo != "csv"){
-			$this->Html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
+			$this->Html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"0\" align=\"left\">";
 			$this->Html .= "<tr class=\"tituloRelatorio\">";
 				
 				if($tipo == "html"){
 					$this->Html .= "<td width='10%'>";
-					$this->Html .= "<img src=\"layout/incones/exportar.png\" width=\"30px\" border='1' alt=\"Imprimir\" onclick=\"main.imprimir();\"  /> ";
+					$this->Html .= "<div class=\"logo\"></div>";
 					$this->Html .= "</td>";
 				}
 
 				$this->Html .= "<td  width='90%' align='center'>";
-					$this->Html .= "Impress�o ".ucfirst($this->getTabela());
+					$this->Html .= "Impressão ".ucfirst($this->getTabela());
 				$this->Html .= "</td>";
 			$this->Html .= "</tr>";
 			$this->Html .= "</table><br />";
 			
-			$this->Html .= "<table width=\"99%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\">";
+			$this->Html .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\" class=\"table-relatorio\">";
 			
 			if($this->verficaErros()){
 				print $this->Html;
@@ -435,7 +431,7 @@ class DataGrid {
 				$NomeTabelaRelacionamento = "";
 				//Busca relacionamento outra tabela 
 				if( eregi("^id_", $Nome[1]) ){
-						$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Nome[1]);
+						$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
 				}//end if eregi
 				$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
 				if( eregi("^id", $Nome[1]) ){
@@ -466,7 +462,7 @@ class DataGrid {
 				foreach($this->Colunas as $Ind=>$NomeColuna){
 					//Busca relacionamento outra tabela
 					if( eregi(".id_", $NomeColuna) ){
-						$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($NomeColuna);
+						$NomeTabelaRelacionamento = Formata::retornaNomeTabela($NomeColuna);
 						$RetornoConsultaRel = $this->ConexaoSQL->SelectAuto($NomeTabelaRelacionamento, array("*"), $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)] );
 					}else{ unset($RetornoConsultaRel); }
 					
@@ -476,9 +472,9 @@ class DataGrid {
 					$Teste[$i][$Ind] = $RetornoConsulta[$i][$Ind];
 					//Formata Valor e data
 					if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
-						$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+						$valorFormatado =  Formata::banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna)){
-						$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+						$valorFormatado =  Formata::banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else{
 						$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
 					}
@@ -494,8 +490,8 @@ class DataGrid {
 			
 			if($tipo == "excel"){
 				
-				$arquivo = $this->Exportacao->criaArquivo("/", $this->Html);
-				$this->Exportacao->gerarExceldeArquivoTemporario($arquivo, "exportacao");
+				$arquivo = Exportacao::criaArquivo("/", $this->Html);
+				Exportacao::gerarExceldeArquivoTemporario($arquivo, "exportacao");
 			}else if($tipo == "html"){
 				print $this->Html;
 			}
@@ -508,7 +504,7 @@ class DataGrid {
 				$NomeTabelaRelacionamento = "";
 				//Busca relacionamento outra tabela 
 				if( eregi("^id_", $Nome[1]) ){
-						$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Nome[1]);
+						$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
 				}//end if eregi
 				$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
 				if( eregi("^id", $Nome[1]) ){
@@ -529,16 +525,16 @@ class DataGrid {
 				foreach($this->Colunas as $Ind=>$NomeColuna){
 					//Busca relacionamento outra tabela
 					if( eregi(".id_", $NomeColuna) ){
-						$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($NomeColuna);
+						$NomeTabelaRelacionamento = Formata::retornaNomeTabela($NomeColuna);
 						$RetornoConsultaRel = $this->ConexaoSQL->SelectAuto($NomeTabelaRelacionamento, array("*"), $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)] );
 					}else{ 
 						unset($RetornoConsultaRel); 
 					}
 
 					if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
-						$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+						$valorFormatado =  Formata::banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna) ){
-						$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+						$valorFormatado =  Formata::banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 					}else{
 						$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
 					}
@@ -556,8 +552,8 @@ class DataGrid {
 				
 			}//end for
 			
-			$arquivo = $this->Exportacao->criaArquivo("/", $this->Html);
-			$this->Exportacao->gerarCsvdeArquivoTemporario($arquivo, "exportacao");
+			$arquivo = Exportacao::criaArquivo("/", $this->Html);
+			Exportacao::gerarCsvdeArquivoTemporario($arquivo, "exportacao");
 		}
     }
     
@@ -574,7 +570,7 @@ class DataGrid {
     		return;
     	}
 		
-    	$this->Html .= "<table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" id=\"".$this->getNomeTable()."\">";
+    	$this->Html .= "<table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" id=\"".$this->getNomeTable()."\" class=\"table-erp\">";
     	
     	
     	$this->geraTituloData();
@@ -593,7 +589,7 @@ class DataGrid {
     		foreach($this->Colunas as $Ind=>$NomeColuna){
 	    		//Busca relacionamento outra tabela
     			if( eregi(".id_", $NomeColuna) ){
-    				$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($NomeColuna);
+    				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($NomeColuna);
 	    			$RetornoConsultaRel = $this->ConexaoSQL->SelectAuto($NomeTabelaRelacionamento, array("*"), $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)] );
     			}else{ unset($RetornoConsultaRel); }
 				
@@ -603,9 +599,9 @@ class DataGrid {
     			$Teste[$i][$Ind] = $RetornoConsulta[$i][$Ind];
 				//Formata Valor e data
 				if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
-					$valorFormatado =  $this->Formata->banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+					$valorFormatado =  Formata::banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 				}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna)){
-					$valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
+					$valorFormatado =  Formata::banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 				}else{
 					$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
 				}
@@ -633,7 +629,7 @@ class DataGrid {
     		$this->Html .= "</tr>";
     	}//end for
     	
-    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+2)."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-sm size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
+    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+3 + count($this->CadastroExtra))."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-sm size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
 								<option value=\"15\" ".(($this->getLimite()==15)?"selected":"").">15</option>
 								<option value=\"30\" ".(($this->getLimite()==30)?"selected":"").">30</option>
 								<option value=\"999999\" ".(($this->getLimite()==999999)?"selected":"").">Todos</option>
@@ -683,7 +679,7 @@ class DataGrid {
     		$NomeTabelaRelacionamento = "";
     		//Busca relacionamento outra tabela 
     		if( eregi("^id_", $Nome[1]) ){
-    				$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Nome[1]);
+    				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
     		}//end if eregi
     		$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
     		if( eregi("^id", $Nome[1]) ){
@@ -725,9 +721,11 @@ class DataGrid {
     	$Paramentros = $this->montaParametros();
     	
     	$Ret = "<div id=\"busca\" class=\"linhaConfig\"> ";
-    	$Ret .= "<a href=\"javascript:main.trocad('buscaDiv');\" class=\"button\"><span>Consultar</span></a> 
-				 <a href=\"javascript:doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=adicionar".$Paramentros."',1,'addPop');addPop_open(630);\" class=\"button\"><span>Incluir</span></a><br /><br />";
-				
+    	$Ret .= "<ul class=\"nav nav-tabs\" role=\"tablist\">
+    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"main.trocad('buscaDiv');\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Consultar</a></li>
+    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=adicionar".$Paramentros."',1,'addPop');addPop_open(630);\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Cadastrar Novo</a></li>
+    			</ul>";
+
     	$Ret .= "<div id=\"buscaDiv\" style=\"display:none;\"> <div class=\"form-group form-inline\"> ";
     	
     	//Monta as buscas com colunas
@@ -737,7 +735,7 @@ class DataGrid {
 			$QueryBusca .= $Nome[0].".".$Nome[1].".".$Nome[2].",";
 			//Monta Relacionamento 1x1
 			if( eregi("^id_",$Nome[1]) ){
-				$NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Nome[1]);
+				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
 				
 				$QueryRel = " SELECT * FROM ".$NomeTabelaRelacionamento." Order By id ASC ";
     			$RetornoConsultaRel = $this->ConexaoSQL->Select($QueryRel);
@@ -759,7 +757,7 @@ class DataGrid {
 			}//end if eregi
 		}//end for
 
-		$Ret .= "<a href=\"javascript:dataGrid.enviarget('$QueryBusca', '$Paramentros');\"><img src=\"layout/incones/find.png\" border=\"0\"></a>";
+		$Ret .= "<button type=\"button\" class=\"btn btn-sm btn-default\" onClick=\"dataGrid.enviarget('".$QueryBusca."', '".$Paramentros."');\">Buscar</button>";
 				
 		$Ret .= "<input type=\"hidden\" value=\"\" name=\"urlHidden\" id=\"urlHidden\">";
 		$Ret .= "<input type=\"hidden\" value=\"\" name=\"queryB\" id=\"queryB\">";
@@ -822,22 +820,22 @@ class DataGrid {
      * Monta tela de impressao.
      */
     public function montaImpressao(){
-       $this->Html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
+       $this->Html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"0\" align=\"left\">";
             $this->Html .= "<tr class=\"tituloRelatorio\">";
 
                     
                     $this->Html .= "<td width='10%'>";
-                    $this->Html .= "<img src=\"layout/incones/exportar.png\" width=\"30px\" border='1' alt=\"Imprimir\" onclick=\"main.imprimir();\"  /> ";
+                    $this->Html .= "<div class=\"logo\"></div>";
                     $this->Html .= "</td>";
 
 
                     $this->Html .= "<td  width='90%' align='center'>";
-                            $this->Html .= "Impress�o ".ucfirst($this->getTabela());
+                            $this->Html .= "Impressão ".ucfirst($this->getTabela());
                     $this->Html .= "</td>";
             $this->Html .= "</tr>";
             $this->Html .= "</table><br />";
 
-        $this->Html .= "<table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
+        $this->Html .= "<table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" align=\"left\" class=\"table-relatorio\">";
 
         $Query = $this->Query." WHERE id = '".$this->getId()."' ";
     	$RetornoConsulta = $this->ConexaoSQL->Select($Query);
@@ -864,14 +862,14 @@ class DataGrid {
 
             }else if(!is_int($Campos[$i]) && $Campos[$i]!="id" && !eregi("^id",$Campos[$i]) && !in_array($Campos[$i] , $this->camposIgnorados) ){
 		$this->Html .= "<tr>";
-                    $this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst($this->Formata->removeCaractres($Campos[$i])).":</b></td>";
+                    $this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst(Formata::removeCaractres($Campos[$i])).":</b></td>";
 
                     //Formata Valor e data
                     if(eregi("data", $Campos[$i]) || eregi("nascimento", $Campos[$i])){
-                            $valorFormatado =  $this->Formata->banco2date($RetornoConsulta[0][$Campos[$i]]);
+                            $valorFormatado =  Formata::banco2date($RetornoConsulta[0][$Campos[$i]]);
                             $camposData[] = "edit_".$Campos[$i];
                     }else if(eregi("preco", $Campos[$i]) || $this->isCurrencyCollumn($Campos[$i]) ){
-                            $valorFormatado =  $this->Formata->banco2valor($RetornoConsulta[0][$Campos[$i]]);
+                            $valorFormatado =  Formata::banco2valor($RetornoConsulta[0][$Campos[$i]]);
                     }else{
                             $valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
                     }
@@ -888,7 +886,7 @@ class DataGrid {
                 
                 $queyCidade = " WHERE id = '".$RetornoConsulta[0][$Campos[$i]]."'";
                
-                $NomeTabelaRelacionamento = $this->Formata->retornaNomeTabela($Campos[$i]);
+                $NomeTabelaRelacionamento = Formata::retornaNomeTabela($Campos[$i]);
 
                 $QueryRel = " SELECT * FROM ".$NomeTabelaRelacionamento." ".$queyCidade." Order By id ASC ";
                 //print $QueryRel;
@@ -896,7 +894,7 @@ class DataGrid {
                 $RetornoConsultaRel = $this->ConexaoSQL->Select($QueryRel);
                 if(count($RetornoConsultaRel) > 0){
                         $this->Html .= "<tr>";
-                            $this->Html .= "<td align=\"right\"><b>".ucfirst( $this->Formata->removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
+                            $this->Html .= "<td align=\"right\"><b>".ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
                             $this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\">".$RetornoConsultaRel[0]["nome"]."";
                             $this->Html .= "</td>";
                         $this->Html .= "</tr>";

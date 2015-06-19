@@ -34,7 +34,7 @@ if($_GET["acao"] == "listar"){
 
 ?>
 
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 
 	<tbody>
 
@@ -46,15 +46,15 @@ if($_GET["acao"] == "listar"){
 
 		<tr class="titulo">
 
-			<td width="45" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.codigo&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Código</a></td>
+			<td width="7%" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.codigo&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Código</a></td>
 
-			<td width="42" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=clientes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Clientes</a></td>
+			<td width="30%" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=clientes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Cliente</a></td>
 
-			<td width="42" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=representantes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Representante</a></td>
+			<td width="30%" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=representantes.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Representante</a></td>
 
-			<td width="42" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.data_cad&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Data</a></td>
+			<td width="10%" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=pedidos.data_cad&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');"><a href="#">Data</a></td>
 
-			<td width="42" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=status_pedidos.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');" ><a href="#">Status</a></td>
+			<td width="10%" onclick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=<?=$_GET["clientes"]?>&status=<?=$_GET["status"]?>&limite=<?=($limite)?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&codigo=<?=$_GET["codigo"]?>&dataEnvioIni=<?=$_GET["dataEnvioIni"]?>&dataEnvioFim=<?=$_GET["dataEnvioFim"]?>&ordem=status_pedidos.nome&tipoOrdem=<?=$tipoOrdem?>',1,'SaidaMain');" ><a href="#">Status</a></td>
 
 			<td width="4%">&nbsp;</td>
 
@@ -111,57 +111,63 @@ if($_GET["acao"] == "listar"){
 
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$linha?>" width="60%">
 
-			<td width="13%" class="ColunaInfo">
+			<td  class="ColunaInfo">
 
 				<?=$pedidos[$j]->getCodigo()?>
 
 			</td>
 
-			<td width="42%"  id="linhaDataGrid_<?=$j?>_0">
+			<td   id="linhaDataGrid_<?=$j?>_0">
 
 				<?=$pedidos[$j]->getClienteNome()?>
 
 			</td>
 
-			<td width="30%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 
 				<?=($pedidos[$j]->getRepresentantesNome()) ? ($pedidos[$j]->getRepresentantesNome()) : "Sem Representante";?>
 
 			</td>
 
-			<td width="42%"  id="linhaDataGrid_<?=$j?>_0">
+			<td   id="linhaDataGrid_<?=$j?>_0">
 
 				<?=$pedidos[$j]->getDataAberta()?>
 
 			</td>
 
-			<td width="20%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 
 				<?=$pedidos[$j]->getStatusNome()?>
 
 			</td>
 
-			<td width="4%" align="center"> 
-
+			<td align="center"> 
+				
+				<?php 
+				if( $pedidos[$j]->getStatusId() == 1 ){
+				?>
 				<a href="javascript:fecharPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
 
 					<img border="0" src="layout/incones/fechar_22.png" alt="Fechar Pedido" title="Fechar Pedido"/>
 
 				</a>
-
+				<?php } ?>
 			</td>
 
-			<td width="4%" align="center"> 
+			<td  align="center"> 
 
+				<?php 
+				if( $pedidos[$j]->getStatusId() == 6 ){
+				?>
 				<a href="javascript:enviarPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
 
 					<img border="0" src="layout/incones/enviarPedido.png" alt="Impressão" title="Enviar"/>
 
 				</a>
-
+				<?php } ?>
 			</td>
 
-			<td width="4%" align="center"> 
+			<td  align="center"> 
 
 				<a href="javascript:impressaoPedido(<?=$pedidos[$j]->getId()?>)">
 
@@ -171,7 +177,7 @@ if($_GET["acao"] == "listar"){
 
 			</td>
 
-			<td width="4%" align="center"> 
+			<td align="center"> 
 
 				<a href="javascript:enviarEmailPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getClienteId()?>)">
 
@@ -181,7 +187,7 @@ if($_GET["acao"] == "listar"){
 
 			</td>
 
-			<td width="4%" align="center"> 
+			<td  align="center"> 
 
 				<a href="javascript:doAjaxSemRetorno('ajax_com/pedidos.php?acao=editar&idPedido=<?=$pedidos[$j]->getId()?>',1,'addPop');addPop_open(630);">
 
@@ -191,7 +197,7 @@ if($_GET["acao"] == "listar"){
 
 			</td>
 
-			<td  width="4%" align="center" colspan="2"> 
+			<td align="center" colspan="2"> 
 
 				<a onclick="if(confirm('Deseja Excluir?')){ excluirPedido(<?=$pedidos[$j]->getId()?>);  }" href="#">
 

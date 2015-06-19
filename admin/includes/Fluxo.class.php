@@ -22,16 +22,14 @@ include_once("properties/PropriedadesPadrao.php");
 
 class Fluxo  {
 	public $ConexaoSQL;
-    public $Formata;
 	
     /**
 	 * M?todo construtor.
 	 *
 	 * @param ConexaoSQL conex?o com o banco
 	 */
-    public function Fluxo($ConexaoSQL, $Formata){
+    public function Fluxo($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }
     
     /**
@@ -57,17 +55,17 @@ class Fluxo  {
 			$buscaEspec .= " AND fluxo.id_tipo_fluxo = '".$tipoFluxo."' ";
 
 		if(!empty($dataIni))
-			$busca .= " AND fluxo.data >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND fluxo.data >= '".Formata::date2banco($dataIni)."' ";
 			
 		if(!empty($dataFim))
-			$busca .= " AND fluxo.data <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND fluxo.data <= '".Formata::date2banco($dataFim)."' ";
 			
 		if(!empty($id)){
             $busca .= " AND fluxo.id = '".$id."' ";
             $query = " SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE 1 ".$busca." ORDER By fluxo.data ASC ";
         }else{
             
-            $query = " SELECT * FROM (SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.data <= '".$this->Formata->date2banco($dataIni)."' AND fluxo.status = '0' ".$buscaEspec." UNION SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE 1 ".$busca."  ) as a ORDER BY a.data ASC";
+            $query = " SELECT * FROM (SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.data <= '".Formata::date2banco($dataIni)."' AND fluxo.status = '0' ".$buscaEspec." UNION SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE 1 ".$busca."  ) as a ORDER BY a.data ASC";
         }
 
 		//print $query;
@@ -85,9 +83,9 @@ class Fluxo  {
 				$Retorno[$j]->setTipoFluxoNome($RetornoConsultaRel[$j]["tipoFluxoNome"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
-				$Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
+				$Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
 			}
 		}
 		
@@ -145,12 +143,12 @@ class Fluxo  {
 	*/
 	public function salvarFluxo($id = "", $cliente = "", $fornecedor = "", $tipo = "", $tipoFluxo = "", $ocorrencia = "", $valor = "", $data = "", $status = ""){
 		if(empty($id)){
-			$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_fornecedores, tipo, id_tipo_fluxo, ocorrencia, valor, data) VALUES('".$cliente."', '".$fornecedor."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".$this->Formata->valor2banco($valor)."', '".$this->Formata->date2banco($data)."')");
+			$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_fornecedores, tipo, id_tipo_fluxo, ocorrencia, valor, data) VALUES('".$cliente."', '".$fornecedor."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".Formata::valor2banco($valor)."', '".Formata::date2banco($data)."')");
 		}else{
 			if( $status != ""){
 				$queryStatus = ", status = '".$status."' ";
 			}
-			$this->ConexaoSQL->updateQuery("UPDATE fluxo SET id_clientes = '".$cliente."', id_fornecedores = '".$fornecedor."', tipo = '".$tipo."', id_tipo_fluxo = '".$tipoFluxo."', ocorrencia = '".$ocorrencia."', valor = '".$this->Formata->valor2banco($valor)."', data = '".$this->Formata->date2banco($data)."' ".$queryStatus." WHERE id = '".$id."'");
+			$this->ConexaoSQL->updateQuery("UPDATE fluxo SET id_clientes = '".$cliente."', id_fornecedores = '".$fornecedor."', tipo = '".$tipo."', id_tipo_fluxo = '".$tipoFluxo."', ocorrencia = '".$ocorrencia."', valor = '".Formata::valor2banco($valor)."', data = '".Formata::date2banco($data)."' ".$queryStatus." WHERE id = '".$id."'");
 		}
 	}
 	
@@ -186,8 +184,8 @@ class Fluxo  {
 				$Retorno[$j]->setTipoFluxoNome($RetornoConsultaRel[$j]["tipoFluxoNome"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
-				$Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 			}
 		}
@@ -220,8 +218,8 @@ class Fluxo  {
 				$Retorno[$j]->setTipoFluxoNome($RetornoConsultaRel[$j]["tipoFluxoNome"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
-				$Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 			}
 		}
@@ -288,8 +286,8 @@ class Fluxo  {
 				$Retorno[$j]->setTipoFluxoNome($RetornoConsultaRel[$j]["tipoFluxoNome"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
-				$Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 			}
 		}
@@ -322,8 +320,8 @@ class Fluxo  {
 				$Retorno[$j]->setTipoFluxoNome($RetornoConsultaRel[$j]["tipoFluxoNome"]);
 				$Retorno[$j]->setTipo($RetornoConsultaRel[$j]["tipo"]);
 				$Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
-				$Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
-				$Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
+				$Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 			}
 		}
@@ -333,7 +331,7 @@ class Fluxo  {
 	}
 
         public function pegaTiposDespesas($dataIni, $dataFim){
-            $query = "SELECT tipo_fluxo.id, tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.data >= '".$this->Formata->date2banco($dataIni)."' AND fluxo.data <= '".$this->Formata->date2banco($dataFim)."' AND fluxo.tipo = '2' AND fluxo.status = '2' GROUP By fluxo.id_tipo_fluxo ";
+            $query = "SELECT tipo_fluxo.id, tipo_fluxo.nome as tipoFluxoNome FROM fluxo LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.data >= '".Formata::date2banco($dataIni)."' AND fluxo.data <= '".Formata::date2banco($dataFim)."' AND fluxo.tipo = '2' AND fluxo.status = '2' GROUP By fluxo.id_tipo_fluxo ";
 
             //print $query;
             $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
@@ -350,7 +348,7 @@ class Fluxo  {
         }
 
         public function pegaDespesas($dataIni, $dataFim, $tipo){
-            $query = "SELECT fluxo.* FROM fluxo LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.id_tipo_fluxo = '".$tipo."' AND fluxo.data >= '".$this->Formata->date2banco($dataIni)."' AND fluxo.data <= '".$this->Formata->date2banco($dataFim)."' AND fluxo.tipo = '2' AND fluxo.status = '2' Order By fluxo.data ";
+            $query = "SELECT fluxo.* FROM fluxo LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo WHERE fluxo.id_tipo_fluxo = '".$tipo."' AND fluxo.data >= '".Formata::date2banco($dataIni)."' AND fluxo.data <= '".Formata::date2banco($dataFim)."' AND fluxo.tipo = '2' AND fluxo.status = '2' Order By fluxo.data ";
 
             //print $query."<br>";
             $RetornoConsultaRel = $this->ConexaoSQL->Select($query);

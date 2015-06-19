@@ -6,7 +6,7 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/1/08
 #  
-#  Classe métodos segurança
+#  Classe mÃ©todos seguranÃ§a
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**

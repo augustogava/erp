@@ -3,7 +3,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxo();
 
 if($_REQUEST["acao"] == "deletar"){
 	$Main->Fluxo->excluir($_GET["id"]);

@@ -32,6 +32,9 @@ body {
 	color: #383d44;
 	overflow: hidden; 
 }
+body.scroll {
+	overflow: auto !important; 
+}
 
 body.login { background: url('../imagens/login_image.jpg') no-repeat center center fixed; background-size: cover; }
 
@@ -161,9 +164,8 @@ a.more {
 	overflow: hidden;
 }
 #contentPopUp {
-	width: 85%;
+	width: 100%;
 	float: left;
-	padding: 20px 0 0 20px;
 }
 #sidebar {
 	width: 185px;
@@ -174,12 +176,14 @@ a.more {
 	color: #666b75;
 }
 .titulo{
-	background:#CFDEFF;
-	color:#215DF6;
+	background:#1E96CD;
+	color: white;
 	font-weight: bold;
 	height:26px;
 }
-
+.titulo a, .titulo a:visited{
+	color: white;	
+}
 .tituloSemLinha{
 	color:#215DF6;
 	font-weight: bold;
@@ -195,28 +199,17 @@ a.more {
 	  border-bottom: 0;
 }
 .tituloRelatorio{
-	background:#FFF;
-	color:#215DF6;
+	background: #006B9C;
+	color: white;
 	border-bottom: 1px solid #000;
 	font-weight: bold;
 	height:46px;
 }
-.linha{
-	background: #EBF0FD;
-	height:32px;
-}
-.linhaMu{
-	background: #F6F7FA;
-	height:32px;
-}
-.linhaVermelha{
-	background: #FFC5C4;
-	height:32px;
-}
+
 .linhaConfig{
 	background: #EBF0FD;
 	text-align:left;
-	padding: 1px 10px 1px 1px;
+	padding: 0;
 	font-weight: bold;
 }
 
@@ -606,12 +599,6 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 .nav>li>a, .nav>li>a {
 	color: #fff;
 }
-.nav>li>a:focus, .nav>li>a:hover {
-  text-decoration: none;
-  background-color: #00AFFF !important;
-  color: #fff;
-}
-
 
 .menu-submenu-nav {
   display: block;
@@ -831,3 +818,38 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 .welcome { margin: 13px; font-size: 18px; }
 
 .main-body.popup{ width: 100% !important; }
+
+.table-striped>tbody>tr:nth-of-type(odd){  background: #1E96CD; }
+
+.table-erp .linha{ background: rgba(30, 150, 205, 0.1) !important;	height: 40px; border-bottom: 1px solid #ddd; }
+.table-erp .linha td, .table-erp .linhaMu td, .table-erp .titulo td, .table-erp .tituloSemLinha td, .table-erp .tituloRed td{   padding: 5px; }
+.table-erp .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 40px; }
+.table-erp .linha:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+.table-erp .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+
+.table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px; border-bottom: 1px solid #ddd; }
+.table-relatorio .linha td, .table-relatorio .linhaMu td, .table-relatorio .titulo td{   padding: 3px; }
+.table-relatorio .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 20px; }
+.table-relatorio .linha:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+.table-relatorio .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+
+#buscaDiv{ background-color: rgba(220, 238, 247, 1); border: 1px solid #ddd; border-top-color: transparent; padding: 5px; }
+
+.nav-tabs>li{
+	margin-bottom: -2px !important;
+}
+.nav-tabs>li.active>a { background-color: rgba(220, 238, 247, 1) !important; }
+.nav-tabs>li>a { background-color: rgba(224, 224, 224, 1) !important; color: #555; }
+
+.nav>li>a:focus, .nav>li>a:hover {
+  text-decoration: none !important;
+  background-color: #1E96CD !important;
+  color: #fff !important;
+}
+.nav-tabs>li.active>a:hover {
+}
+
+.table-erp{   border: 1px solid #DDD; }
+.form-group { margin-bottom: 0px !important; }
+
+.linhaVermelha{ background: #FFC5C4 !important; height:32px; border-bottom: 1px solid #FFD9D8; }

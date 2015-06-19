@@ -3,15 +3,11 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * FROM ".$_GET["tabela"]);
 $Main->DataGrid->setTabela($_GET["tabela"]);
 
 
-//pagina��o
+//paginacao
 $Main->DataGrid->setId($_GET["id"]);
 $Main->DataGrid->setEditar(1);
 $Main->DataGrid->setExcluir(1);

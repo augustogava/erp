@@ -6,27 +6,25 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/01/08
 #  
-#  Classe responsável imagens
+#  Classe responsï¿½vel imagens
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Classe responsável tratamento imagens
+ * Classe responsï¿½vel tratamento imagens
  *
  * @author Augusto Gava
  * @version 1.0
  */
 class Imagem {
     public $ConexaoSQL;
-    public $Formata;
 	
     /**
-	 * Método construtor.
+	 * Mï¿½todo construtor.
 	 *
-	 * @param ConexaoSQL conexão com o banco
+	 * @param ConexaoSQL conexï¿½o com o banco
 	 */
-    public function Imagem($ConexaoSQL, $Formata){
+    public function Imagem($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }//end function
     
     
@@ -34,7 +32,7 @@ class Imagem {
      * Redimensior a $img.
      */
     public function redimensionarImagem($imagem, $nomeSaida, $width, $height){
-    	//DEFINE OS PARÂMETROS DA MINIATURA
+    	//DEFINE OS PARï¿½METROS DA MINIATURA
 		$largura = $width;
 		$altura = $height;
 		
@@ -61,7 +59,7 @@ class Imagem {
 		//SALVA A IMAGEM
 		ImageJPEG($imagem_fin, $nomeSaida);
 		
-		//LIBERA A MEMÓRIA
+		//LIBERA A MEMï¿½RIA
 		ImageDestroy($imagem_orig);
 		ImageDestroy($imagem_fin);
 

@@ -14,15 +14,13 @@
 
 #  
 
-#  Classe m�todos seguran�a
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 
 /**
 
- * Classe respons�vel pelos metodos Pedidos.
+ * Classe responsável pelos metodos Pedidos.
 
  *
 
@@ -49,37 +47,17 @@ include_once("properties/PropriedadesPadrao.php");
 
 
 class Compras  {
-
     public $ConexaoSQL;
-
-    public $Formata;
-
     public $Configuracoes;
 
-    private $Exportacao;
-
-	
-
     /**
-
-     * M�todo construtor.
-
+     * Método construtor.
      *
-
-     * @param ConexaoSQL conex�o com o banco
-
+     * @param ConexaoSQL conexão com o banco
      */
-
-    public function Compras($ConexaoSQL, $Formata, $Configuracoes, $Exportacao){
-
+    public function Compras($ConexaoSQL, $Configuracoes){
         $this->ConexaoSQL = $ConexaoSQL;
-
-        $this->Formata = $Formata;
-
         $this->Configuracoes = $Configuracoes;
-		
-	$this->Exportacao = $Exportacao;
-
     }//end function
 
 	
@@ -262,13 +240,13 @@ class Compras  {
 
 		if(!empty($dataIni))
 
-			$busca .= " AND compras.data >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND compras.data >= '".Formata::date2banco($dataIni)."' ";
 
 			
 
 		if(!empty($dataFim))
 
-			$busca .= " AND compras.data <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND compras.data <= '".Formata::date2banco($dataFim)."' ";
 
 
 		if($_SESSION["niveluser"] != 1 && $_SESSION["niveluser"] != 2)
@@ -321,11 +299,11 @@ class Compras  {
 
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 
-				$Retorno[$j]->setImposto($this->Formata->banco2valor($RetornoConsultaRel[$j]["imposto"]));
+				$Retorno[$j]->setImposto(Formata::banco2valor($RetornoConsultaRel[$j]["imposto"]));
 
-                                $Retorno[$j]->setDesconto($this->Formata->banco2valor($RetornoConsultaRel[$j]["desconto"]));
+                                $Retorno[$j]->setDesconto(Formata::banco2valor($RetornoConsultaRel[$j]["desconto"]));
 
-				$Retorno[$j]->setDataAberta($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setDataAberta(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
 
 			}
 
@@ -373,13 +351,13 @@ class Compras  {
 
 		if(!empty($dataIni))
 
-			$busca .= " AND compras.data >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND compras.data >= '".Formata::date2banco($dataIni)."' ";
 
 
 
 		if(!empty($dataFim))
 
-			$busca .= " AND compras.data <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND compras.data <= '".Formata::date2banco($dataFim)."' ";
 
 
 		if($_SESSION["niveluser"] != 1 && $_SESSION["niveluser"] != 2)
@@ -433,11 +411,11 @@ class Compras  {
 
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 
-				$Retorno[$j]->setImposto($this->Formata->banco2valor($RetornoConsultaRel[$j]["imposto"]));
+				$Retorno[$j]->setImposto(Formata::banco2valor($RetornoConsultaRel[$j]["imposto"]));
 
-                                $Retorno[$j]->setDesconto($this->Formata->banco2valor($RetornoConsultaRel[$j]["desconto"]));
+                                $Retorno[$j]->setDesconto(Formata::banco2valor($RetornoConsultaRel[$j]["desconto"]));
 
-				$Retorno[$j]->setDataAberta($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setDataAberta(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
 
 			}
 
@@ -495,11 +473,11 @@ class Compras  {
 
                                 $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
 
-				$Retorno[$j]->setImposto($this->Formata->banco2valor($RetornoConsultaRel[$j]["imposto"]));
+				$Retorno[$j]->setImposto(Formata::banco2valor($RetornoConsultaRel[$j]["imposto"]));
 
-                                $Retorno[$j]->setDesconto($this->Formata->banco2valor($RetornoConsultaRel[$j]["desconto"]));
+                                $Retorno[$j]->setDesconto(Formata::banco2valor($RetornoConsultaRel[$j]["desconto"]));
 
-				$Retorno[$j]->setDataAberta($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+				$Retorno[$j]->setDataAberta(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
 
 			}
 
@@ -553,7 +531,7 @@ class Compras  {
 
 				$Retorno[$j]->setTipoComissao($RetornoConsulta[$j]["tipo_comissao"]);
 
-				$Retorno[$j]->setValorComissao($this->Formata->banco2valor($RetornoConsulta[$j]["comissao_valor"]));
+				$Retorno[$j]->setValorComissao(Formata::banco2valor($RetornoConsulta[$j]["comissao_valor"]));
 
 				$Retorno[$j]->setTotal($RetornoConsulta[$j]["total"]);
 
@@ -653,7 +631,7 @@ class Compras  {
 
             $RetornoConsultaForma = $this->ConexaoSQL->Select("SELECT sum(valor) as total FROM compras_formaPagamento WHERE compras_formaPagamento.id_compras = '".$idCompra."' ");
             
-            $this->ConexaoSQL->insertQuery("INSERT INTO compras_formaPagamento (id_compras, data, valor) VALUES('".$idCompra."', NOW(), '".(($RetornoConsulta[0]["total"]-$this->Formata->valor2banco($dadosCompra[0]->getDesconto())+$this->Formata->valor2banco($dadosCompra[0]->getImposto()) )-$RetornoConsultaForma[0]["total"])."') ");
+            $this->ConexaoSQL->insertQuery("INSERT INTO compras_formaPagamento (id_compras, data, valor) VALUES('".$idCompra."', NOW(), '".(($RetornoConsulta[0]["total"]-Formata::valor2banco($dadosCompra[0]->getDesconto())+Formata::valor2banco($dadosCompra[0]->getImposto()) )-$RetornoConsultaForma[0]["total"])."') ");
 
             return $this->ConexaoSQL->pegaLastId();
 
@@ -719,7 +697,7 @@ class Compras  {
 
                 $RetornoConsultaForma = $this->ConexaoSQL->Select("SELECT sum(valor) as total FROM compras_formaPagamento WHERE compras_formaPagamento.id_compras = '".$idCompra."' ");
 
-                if( ( $RetornoConsulta[0]["total"]-$this->Formata->valor2banco($dadosCompra[0]->getDesconto())+$this->Formata->valor2banco($dadosCompra[0]->getImposto()) ) != $RetornoConsultaForma[0]["total"]){
+                if( ( $RetornoConsulta[0]["total"]-Formata::valor2banco($dadosCompra[0]->getDesconto())+Formata::valor2banco($dadosCompra[0]->getImposto()) ) != $RetornoConsultaForma[0]["total"]){
                     $this->ConexaoSQL->updateQuery("UPDATE compras SET status = '0' WHERE id = '".$idCompra."'");
                     $this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_compras = '".$idCompra."'");
                             $this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_compras = '".$idCompra."'");
@@ -760,7 +738,7 @@ class Compras  {
                             if($fluxo == "s"){
                                 for($j=0; $j<count($RetornoFormasPgto); $j++){
 
-                                        $this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_fornecedores, id_tipo_fluxo, id_compras, ocorrencia, data, tipo, valor) VALUES('".$dadosCompra[0]->getFornecedoresId()."', '".$dadosCompra[0]->getTipoFluxoId()."', '".$idCompra."', 'C�digo Compra: ".$dadosCompra[0]->getCodigo()."', '".$RetornoFormasPgto[$j]["data"]."', '2', '".$RetornoFormasPgto[$j]["valor"]."')");
+                                        $this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_fornecedores, id_tipo_fluxo, id_compras, ocorrencia, data, tipo, valor) VALUES('".$dadosCompra[0]->getFornecedoresId()."', '".$dadosCompra[0]->getTipoFluxoId()."', '".$idCompra."', 'Código Compra: ".$dadosCompra[0]->getCodigo()."', '".$RetornoFormasPgto[$j]["data"]."', '2', '".$RetornoFormasPgto[$j]["valor"]."')");
 
                                 }
                             }
@@ -825,7 +803,7 @@ class Compras  {
 
 			if($campo == "preco" || $campo == "comissao_valor"){
 
-				$valor = $this->Formata->valor2banco($valor);
+				$valor = Formata::valor2banco($valor);
 
 			}
 
@@ -849,7 +827,7 @@ class Compras  {
 
 		}else{
 
-			print "<script>window.alert('Produto j� cadastrado')</script>";
+			print "<script>window.alert('Produto já cadastrado')</script>";
 
 		}
 
@@ -876,11 +854,11 @@ class Compras  {
 
                 if($campo == "valor"){
 
-                        $valor = $this->Formata->valor2banco($valor);
+                        $valor = Formata::valor2banco($valor);
 
                 }else  if($campo == "data"){
 
-                    $valor = $this->Formata->date2banco($valor);
+                    $valor = Formata::date2banco($valor);
 
                 }
 
@@ -915,7 +893,7 @@ class Compras  {
 
 	
 
-		$this->ConexaoSQL->updateQuery("UPDATE compras SET desconto = '".$this->Formata->valor2banco($desconto)."', imposto = '".$this->Formata->valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_fornecedores = '".$fornecedores."', id_tipo_fluxo = '".$tipoFluxo."' WHERE id = '".$id."'");
+		$this->ConexaoSQL->updateQuery("UPDATE compras SET desconto = '".Formata::valor2banco($desconto)."', imposto = '".Formata::valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_fornecedores = '".$fornecedores."', id_tipo_fluxo = '".$tipoFluxo."' WHERE id = '".$id."'");
 
 		
 		$this->verficaFechado($id);
@@ -926,7 +904,7 @@ class Compras  {
 
 	/**
 
-	 * Verifica se est� fechado.
+	 * Verifica se está fechado.
 
 	 * @param id
 
@@ -1249,7 +1227,7 @@ print 2;
 
                 $fluxoTemplateSaida = ereg_replace("%TIPOFLUXO%",$dadosCompra[0]->getTipoFluxoNome(), $fluxoTemplateSaida);
 
-		$fluxoTemplateSaida = ereg_replace("%DATA%", $this->Formata->banco2date($dadosCompra[0]->getDataAberta()), $fluxoTemplateSaida);
+		$fluxoTemplateSaida = ereg_replace("%DATA%", Formata::banco2date($dadosCompra[0]->getDataAberta()), $fluxoTemplateSaida);
 
 		$fluxoTemplateSaida = ereg_replace("%ITENS%",$itens, $fluxoTemplateSaida);
 
@@ -1271,9 +1249,9 @@ print 2;
 
 							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela: ".($i+1)." </td>
 
-							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$this->Formata->banco2date($formasPagto[$i]->getData())."</td>
+							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2date($formasPagto[$i]->getData())."</td>
 
-							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$this->Formata->banco2valor($formasPagto[$i]->getValor())."</td>
+							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($formasPagto[$i]->getValor())."</td>
 
 						</tr>";
 
@@ -1367,13 +1345,13 @@ print 2;
 
 				<td width=\"15%\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
 
-					".$this->Formata->banco2valor($itens[$i]->getPreco())."
+					".Formata::banco2valor($itens[$i]->getPreco())."
 
 				</td>
 
 				<td width=\"10%\" style=\"text-align:left;\" id =\"campoTotal_<?=$i?>\">
 
-					".$this->Formata->banco2valor($itens[$i]->getTotal())."
+					".Formata::banco2valor($itens[$i]->getTotal())."
 
 				</td>
 
@@ -1391,7 +1369,7 @@ print 2;
 
 				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" >&nbsp;</td>
 
-				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".$this->Formata->banco2valor( ($precoTotal))."</strong></td>
+				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".Formata::banco2valor( ($precoTotal))."</strong></td>
 
 			</tr>";
 
@@ -1419,7 +1397,7 @@ print 2;
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Total Pedido</td>
 						</tr>
 						<tr style=\"background:#EBF0FD;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$this->Formata->banco2valor($this->Formata->valor2banco($dadosCompra[0]->getImposto())+$precoTotal-$this->Formata->valor2banco($dadosCompra[0]->getDesconto()))."</td>
+							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor(Formata::valor2banco($dadosCompra[0]->getImposto())+$precoTotal-Formata::valor2banco($dadosCompra[0]->getDesconto()))."</td>
 						</tr>
 						
 					</table>
@@ -1441,7 +1419,7 @@ print 2;
 
 	/**
 
-	 * Gera c�digo para pedido, formato YYYY/000increment.
+	 * Gera código para pedido, formato YYYY/000increment.
 
 	 */
 
@@ -1457,7 +1435,7 @@ print 2;
 
 			
 
-			$codigo = $this->Formata->preencheZero(($pt+1), 4);
+			$codigo = Formata::preencheZero(($pt+1), 4);
 
 			
 
@@ -1486,26 +1464,26 @@ print 2;
 
 		
 		if($tipo != "csv"){
-			$html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
+			$html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"0\" align=\"left\">";
 			$html .= "<tr class=\"tituloRelatorio\">";
 				
 				if($tipo == "html"){
 					$html .= "<td width='10%'>";
-					$html .= "<img src=\"layout/incones/exportar.png\" width=\"30px\" border='1' alt=\"Imprimir\" onclick=\"main.imprimir();\"  /> ";
+					$html .= "<div class=\"logo\"></div>";
 					$html .= "</td>";
 				}
 
 				$html .= "<td  width='90%' align='center'>";
-					$html .= "Impress�o ".$tipoR;
+					$html .= "Impressão ".$tipoR;
 				$html .= "</td>";
 			$html .= "</tr>";
 			$html .= "</table><br />";
 			
-			$html .= "<table width=\"99%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\">";
+			$html .= "<table width=\"99%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\" class=\"table-relatorio\">";
 			
 				$html .= "<tr id=\"linhaDataGrid_\" class=\"titulo\" width=\"100%\">
 	
-							<td width=\"10%\" class=\"ColunaInfo\">C�digo</td>
+							<td width=\"10%\" class=\"ColunaInfo\">Código</td>
 				
 							<td width=\"35%\"  id=\"linhaDataGrid__0\">Fornecedor</td>
 				
@@ -1571,15 +1549,15 @@ print 2;
 			$html .= "</table>";
 			
 			if($tipo == "excel"){
-				$arquivo = $this->Exportacao->criaArquivo("/", $html);
-				$this->Exportacao->gerarExceldeArquivoTemporario($arquivo, "exportacao");
+				$arquivo = Exportacao::criaArquivo("/", $html);
+				Exportacao::gerarExceldeArquivoTemporario($arquivo, "exportacao");
 			}else if($tipo == "html"){
 				print $html;
 			}
 			
 		}else{
 			
-			$html .= "\"C�digo\",\"Fornecedores\",\"Tipo Fluxo\",\"Data\",\"Status\";\n";
+			$html .= "\"Código\",\"Fornecedores\",\"Tipo Fluxo\",\"Data\",\"Status\";\n";
 			
 			for($j=0; $j<count($compras); $j++){
                             if($compras[$j]->getStatus()==0){
@@ -1590,8 +1568,8 @@ print 2;
                             $html .= "\"".$compras[$j]->getCodigo()."\",\"".$compras[$j]->getFornecedoresNome()."\",\"".$compras[$j]->getTipoFluxoNome()."\",\"".$compras[$j]->getDataAberta()."\",\"".$status."\" ;\n";
 			}
 			
-			$arquivo = $this->Exportacao->criaArquivo("/", $html);
-			$this->Exportacao->gerarCsvdeArquivoTemporario($arquivo, "exportacao");
+			$arquivo = Exportacao::criaArquivo("/", $html);
+			Exportacao::gerarCsvdeArquivoTemporario($arquivo, "exportacao");
 		}
 		
 	}

@@ -22,16 +22,14 @@ include_once("properties/PropriedadesPadrao.php");
 
 class FluxoBanco  {
 	public $ConexaoSQL;
-    public $Formata;
 	
     /**
 	 * M?todo construtor.
 	 *
 	 * @param ConexaoSQL conex?o com o banco
 	 */
-    public function FluxoBanco($ConexaoSQL, $Formata){
+    public function FluxoBanco($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }
    
     /**
@@ -84,10 +82,10 @@ class FluxoBanco  {
 			$busca .= " AND fluxo_bancos.id_tipo_fluxo = '".$tipoFluxo."' ";
 
 		if(!empty($dataIni))
-			$busca .= " AND fluxo_bancos.data >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND fluxo_bancos.data >= '".Formata::date2banco($dataIni)."' ";
 			
 		if(!empty($dataFim))
-			$busca .= " AND fluxo_bancos.data <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND fluxo_bancos.data <= '".Formata::date2banco($dataFim)."' ";
 			
 		if(!empty($id))
 			$busca .= " AND fluxo_bancos.id = '".$id."' ";
@@ -108,8 +106,8 @@ class FluxoBanco  {
                         $Retorno[$j]->setNumeroDoc($RetornoConsultaRel[$j]["numero_doc"]);
                         $Retorno[$j]->setOcorrencia($RetornoConsultaRel[$j]["ocorrencia"]);
                         $Retorno[$j]->setStatus($RetornoConsultaRel[$j]["status"]);
-                        $Retorno[$j]->setValor($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]));
-                        $Retorno[$j]->setData($this->Formata->banco2date($RetornoConsultaRel[$j]["data"]));
+                        $Retorno[$j]->setValor(Formata::banco2valor($RetornoConsultaRel[$j]["valor"]));
+                        $Retorno[$j]->setData(Formata::banco2date($RetornoConsultaRel[$j]["data"]));
                     }
 		}
 		
@@ -144,10 +142,10 @@ class FluxoBanco  {
 	public function salvarFluxo($id = "", $idBanco = "", $tipo = "", $tipoFluxo = "", $ocorrencia = "", $valor = "", $data = "", $numeroDoc = ""){
 
             if(empty($id)){
-                    $this->ConexaoSQL->insertQuery("INSERT INTO fluxo_bancos (id_bancos, tipo, id_tipo_fluxo, ocorrencia, valor, numero_doc, data) VALUES('".$idBanco."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".$this->Formata->valor2banco($valor)."', '".$numeroDoc."', '".$this->Formata->date2banco($data)."')");
+                    $this->ConexaoSQL->insertQuery("INSERT INTO fluxo_bancos (id_bancos, tipo, id_tipo_fluxo, ocorrencia, valor, numero_doc, data) VALUES('".$idBanco."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".Formata::valor2banco($valor)."', '".$numeroDoc."', '".Formata::date2banco($data)."')");
             }else{
             	$valorantigo = $this->pegaFluxoBanco("", "", "", "", "", $id);
-                $valorNovo = $this->Formata->valor2banco($valor) - $this->Formata->valor2banco($valorantigo[0]->getValor());
+                $valorNovo = Formata::valor2banco($valor) - Formata::valor2banco($valorantigo[0]->getValor());
                 
                 if($tipo == 1){
                     $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".$valorNovo."') WHERE id = '".$idBanco."'");
@@ -157,13 +155,13 @@ class FluxoBanco  {
 
                 if( $tipo != $valorantigo[0]->getTipo()){ 
 	            	if($tipo == 1){
-	                    $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".$this->Formata->valor2banco($valor)."') WHERE id = '".$idBanco."'");
+	                    $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".Formata::valor2banco($valor)."') WHERE id = '".$idBanco."'");
 	                }else{
-	                    $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual - '".$this->Formata->valor2banco($valor)."') WHERE id = '".$idBanco."'");
+	                    $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual - '".Formata::valor2banco($valor)."') WHERE id = '".$idBanco."'");
 	                }
                 }
                 
-            	$this->ConexaoSQL->updateQuery("UPDATE fluxo_bancos SET id_bancos = '".$idBanco."', tipo = '".$tipo."', id_tipo_fluxo = '".$tipoFluxo."', ocorrencia = '".$ocorrencia."', valor = '".$this->Formata->valor2banco($valor)."', numero_doc = '".$numeroDoc."', data = '".$this->Formata->date2banco($data)."' WHERE id = '".$id."'");
+            	$this->ConexaoSQL->updateQuery("UPDATE fluxo_bancos SET id_bancos = '".$idBanco."', tipo = '".$tipo."', id_tipo_fluxo = '".$tipoFluxo."', ocorrencia = '".$ocorrencia."', valor = '".Formata::valor2banco($valor)."', numero_doc = '".$numeroDoc."', data = '".Formata::date2banco($data)."' WHERE id = '".$id."'");
             }
                 
 	}
@@ -176,7 +174,7 @@ class FluxoBanco  {
 
             $fluxo = $this->pegaFluxoBanco("", "", "", "", "", $id);
 
-            $valor = $this->Formata->valor2banco($fluxo[0]->getValor());
+            $valor = Formata::valor2banco($fluxo[0]->getValor());
 
             if($fluxo[0]->getTipo() == 1){
                 $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".$valor."') WHERE id = '".$fluxo[0]->getBancoId()."'");
@@ -196,7 +194,7 @@ class FluxoBanco  {
 	public function excluir($id){
             $valorantigo = $this->pegaFluxoBanco("", "", "", "", "", $id);
 
-            $valorNovo = $this->Formata->valor2banco($valorantigo[0]->getValor());
+            $valorNovo = Formata::valor2banco($valorantigo[0]->getValor());
 
             if($valorantigo[0]->getTipo() == 1){
                 $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual - '".$valorNovo."') WHERE id = '".$valorantigo[0]->getBancoId()."'");

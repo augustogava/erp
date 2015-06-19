@@ -12,7 +12,7 @@ if($_GET["acao"] == "listar"){
 	
 	
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="6">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
@@ -115,7 +115,7 @@ if($_GET["acao"] == "listar"){
 						<select id="tipo" name="tipo"  title="Tipo" class="erroForm form-control input-sm">
 							<option value="">Selecione</option>
 							<option value="1" <? if($estoque[0] && $estoque[0]->getTipo() == 1) print "selected"; ?>>Entrada</option>
-							<option value="2" <? if($estoque[0] && $estoque[0]->getTipo() == 2) print "selected"; ?>>Sa�da</option>
+							<option value="2" <? if($estoque[0] && $estoque[0]->getTipo() == 2) print "selected"; ?>>Saída</option>
 						</select>
 					</td>
 				</tr>

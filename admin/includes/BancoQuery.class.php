@@ -11,7 +11,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Classe responsável pelos recursos do banco automatizado
+ * Classe responsÃ¡vel pelos recursos do banco automatizado
  *
  * @author Augusto Gava
  * @version 1.0
@@ -31,7 +31,7 @@ class banco_query {
 			$query = "SET ";
 			$separador = "";
 			foreach($fields as $field => $valor){
-				//Não deixar entra id pra atualizar!!
+				//Nï¿½o deixar entra id pra atualizar!!
 				if($field!="id"){
 					$query.=$separador."$field='$valor'";
 					$separador=",";

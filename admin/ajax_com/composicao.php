@@ -4,7 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaComposicao();
 
 if($_GET["acao"] == "listar"){
 	$composicao = $Main->Composicao->pegaComposicao($_GET["id"], $_GET["itensBusca"], "", $_GET["limite"]);

@@ -3,10 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from validacoes ");
 $Main->DataGrid->setTabela("validacoes");
 $Main->DataGrid->setColunas("validacoes.id");

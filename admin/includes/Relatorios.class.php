@@ -6,29 +6,27 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/01/08
 #  
-#  Classe responsável pelos relatórios
+#  Classe responsï¿½vel pelos relatï¿½rios
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Classe responsável pelos relatórios
+ * Classe responsï¿½vel pelos relatï¿½rios
  *
  * @author Augusto Gava
  * @version 1.0
  */
 class Relatorios {
     public $ConexaoSQL;
-    public $Formata;
     public $mes = Array("Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outrubro", "Novembro", "Desembro");
 	
     /**
-	 * Método construtor.
+	 * Mï¿½todo construtor.
 	 *
-	 * @param ConexaoSQL conexão com o banco.
+	 * @param ConexaoSQL conexï¿½o com o banco.
 	 * @param Formata formata dados.
 	 */
-    public function Relatorios($ConexaoSQL, $Formata){
+    public function Relatorios($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }//end function
     
     /**
@@ -52,8 +50,8 @@ class Relatorios {
         	$query = "SELECT clientes.nome, clientes.razao, clientes.telefone1, clientes.telefone2, clientes.contato FROM clientes WHERE clientes.id_status_geral = '1' AND clientes.id NOT IN ( SELECT pedidos.id_clientes FROM pedidos) ".$queryWhere." ";
         	$retorno["titulo"] = "Clientes que nunca compraram";
         }else{
-			$query = "SELECT clientes.nome, clientes.razao, clientes.telefone1, clientes.telefone2, clientes.contato, pedidos.data_fechada FROM clientes INNER JOIN pedidos ON pedidos.id_clientes = clientes.id WHERE clientes.id_status_geral = '1' AND data_fechada <= '".$this->Formata->date2banco($parametros["filtro2"])."' ".$queryWhere."";
-			$retorno["titulo"] = "Clientes que não compram desde ".$parametros["filtro2"];
+			$query = "SELECT clientes.nome, clientes.razao, clientes.telefone1, clientes.telefone2, clientes.contato, pedidos.data_fechada FROM clientes INNER JOIN pedidos ON pedidos.id_clientes = clientes.id WHERE clientes.id_status_geral = '1' AND data_fechada <= '".Formata::date2banco($parametros["filtro2"])."' ".$queryWhere."";
+			$retorno["titulo"] = "Clientes que nÃ£o compram desde ".$parametros["filtro2"];
         }
         
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
@@ -92,7 +90,7 @@ class Relatorios {
 				INNER JOIN produtos ON B.id_produtos = produtos.id
 				GROUP By B.id_produtos ORDER By produtos.codigo";
 				
-		$retorno["titulo"] = "Produção ";
+		$retorno["titulo"] = "ProduÃ§Ã£o ";
 		
 	    $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
     	
@@ -125,8 +123,8 @@ class Relatorios {
         $query = "SELECT SUM(qtd) as qtdTotal, SUM(qtd * 100) / (SELECT SUM( qtd ) AS qtd
                                                     FROM pedidos AS A
                                                     INNER JOIN pedidos_itens AS B ON A.id = B.id_pedidos
-                                                    WHERE ".$queryCliente." A.data_fechada >= '".$this->Formata->date2banco($parametros["filtro1"])." 00:00:01'
-                                                                    AND A.data_fechada <= '".$this->Formata->date2banco($parametros["filtro2"])." 23:59:59'
+                                                    WHERE ".$queryCliente." A.data_fechada >= '".Formata::date2banco($parametros["filtro1"])." 00:00:01'
+                                                                    AND A.data_fechada <= '".Formata::date2banco($parametros["filtro2"])." 23:59:59'
                                                                     AND A.id_status_pedidos
                                                                     IN ( 4, 5 )
                                                                                 ) AS media,
@@ -134,7 +132,7 @@ class Relatorios {
                                 C.codigo, C.nome, C.descricao FROM pedidos as A
                                 INNER JOIN pedidos_itens AS B ON A.id = B.id_pedidos
                                 INNER JOIN produtos AS C on C.id = B.id_produtos
-                                WHERE ".$queryCliente." A.data_fechada >= '".$this->Formata->date2banco($parametros["filtro1"])." 00:00:01' AND A.data_fechada <= '".$this->Formata->date2banco($parametros["filtro2"])." 23:59:59'
+                                WHERE ".$queryCliente." A.data_fechada >= '".Formata::date2banco($parametros["filtro1"])." 00:00:01' AND A.data_fechada <= '".Formata::date2banco($parametros["filtro2"])." 23:59:59'
                                 AND A.id_status_pedidos IN (4, 5)
                                                 GROUP By B.id_produtos Order By media DESC";
 				
@@ -170,19 +168,19 @@ class Relatorios {
         	$query = "SELECT sum(fluxo.valor) as valor, fluxo.ocorrencia, pedidos.codigo as nome FROM fluxo 
 																				INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
 																				WHERE fluxo.tipo = '1' 
-																				AND fluxo.data >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-																				AND fluxo.data <= '".$this->Formata->date2banco($parametros["filtro3"])." 23:59:59' GROUP By pedidos.id ORDER By valor DESC";
+																				AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																				AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59' GROUP By pedidos.id ORDER By valor DESC";
 																				
         	$retorno["titulo"] = "Faturamento por Pedido";
-        	$retorno["campos"] = array("Código","valor");
+        	$retorno["campos"] = array("CÃ³ï¿½digo","valor");
 			
         }else if($parametros["filtro1"] == 2){
 			$query = "SELECT SUM(fluxo.valor) as valor, representantes.nome as nome FROM fluxo 
 																					INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
 																					LEFT JOIN representantes ON representantes.id = pedidos.id_representantes
 																					WHERE fluxo.tipo = '1' 
-																					AND fluxo.data >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-																					AND fluxo.data <= '".$this->Formata->date2banco($parametros["filtro3"])." 23:59:59'
+																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'
 																					GROUP By representantes.id ORDER By valor DESC";
 			$retorno["titulo"] = "Faturamento por Representante";
 			$retorno["campos"] = array("Nome","valor");
@@ -192,8 +190,8 @@ class Relatorios {
 																					INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
 																					LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
 																					WHERE fluxo.tipo = '1' 
-																					AND fluxo.data >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-																					AND fluxo.data <= '".$this->Formata->date2banco($parametros["filtro3"])." 23:59:59'
+																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'
 																					GROUP By clientes.id ORDER By valor DESC";
 			$retorno["titulo"] = "Faturamento por Cliente";
 			$retorno["campos"] = array("Nome","valor");
@@ -207,13 +205,13 @@ class Relatorios {
 					$RetornoConsultaRel[$j]["nome"] = "Sem Representante";
 				}
 				$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["nome"]. str_replace("<br>", "", $RetornoConsultaRel[$j]["ocorrencia"]);
-				$retorno["valores"][$j][1] = $this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]);
+				$retorno["valores"][$j][1] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
 				
 				$total += $RetornoConsultaRel[$j]["valor"];
 			}
 			
 			$retorno["valores"][$j][0] = "<b>Total:</b> ";
-			$retorno["valores"][$j][1] = "<b>".$this->Formata->banco2valor( $total )."<b>";
+			$retorno["valores"][$j][1] = "<b>".Formata::banco2valor( $total )."<b>";
 				
 		}
 		
@@ -235,8 +233,8 @@ class Relatorios {
             $query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, produtos.codigo as nome FROM pedidos
                     INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
                     INNER JOIN produtos ON produtos.id = pedidos_itens.id_produtos
-                    WHERE pedidos.data_fechada >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-                    AND pedidos.data_fechada <= '".$this->Formata->date2banco($parametros["filtro3"])."  23:59:59'
+                    WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+                    AND pedidos.data_fechada <= '".Formata::date2banco($parametros["filtro3"])."  23:59:59'
                     AND id_status_pedidos IN ('4', '5')
                     GROUP By produtos.id ORDER By valor DESC ";
 
@@ -254,13 +252,13 @@ class Relatorios {
                                 FROM pedidos
                                 LEFT JOIN representantes ON representantes.id = pedidos.id_representantes
                                 INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
-                                WHERE pedidos.data_fechada >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-                                AND pedidos.data_fechada <= '".$this->Formata->date2banco($parametros["filtro3"])."  23:59:59'
+                                WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+                                AND pedidos.data_fechada <= '".Formata::date2banco($parametros["filtro3"])."  23:59:59'
                                 AND id_status_pedidos IN ('4', '5')
                                 GROUP By representantes.id ORDER By valor DESC";
 
 			$retorno["titulo"] = "Vendas por Representante";
-			$retorno["campos"] = array("Nome","valor", "Comissão");
+			$retorno["campos"] = array("Nome","valor", "ComissÃ£o");
 			
         }else if($parametros["filtro1"] == 3){
 			$query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, clientes.nome as nome,
@@ -273,8 +271,8 @@ class Relatorios {
                                     FROM pedidos
                                     LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
                                     INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
-                                    WHERE pedidos.data_fechada >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-                                    AND pedidos.data_fechada <= '".$this->Formata->date2banco($parametros["filtro3"])."  23:59:59'
+                                    WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+                                    AND pedidos.data_fechada <= '".Formata::date2banco($parametros["filtro3"])."  23:59:59'
                                     AND id_status_pedidos IN ('4', '5')
                                     GROUP By clientes.id ORDER By valor DESC";
 
@@ -289,8 +287,8 @@ class Relatorios {
                                     FROM pedidos
                                     LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
                                     INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
-                                    WHERE pedidos.data_fechada >= '".$this->Formata->date2banco($parametros["filtro2"])." 00:00:01'
-                                    AND pedidos.data_fechada <= '".$this->Formata->date2banco($parametros["filtro3"])." 23:59:59'
+                                    WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+                                    AND pedidos.data_fechada <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'
                                     AND id_status_pedidos IN ('4', '5') AND pedidos_itens.id_produtos NOT IN('45','46') ".$cli."
                                     GROUP By pedidos.id ORDER By data_fechada DESC";
 
@@ -320,7 +318,7 @@ class Relatorios {
 				
 				$retorno["valores"][$j][0] = $this->mes[$i-1];
 				$retorno["valores"][$j][1] = $RetornoConsultaRel[0]["qtd"];
-				$retorno["valores"][$j++][2] = $this->Formata->banco2valor($RetornoConsultaRel[0]["valor"]);
+				$retorno["valores"][$j++][2] = Formata::banco2valor($RetornoConsultaRel[0]["valor"]);
 				
 			}
         	
@@ -334,8 +332,8 @@ class Relatorios {
 						$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["codigo"];
 						$retorno["valores"][$j][1] = $RetornoConsultaRel[$j]["nome"];
 						$retorno["valores"][$j][2] = $RetornoConsultaRel[$j]["qtd"];
-						$retorno["valores"][$j][3] = $this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]);
-						$retorno["valores"][$j][4] = $this->Formata->banco2date($RetornoConsultaRel[$j]["data_fechada"]);
+						$retorno["valores"][$j][3] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+						$retorno["valores"][$j][4] = Formata::banco2date($RetornoConsultaRel[$j]["data_fechada"]);
 						
 						$totalValor += $RetornoConsultaRel[$j]["valor"];
 						$totalQtd += $RetornoConsultaRel[$j]["qtd"];
@@ -344,21 +342,21 @@ class Relatorios {
 					$retorno["valores"][$j][0] = "<b>Total:</b> ";
 					$retorno["valores"][$j][1] = "";
 					$retorno["valores"][$j][2] = "<b>".$totalQtd."<b>";
-					$retorno["valores"][$j][3] = "<b>".$this->Formata->banco2valor( $totalValor )."<b>";
+					$retorno["valores"][$j][3] = "<b>".Formata::banco2valor( $totalValor )."<b>";
 					$retorno["valores"][$j][4] = "";
 				}else{
 					for($j=0; $j<count($RetornoConsultaRel); $j++){
 						$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["nome"];
-						$retorno["valores"][$j][1] = $this->Formata->banco2valor($RetornoConsultaRel[$j]["valor"]);
+						$retorno["valores"][$j][1] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
 						if($parametros["filtro1"] == 2){
-							$retorno["valores"][$j][2] = $this->Formata->banco2valor($RetornoConsultaRel[$j]["comissao"]);
+							$retorno["valores"][$j][2] = Formata::banco2valor($RetornoConsultaRel[$j]["comissao"]);
 						}
 						
 						$total += $RetornoConsultaRel[$j]["valor"];
 					}
 					
 					$retorno["valores"][$j][0] = "<b>Total:</b> ";
-					$retorno["valores"][$j][1] = "<b>".$this->Formata->banco2valor( $total )."<b>";				
+					$retorno["valores"][$j][1] = "<b>".Formata::banco2valor( $total )."<b>";				
 				}
 			}
         }
@@ -402,21 +400,21 @@ class Relatorios {
 	            $totalSaidaEnd   += $totalSaida;
 
 	            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
-	            $retorno["valores"][$i]["Entrada"] = $this->Formata->banco2valor($totalEntrada);
-	            $retorno["valores"][$i]["Saida"] = $this->Formata->banco2valor($totalSaida);
-	            $retorno["valores"][$i]["Total"] = $this->Formata->banco2valor( ($totalSaida+$totalEntrada) );
+	            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntrada);
+	            $retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaida);
+	            $retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaida+$totalEntrada) );
 	        }else{
 	            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
-	            $retorno["valores"][$i]["Entrada"] = $this->Formata->banco2valor(0);
-	            $retorno["valores"][$i]["Saida"] = $this->Formata->banco2valor(0);
-	            $retorno["valores"][$i]["Total"] = $this->Formata->banco2valor(0);
+	            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor(0);
+	            $retorno["valores"][$i]["Saida"] = Formata::banco2valor(0);
+	            $retorno["valores"][$i]["Total"] = Formata::banco2valor(0);
 	        }
 	}
 
 	  $retorno["valores"][$i]["Mes"] = "Total";
-	  $retorno["valores"][$i]["Entrada"] = $this->Formata->banco2valor($totalEntradaEnd);
-	  $retorno["valores"][$i]["Saida"] = $this->Formata->banco2valor($totalSaidaEnd);
-	  $retorno["valores"][$i]["Total"] = $this->Formata->banco2valor( ($totalSaidaEnd + $totalEntradaEnd) );
+	  $retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntradaEnd);
+	  $retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaidaEnd);
+	  $retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaidaEnd + $totalEntradaEnd) );
 
         return $retorno;
 
@@ -451,7 +449,7 @@ class Relatorios {
                                                                   B.nome FROM pedidos as A
                                 INNER JOIN clientes AS B ON B.id = A.id_clientes
                                 INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = A.id
-                                WHERE ".$queryCliente." A.data_fechada >= '".$this->Formata->date2banco($parametros["filtro1"])." 00:00:01' AND A.data_fechada <= '".$this->Formata->date2banco($parametros["filtro2"])." 23:59:59'
+                                WHERE ".$queryCliente." A.data_fechada >= '".Formata::date2banco($parametros["filtro1"])." 00:00:01' AND A.data_fechada <= '".Formata::date2banco($parametros["filtro2"])." 23:59:59'
                                 AND A.id_status_pedidos IN (4, 5)
                                                 GROUP By A.id ORDER By A.data_fechada ASC";
 				
@@ -466,9 +464,9 @@ class Relatorios {
             for($j=0; $j<count($RetornoConsultaRel); $j++){
                 $retorno["valores"][$j]["Codigo"] = $RetornoConsultaRel[$j]["codigo"];
                 $retorno["valores"][$j]["Cliente"] = $RetornoConsultaRel[$j]["nome"];
-                $retorno["valores"][$j]["Data"] = $this->Formata->banco2date( $RetornoConsultaRel[$j]["data_fechada"] );
-                $retorno["valores"][$j]["Total"] = $this->Formata->banco2valor( $RetornoConsultaRel[$j]["total"] );
-                $retorno["valores"][$j]["Comissao"] =  $this->Formata->banco2valor( $RetornoConsultaRel[$j]["comissao"] );
+                $retorno["valores"][$j]["Data"] = Formata::banco2date( $RetornoConsultaRel[$j]["data_fechada"] );
+                $retorno["valores"][$j]["Total"] = Formata::banco2valor( $RetornoConsultaRel[$j]["total"] );
+                $retorno["valores"][$j]["Comissao"] =  Formata::banco2valor( $RetornoConsultaRel[$j]["comissao"] );
                 $retorno["valores"][$j]["%"] = $RetornoConsultaRel[$j]["porcentagem"];
                 $tot += $RetornoConsultaRel[$j]["comissao"];
             }
@@ -478,7 +476,7 @@ class Relatorios {
                 $retorno["valores"][$j]["Cliente"] = "";
                 $retorno["valores"][$j]["Data"] = "";
                 $retorno["valores"][$j]["Total"] = "";
-                $retorno["valores"][$j]["Comissao"] =  $this->Formata->banco2valor( $tot );
+                $retorno["valores"][$j]["Comissao"] =  Formata::banco2valor( $tot );
         }
 		
         return $retorno;

@@ -8,11 +8,7 @@ $Main = new Main();
 
 $Main->Seguranca->verificaLogado();
 
-$Main->AdicionaCompras();
-
 //session_unset($_SESSION["Ordena"]);
-
-
 
 if($_REQUEST["acao"] == "deletar"){
 

@@ -4,13 +4,11 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxoBanco();
-
 
 if($_GET["acao"] == "listarBancos"){
     $bancos = $Main->FluxoBanco->pegaBancos();
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="40%">Nome</td>
@@ -47,7 +45,7 @@ if($_GET["acao"] == "listarBancos"){
         $bancos = $Main->FluxoBanco->pegaBancos($_GET["idBanco"]);
 	
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="40%">Ocorrencia</td>

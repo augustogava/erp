@@ -25,7 +25,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<form id="edit" name="edit" >	
 					<div class="form-group form-inline">
 						<input type="radio" name="filtro1" id="filtro1" value="1" checked> Clientes que nunca compraram <br />
-						<input type="radio" name="filtro1" id="filtro1_1" value="2" > Clientes que n�o compram desde: <input name="filtro2" id="filtro2" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10"> <br />
+						<input type="radio" name="filtro1" id="filtro1_1" value="2" > Clientes que não compram desde: <input name="filtro2" id="filtro2" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10"> <br />
 					</div>
 					
 					<div class="form-group form-inline">
@@ -53,7 +53,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					<script>
 						document.onkeypress = function (evt){
 							if(main.procuraTecla(evt,13)){
-								if(confirm('Deseja gerar o relat�rio?')){ abrirRelatorioClientes() }
+								if(confirm('Deseja gerar o relatório?')){ abrirRelatorioClientes() }
 							}
 						}
 						

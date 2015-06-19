@@ -4,7 +4,6 @@ include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaFluxo();
 
 if($_GET["acao"] == "listar"){
 	$fluxo        = $Main->Fluxo->pegaContasPagarVencidas();
@@ -13,7 +12,7 @@ if($_GET["acao"] == "listar"){
 ?>
 
 
-    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
             <tr class="tituloSemLinha">
 		<td width="10%" colspan="7">Vencidas</td>
@@ -110,14 +109,14 @@ if($_GET["acao"] == "listar"){
 		?>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="2" style="text-align:left;">Total</td>
-			<td width="100%" class="ColunaInfo" colspan="7" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
+			<td width="100%" class="ColunaInfo" colspan="8" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
 		</tr>
 	</tbody>
     </table>
 
 <br>
 
-    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+    <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
             <tr class="tituloSemLinha">
 		<td width="10%" colspan="7">Pagar</td>
@@ -153,7 +152,11 @@ if($_GET["acao"] == "listar"){
                             if($fluxoPagar[$j]->getStatus() == 0)
                                 $total += $Main->Formata->valor2banco($fluxoPagar[$j]->getValor());
 
-                            $class = "linha";
+				if(($j%2) == 0){
+					$class = "linha";
+				}else{
+					$class = "linhaMu";
+				}
 		?>
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$class?>" width="60%">
 			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
@@ -232,7 +235,7 @@ if($_GET["acao"] == "listar"){
 		?>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="2" style="text-align:left;">Total</td>
-			<td width="100%" class="ColunaInfo" colspan="7" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
+			<td width="100%" class="ColunaInfo" colspan="8" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
 		</tr>
 	</tbody>
     </table>

@@ -6,7 +6,6 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 03/2/09
 #  
-#  Classe métodos ordem producao.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**

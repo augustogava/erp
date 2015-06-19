@@ -21,16 +21,14 @@ include_once("properties/PropriedadesPadrao.php");
 
 class Composicao  {
 	public $ConexaoSQL;
-    public $Formata;
 	
     /**
-	 * M�todo construtor.
+	 * Método construtor.
 	 *
-	 * @param ConexaoSQL conex�o com o banco
+	 * @param ConexaoSQL conexão com o banco
 	 */
-    public function Composicao($ConexaoSQL, $Formata){
+    public function Composicao($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
     }
     
     /**

@@ -10,9 +10,6 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Configura��es do software
- * extende a configura��o padr�o.
- *
  * @author Augusto Gava
  * @version 1.0
  */

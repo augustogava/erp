@@ -3,7 +3,6 @@
 	<head>
 		<title> :: MultPoint Admin :: <? print $Main->Padrao->nome; ?></title>
 		<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<meta name="description" content="<? print $Main->Padrao->descricao; ?>" >
 	<meta name="keywords" content="<? print $Main->Padrao->keywords; ?>" >
 	<meta name="author" content="Augusto Gava" >
@@ -16,5 +15,6 @@
 	<script src="lib/script.js" type="text/javascript"></script>
 </head>
 
+<body class="scroll">
 
 <div id="addPop" class="caixa"></div>

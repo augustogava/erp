@@ -5,11 +5,6 @@ include "../includes/Main.class.php";
 $Main = new Main();
 
 
-
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery($_GET["query"]);
 
 //Adiciona Colunas
@@ -21,7 +16,7 @@ foreach($Colunas as $Valor){
 
 $Main->DataGrid->setOrder($_GET["ordena"]);
 
-//paginação
+//paginaÃ§Ã£o
 $Main->DataGrid->setLimiteAtual($_GET["limiteatual"]);
 if($_GET["flag"] == "proximo"){
 	$Main->DataGrid->setLimiteAtual(($Main->DataGrid->getLimiteAtual() + $_GET["limite"] ));
@@ -63,7 +58,7 @@ if($_GET["acao"]=="Deletar"){
 	$Main->DataGrid->deletaDataGrid($_GET["idData"]);
 }
 sleep(1);
-//Adiciona na sessão pra verificar
+//Adiciona na sessÃ£o pra verificar
 $_SESSION["flag"] = $_GET["flagOrdena"];
 
 $Main->DataGrid->montaDataGrid();

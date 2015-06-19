@@ -3,8 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-$Main->AdicionaCompras();
-
 if($_GET["acao"] == "exportar"){
 
 	$Main->Compras->exportar($_GET["fornecedores"], $_GET["dataIni"], $_GET["dataFim"], $_GET["codigo"], $_GET["ordem"], $_GET["tipoOrdem"], $_GET["campo"], $_GET["tipoR"]);

@@ -3,12 +3,6 @@ include "includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
-
-//session_unset($_SESSION["Ordena"]);
-
-//Chama DataGrid
-$Main->AdicionaDataGrid();
-
 $Main->DataGrid->setQuery("SELECT * from niveis ");
 $Main->DataGrid->setTabela("niveis");
 $Main->DataGrid->setColunas("niveis.id");

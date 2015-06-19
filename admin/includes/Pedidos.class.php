@@ -26,11 +26,7 @@ include_once("properties/PropriedadesFormaPagamento.php");
 
 class Pedidos  {
 	public $ConexaoSQL;
-    public $Formata;
     public $Configuracoes;
-	public $OrdemSeparacao;
-	
-    private $Exportacao;
     
     /**
 	 * Método construtor.
@@ -38,16 +34,9 @@ class Pedidos  {
 	 * @param ConexaoSQL conexão com o banco
 	 */
 
-    public function Pedidos($ConexaoSQL, $Formata, $Configuracoes, $OrdemSeparacao, $Exportacao){
+    public function Pedidos($ConexaoSQL, $Configuracoes){
         $this->ConexaoSQL = $ConexaoSQL;
-        $this->Formata = $Formata;
         $this->Configuracoes = $Configuracoes;
-//         $this->OrdemSeparacao = $OrdemSeparacao;
-		$this->Exportacao = $Exportacao;
-    }//end function
-
-    public function setOrdemSeparacao($OrdemSeparacao){
-//     	$this->OrdemSeparacao = $OrdemSeparacao;
     }
 
 	/**
@@ -433,25 +422,25 @@ class Pedidos  {
 
 		if(!empty($dataIni))
 
-			$busca .= " AND pedidos.data_cad >= '".$this->Formata->date2banco($dataIni)."' ";
+			$busca .= " AND pedidos.data_cad >= '".Formata::date2banco($dataIni)."' ";
 
 			
 
 		if(!empty($dataFim))
 
-			$busca .= " AND pedidos.data_cad <= '".$this->Formata->date2banco($dataFim)."' ";
+			$busca .= " AND pedidos.data_cad <= '".Formata::date2banco($dataFim)."' ";
 
 			
 
 		if(!empty($dataEnvioIni))
 
-			$busca .= " AND pedidos.data_enviado >= '".$this->Formata->date2banco($dataEnvioIni)."' ";
+			$busca .= " AND pedidos.data_enviado >= '".Formata::date2banco($dataEnvioIni)."' ";
 
 			
 
 		if(!empty($dataEnvioFim))
 
-			$busca .= " AND pedidos.data_enviado <= '".$this->Formata->date2banco($dataEnvioFim)."' ";
+			$busca .= " AND pedidos.data_enviado <= '".Formata::date2banco($dataEnvioFim)."' ";
 
 
 
@@ -516,19 +505,19 @@ class Pedidos  {
 
 				$Retorno[$j]->setObs($RetornoConsultaRel[$j]["obs"]);
 
-				$Retorno[$j]->setImposto($this->Formata->banco2valor($RetornoConsultaRel[$j]["imposto"]));
+				$Retorno[$j]->setImposto(Formata::banco2valor($RetornoConsultaRel[$j]["imposto"]));
 
-                $Retorno[$j]->setComissao($this->Formata->banco2valor($RetornoConsultaRel[$j]["comissao"]));
+                $Retorno[$j]->setComissao(Formata::banco2valor($RetornoConsultaRel[$j]["comissao"]));
 				
-				$Retorno[$j]->setValorEntrega($this->Formata->banco2valor($RetornoConsultaRel[$j]["valor_entrega"]));
+				$Retorno[$j]->setValorEntrega(Formata::banco2valor($RetornoConsultaRel[$j]["valor_entrega"]));
 
 				$Retorno[$j]->setDataFechada($RetornoConsultaRel[$j]["data_fechada"]);
 
 				$Retorno[$j]->setDataEnviada($RetornoConsultaRel[$j]["data_enviado"]);
 
-				$Retorno[$j]->setDataAberta($this->Formata->banco2date($RetornoConsultaRel[$j]["data_cad"]));
+				$Retorno[$j]->setDataAberta(Formata::banco2date($RetornoConsultaRel[$j]["data_cad"]));
 				
-				$Retorno[$j]->setDataImposto($this->Formata->banco2date($RetornoConsultaRel[$j]["data_imposto"]));
+				$Retorno[$j]->setDataImposto(Formata::banco2date($RetornoConsultaRel[$j]["data_imposto"]));
 
 			}
 
@@ -582,7 +571,7 @@ class Pedidos  {
 
 				$Retorno[$j]->setTipoComissao($RetornoConsulta[$j]["tipo_comissao"]);
 
-				$Retorno[$j]->setValorComissao($this->Formata->banco2valor($RetornoConsulta[$j]["comissao_valor"]));
+				$Retorno[$j]->setValorComissao(Formata::banco2valor($RetornoConsulta[$j]["comissao_valor"]));
 
 				$Retorno[$j]->setTotal($RetornoConsulta[$j]["total"]);
 
@@ -669,7 +658,7 @@ class Pedidos  {
 
         //Cadastra saida da comissao do representante
         $comissao = ($dadosPedido[0]->getComissao() > 0) ? $dadosPedido[0]->getComissao() : 7;
-        $valorRepresentante = ($precoTotal * $this->Formata->valor2banco( $comissao )) / 100;
+        $valorRepresentante = ($precoTotal * Formata::valor2banco( $comissao )) / 100;
         $ultimoDiaDomes = date("Y-m-d", strtotime(date("Y/m/d", mktime(0, 0, 0, date("m")+1, 1, date("Y"))) . " -1 day"));
 
         $representante = $this->ConexaoSQL->Select("SELECT * FROM fluxo WHERE ocorrencia LIKE '%".$dadosPedido[0]->getRepresentantesNome()."%' AND data = '".$ultimoDiaDomes."' AND tipo = '2'");
@@ -687,13 +676,13 @@ class Pedidos  {
 			if(empty($parcela)){
 				$adicional = 0;
 
-				$adicional = $this->Formata->valor2banco( $dadosPedido[0]->getValorEntrega() ); 
+				$adicional = Formata::valor2banco( $dadosPedido[0]->getValorEntrega() ); 
 				if( $dadosPedido[0]->getDataImposto() == "00-00-0000" ||  $dadosPedido[0]->getDataImposto() == "00/00/0000" ){
-					$adicional += $this->Formata->valor2banco( $dadosPedido[0]->getImposto() );
+					$adicional += Formata::valor2banco( $dadosPedido[0]->getImposto() );
 					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 				}else{
 					//Adiciona conta receber na data desejada					
-					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
+					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". Formata::date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
 					$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido." ', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 				}
 
@@ -712,12 +701,12 @@ class Pedidos  {
 						
 						$adicional = 0;
 						if($k == 0){
-							$adicional = $this->Formata->valor2banco( $dadosPedido[0]->getValorEntrega() ); 
+							$adicional = Formata::valor2banco( $dadosPedido[0]->getValorEntrega() ); 
 							if( $dadosPedido[0]->getDataImposto() == "00-00-0000" || $dadosPedido[0]->getDataImposto() == "00/00/0000" ){
-								$adicional += $this->Formata->valor2banco( $dadosPedido[0]->getImposto() );
+								$adicional += Formata::valor2banco( $dadosPedido[0]->getImposto() );
 								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 							}else{
-								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". $this->Formata->date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
+								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', '". Formata::date2banco( $dadosPedido[0]->getDataImposto() )."', '1', '".( $dadosPedido[0]->getImposto() )."')");
 								$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_clientes, id_tipo_fluxo, id_pedidos, ocorrencia, data, tipo, valor) VALUES('".$dadosPedido[0]->getClienteId()."', '11', '".$idPedido."', 'Imposto Código Pedido: ".$dadosPedido[0]->getCodigo()."', NOW(), '2', '".( $dadosPedido[0]->getImposto() )."')");
 							}
 						}
@@ -746,11 +735,10 @@ class Pedidos  {
 		
 		//Só pode remover do historio do estoque, as saidas (separacoes)
 		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$idPedido."' AND tipo = '2'");
-		
-// 		$ordens = $this->OrdemSeparacao->pegaOrdemSeparacao("", $idPedido );
-		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT ordem_separacao.*, status_separacao.nome as statusNome FROM ordem_separacao LEFT JOIN status_separacao ON status_separacao.id = ordem_separacao.id_status_separacao WHERE id = '".$idPedido."' AND id_ordem_status = '2' ORDER By ordem_separacao.id DESC  ");
+		$ordens = OrdemSeparacao::pegaOrdemSeparacao("", $idPedido, null, null, null, null, 2 );
 		for($j=0; $j<count($ordens); $j++){
-			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '". $RetornoConsulta[$j]["qtd"]."' WHERE id = '". $RetornoConsulta[$j]["id_produtos"]."'");
+			$produto = $ordens[0]->getProdutos();
+			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '". $ordens[0]->getQtd()."' WHERE id = '". $produto[0]->getId(). "'");
 		}
 		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id_pedido = '".$idPedido."'");
 	}
@@ -853,7 +841,7 @@ class Pedidos  {
 
 			if($campo == "preco" || $campo == "comissao_valor"){
 
-				$valor = $this->Formata->valor2banco($valor);
+				$valor = Formata::valor2banco($valor);
 
 			}
 
@@ -877,7 +865,7 @@ class Pedidos  {
 
 		}else{
 
-			print "<script>window.alert('Produto j� cadastrado')</script>";
+			print "<script>window.alert('Produto já� cadastrado')</script>";
 
 		}
 
@@ -894,15 +882,14 @@ class Pedidos  {
 	public function salvarPedido($clientes, $representantes, $id, $tipoComissao, $valorComissao, $formaPagamento, $codigo, $obs, $tipo_entrega, $imposto, $valorEntrega, $comissao, $dataimposto=""){
 		//Deleta lixo
 		$this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_pedidos = '".$id."'");
-		//print "UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".$this->Formata->valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".$this->Formata->valor2banco($valorComissao)."', valor_entrega = '".$this->Formata->valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".$this->Formata->valor2banco($comissao)."', data_imposto = '".$this->Formata->date2banco($dataimposto)."' WHERE id = '".$id."'";
-		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".$this->Formata->valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".$this->Formata->valor2banco($valorComissao)."', valor_entrega = '".$this->Formata->valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".$this->Formata->valor2banco($comissao)."', data_imposto = '".$this->Formata->date2banco($dataimposto)."' WHERE id = '".$id."'");
+		//print "UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".Formata::valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".Formata::valor2banco($valorComissao)."', valor_entrega = '".Formata::valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".Formata::valor2banco($comissao)."', data_imposto = '".Formata::date2banco($dataimposto)."' WHERE id = '".$id."'";
+		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET id_tipo_entrega = '".$tipo_entrega."', imposto = '".Formata::valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_clientes = '".$clientes."', id_representantes = '".$representantes."', tipo_comissao = '".$tipoComissao."', comissao_valor = '".Formata::valor2banco($valorComissao)."', valor_entrega = '".Formata::valor2banco($valorEntrega)."', id_formas_pagamento = '".$formaPagamento."', data_fechada = '', comissao = '".Formata::valor2banco($comissao)."', data_imposto = '".Formata::date2banco($dataimposto)."' WHERE id = '".$id."'");
 		$this->verficaFechado($id);
 	}
 	
 	
 	public function alteraStatusPedidoSeparado( $id ){
-		print 123;
-		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET status = '6' WHERE id = '".$id."'");
+		$this->ConexaoSQL->updateQuery("UPDATE pedidos SET id_status_pedidos = '6' WHERE id = '".$id."'");
 	}
 
 	/**
@@ -934,7 +921,6 @@ class Pedidos  {
 			$busca = " AND id = '".$produto."' ";
 
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM produtos WHERE 1 ".$busca." Order By codigo ASC ");
-
 		if(count($RetornoConsulta) > 0){
 			for($j=0; $j<count($RetornoConsulta); $j++){
 				$Retorno[$j] = new PropriedadesProdutos();
@@ -1145,7 +1131,7 @@ class Pedidos  {
 
 				$valorParcela = $precoTotal / count($dias);
 
-				if( ( $dadosPedido[0]->getDataImposto() != "00-00-0000" && $dadosPedido[0]->getDataImposto() != "00/00/0000" ) && $this->Formata->valor2banco( $dadosPedido[0]->getImposto() ) > 0  ){
+				if( ( $dadosPedido[0]->getDataImposto() != "00-00-0000" && $dadosPedido[0]->getDataImposto() != "00/00/0000" ) && Formata::valor2banco( $dadosPedido[0]->getImposto() ) > 0  ){
 					$saidaParcelas .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 						<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"> Imposto </td>
 						<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getDataImposto()."</td>
@@ -1155,13 +1141,13 @@ class Pedidos  {
 
 				foreach($dias as $k=>$datas){
 
-					$data = $this->Formata->banco2date(date("Y-m-d", mktime(0,0,0, $dataFechada[1], substr($dataFechada[2], 0, 2) + $datas, $dataFechada[0])));
+					$data = Formata::banco2date(date("Y-m-d", mktime(0,0,0, $dataFechada[1], substr($dataFechada[2], 0, 2) + $datas, $dataFechada[0])));
 
-					//$valPar = ($k==0) ? $valorParcela+$this->Formata->valor2banco($dadosPedido[0]->getImposto())+$this->Formata->valor2banco($dadosPedido[0]->getValorEntrega()) : $valorParcela;
+					//$valPar = ($k==0) ? $valorParcela+Formata::valor2banco($dadosPedido[0]->getImposto())+Formata::valor2banco($dadosPedido[0]->getValorEntrega()) : $valorParcela;
 					if( $k==0 ){
-						$valPar = $valorParcela + $this->Formata->valor2banco( $dadosPedido[0]->getValorEntrega() ); 
+						$valPar = $valorParcela + Formata::valor2banco( $dadosPedido[0]->getValorEntrega() ); 
 						if( $dadosPedido[0]->getDataImposto() == "00-00-0000" || $dadosPedido[0]->getDataImposto() == "00/00/0000" ){
-							$valPar += $this->Formata->valor2banco( $dadosPedido[0]->getImposto() );
+							$valPar += Formata::valor2banco( $dadosPedido[0]->getImposto() );
 						}
 					}else{
 						$valPar = $valorParcela;
@@ -1173,7 +1159,7 @@ class Pedidos  {
 
 							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
 							
-							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$this->Formata->banco2valor($valPar)."</td>
+							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($valPar)."</td>
 
 						</tr>";
 
@@ -1254,7 +1240,7 @@ class Pedidos  {
 
 		$fluxoTemplateSaida = ereg_replace("%TIPOENTREGA%", $tipoEntrega, $fluxoTemplateSaida);
 
-		$fluxoTemplateSaida = ereg_replace("%DATA%", $this->Formata->banco2date($dadosPedido[0]->getDataEnviada()), $fluxoTemplateSaida); 
+		$fluxoTemplateSaida = ereg_replace("%DATA%", Formata::banco2date($dadosPedido[0]->getDataEnviada()), $fluxoTemplateSaida); 
 
 		$fluxoTemplateSaida = ereg_replace("%ITENS%",$itens, $fluxoTemplateSaida);
 
@@ -1298,7 +1284,7 @@ class Pedidos  {
 
 		
 
-		$return = "<tr style=\"background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+		$return = "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 
 						<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">Cod</td>
 
@@ -1350,13 +1336,13 @@ class Pedidos  {
 
 				<td width=\"15%\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
 
-					".$this->Formata->banco2valor($itens[$i]->getPreco())."
+					".Formata::banco2valor($itens[$i]->getPreco())."
 
 				</td>
 
 				<td width=\"10%\" style=\"text-align:left;\" id =\"campoTotal_<?=$i?>\">
 
-					".$this->Formata->banco2valor($itens[$i]->getTotal())."
+					".Formata::banco2valor($itens[$i]->getTotal())."
 
 				</td>
 
@@ -1374,7 +1360,7 @@ class Pedidos  {
 
 				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" >&nbsp;</td>
 
-				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".$this->Formata->banco2valor( ($precoTotal))."</strong></td>
+				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".Formata::banco2valor( ($precoTotal))."</strong></td>
 
 			</tr>";
 
@@ -1383,7 +1369,7 @@ class Pedidos  {
 
 				<td colspan=\"5\" style=\"text-align:right;\">
 					<table width=\"20%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"right\">
-						<tr style=\"background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+						<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Imposto</td>
 						</tr>
 						<tr style=\"background:#EBF0FD;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
@@ -1391,7 +1377,7 @@ class Pedidos  {
 						</tr>
 						
 						
-						<tr style=\"background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+						<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Frete</td>
 						</tr>
 						<tr style=\"background:#EBF0FD;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
@@ -1400,11 +1386,11 @@ class Pedidos  {
 						
 						
 						
-						<tr style=\"background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+						<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Total Pedido</td>
 						</tr>
 						<tr style=\"background:#EBF0FD;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$this->Formata->banco2valor($this->Formata->valor2banco($dadosPedido[0]->getImposto())+$precoTotal+$this->Formata->valor2banco($dadosPedido[0]->getValorEntrega()))."</td>
+							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor(Formata::valor2banco($dadosPedido[0]->getImposto())+$precoTotal+Formata::valor2banco($dadosPedido[0]->getValorEntrega()))."</td>
 						</tr>
 						
 					</table>
@@ -1471,7 +1457,7 @@ class Pedidos  {
 
 			
 
-			$codigo = $this->Formata->preencheZero(($pt+1), 4);
+			$codigo = Formata::preencheZero(($pt+1), 4);
 
 			
 
@@ -1495,26 +1481,26 @@ class Pedidos  {
 		$pedidos = $this->pegaPedidos($cliente, $status, "", "", $dataIni, $dataFim, $codigo, $ordem, $tipoOrdem, $dataEnvioIni, $dataEnvioFim);
 		
 		if($tipo != "csv"){
-			$html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
+			$html = "<table border=\"1\" width=\"100%\" height=\"100px\"  cellpadding=\"0\" cellspacing=\"0\" align=\"left\">";
 			$html .= "<tr class=\"tituloRelatorio\">";
 				
 				if($tipo == "html"){
 					$html .= "<td width='10%'>";
-					$html .= "<img src=\"layout/incones/exportar.png\" width=\"30px\" border='1' alt=\"Imprimir\" onclick=\"main.imprimir();\"  /> ";
+					$html .= "<div class=\"logo\"></div>";
 					$html .= "</td>";
 				}
 
 				$html .= "<td  width='90%' align='center'>";
-					$html .= "Impress�o Pedido";
+					$html .= "Impressão Pedido";
 				$html .= "</td>";
 			$html .= "</tr>";
 			$html .= "</table><br />";
 			
-			$html .= "<table width=\"99%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\">";
+			$html .= "<table width=\"99%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" id=\"tabletest\" class=\"table-relatorio\">";
 			
 				$html .= "<tr id=\"linhaDataGrid_\" class=\"titulo\" width=\"100%\">
 	
-							<td width=\"10%\" class=\"ColunaInfo\">C�digo</td>
+							<td width=\"10%\" class=\"ColunaInfo\">Código</td>
 				
 							<td width=\"35%\"  id=\"linhaDataGrid__0\">Cliente</td>
 				
@@ -1574,22 +1560,22 @@ class Pedidos  {
 			$html .= "</table>";
 			
 			if($tipo == "excel"){
-				$arquivo = $this->Exportacao->criaArquivo("/", $html);
-				$this->Exportacao->gerarExceldeArquivoTemporario($arquivo, "exportacao");
+				$arquivo = Exportacao::criaArquivo("/", $html);
+				Exportacao::gerarExceldeArquivoTemporario($arquivo, "exportacao");
 			}else if($tipo == "html"){
 				print $html;
 			}
 			
 		}else{
 			
-			$html .= "\"C�digo\",\"Cliente\",\"Representante\",\"Data\",\"Status\";\n";
+			$html .= "\"Código\",\"Cliente\",\"Representante\",\"Data\",\"Status\";\n";
 			
 			for($j=0; $j<count($pedidos); $j++){
 				$html .= "\"".$pedidos[$j]->getCodigo()."\",\"".$pedidos[$j]->getClienteNome()."\",\"".(($pedidos[$j]->getRepresentantesNome()) ? ($pedidos[$j]->getRepresentantesNome()) : "Sem Representante")."\",\"".$pedidos[$j]->getDataAberta()."\",\"".$pedidos[$j]->getStatusNome()."\" ;\n";
 			}
 			
-			$arquivo = $this->Exportacao->criaArquivo("/", $html);
-			$this->Exportacao->gerarCsvdeArquivoTemporario($arquivo, "exportacao");
+			$arquivo = Exportacao::criaArquivo("/", $html);
+			Exportacao::gerarCsvdeArquivoTemporario($arquivo, "exportacao");
 		}
 		
 	}
@@ -1615,8 +1601,8 @@ class Pedidos  {
         $query = "SELECT SUM(pedidos_itens.qtd) as qtd, pedidos.codigo, pedidos.valor_total, clientes.nome as nome  FROM pedidos
             INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
             INNER JOIN clientes ON clientes.id = pedidos.id_clientes
-            WHERE pedidos.data_fechada >= '".$this->Formata->date2banco($dataIni)."'
-            AND pedidos.data_fechada <= '".$this->Formata->date2banco($dataFim)."'
+            WHERE pedidos.data_fechada >= '".Formata::date2banco($dataIni)."'
+            AND pedidos.data_fechada <= '".Formata::date2banco($dataFim)."'
             AND id_status_pedidos IN ('4', '5') GROUP By pedidos.id
             ";
 

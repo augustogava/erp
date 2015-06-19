@@ -6,7 +6,7 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/01/08
 #  
-#  Classe bd, conexão
+#  Classe bd, conexÃ£o
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 //$campos = array("nome"=>"augusto35","email"=>"teste@teste.com.br35");
@@ -26,7 +26,7 @@ print $a[0]["nome"];
 require_once('BancoQuery.class.php');
 
 /**
- * Classe responsável pelo Banco
+ * Classe responsï¿½vel pelo Banco
  *
  * @author Augusto Gava
  * @version 1.0
@@ -38,16 +38,16 @@ class ConexaoMySQL extends banco_query {
     public $ConexaoSQL;
     
     /**
-	 * Método construtor.
+	 * Mï¿½todo construtor.
 	 *
-	 * @param Configuracoes configuração padrão da classe Configuracoes.
+	 * @param Configuracoes configuraï¿½ï¿½o padrï¿½o da classe Configuracoes.
 	 */
     public function ConexaoMySQL($Configuracoes){
         $this->Configuracoes = $Configuracoes;
     }//end function
     
      /**
-	 * Método pega nome tabela.
+	 * Mï¿½todo pega nome tabela.
 	 *
 	 * @return table_name
 	 */
@@ -56,7 +56,7 @@ class ConexaoMySQL extends banco_query {
     }//end function
     
     /**
-	 * Método de tratamento de erro.
+	 * Mï¿½todo de tratamento de erro.
 	 *
 	 * @param MensagemDeErro mensagem de erro.
 	 */
@@ -66,7 +66,7 @@ class ConexaoMySQL extends banco_query {
     
     /**
     *
-    * Método de conexão com banco.
+    * Mï¿½todo de conexï¿½o com banco.
     *
     * @return true or false
     */
@@ -81,7 +81,7 @@ class ConexaoMySQL extends banco_query {
     
     /**
     *
-    * Método que executa query qualquer.
+    * Mï¿½todo que executa query qualquer.
     *
     * @param query utilizada
     * @return result
@@ -100,7 +100,7 @@ class ConexaoMySQL extends banco_query {
 	
 	/**
     *
-    * Método que executa query para Inserção.
+    * Mï¿½todo que executa query para Inserï¿½ï¿½o.
     *
     * @param query utilizada
     * @return result
@@ -125,7 +125,7 @@ class ConexaoMySQL extends banco_query {
 	
 	/**
     *
-    * Método que executa query para update.
+    * Mï¿½todo que executa query para update.
     *
     * @param query utilizada
     * @return result
@@ -146,7 +146,7 @@ class ConexaoMySQL extends banco_query {
 	
 	/**
     *
-    * Método que executa query de delete.
+    * Mï¿½todo que executa query de delete.
     *
     * @param query utilizada
     * @return result
@@ -186,7 +186,7 @@ class ConexaoMySQL extends banco_query {
     
 	/**
     *
-    * Método que insere banco.
+    * Mï¿½todo que insere banco.
     *
     * @param fields array com campos
     * @table_name nome da tabela
@@ -206,7 +206,7 @@ class ConexaoMySQL extends banco_query {
     
     /**
     *
-    * Método que atualiza tabela, update($campos,"cliente","id=1"), update($campos,"cliente",1).
+    * Mï¿½todo que atualiza tabela, update($campos,"cliente","id=1"), update($campos,"cliente",1).
     *
     * @param fields array com campos
     * @param table_name nome da tabela
@@ -226,7 +226,7 @@ class ConexaoMySQL extends banco_query {
     
 	/**
     *
-    * Método que retorna registros da tabela print $cont[1]["nome"];.
+    * Mï¿½todo que retorna registros da tabela print $cont[1]["nome"];.
     *
     * @param table_name nome tabela
     * @param campos array dos campos
@@ -252,7 +252,7 @@ class ConexaoMySQL extends banco_query {
     
 	/**
     *
-    * Método que executa query, trazendo fecth_array.
+    * Mï¿½todo que executa query, trazendo fecth_array.
     *
     * @param query
     */
