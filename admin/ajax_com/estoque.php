@@ -15,48 +15,52 @@ if($_GET["acao"] == "listar"){
 <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
-			<td width="100%" class="ColunaInfo" colspan="6">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
+			<td width="100%" class="ColunaInfo" colspan="5">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
 		</tr>
 		<tr class="titulo">
 			<td width="40%">Produto</td>
 			<td width="5%" >Qtd</td>
 			<td width="5%" >Tipo</td>
 			<td width="5%" >Data</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('/ajax_com/estoque.php?acao=listar&produto=<?=$_GET["produto"]?>&tipo=<?=$_GET["tipo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
+			<td width="30%" align="right">
+				<a title="Anterior" href="javascript:doAjaxSemRetorno('ajax_com/estoque.php?acao=listar&produto=<?=$_GET["produto"]?>&tipo=<?=$_GET["tipo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-left" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/estoque.php?acao=listar&produto=<?=$_GET["produto"]?>&tipo=<?=$_GET["tipo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite+15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreen.gif"/>
+				
+				<a title="Próximo" href="javascript:doAjaxSemRetorno('ajax_com/estoque.php?acao=listar&produto=<?=$_GET["produto"]?>&tipo=<?=$_GET["tipo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite+15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-right" aria-hidden="true"></span>
 				</a>
+					
 			</td>
 		</tr>
 		<?
 			for($j=0; $j<count($estoque); $j++){
+				if(($j%2) == 0){
+					$linha = "linha";
+				}else{
+					$linha = "linhaMu";
+				}
 		?>
-		<tr id="linhaDataGrid_<?=$j?>" class="linha" width="60%">
-			<td width="40%"  id="linhaDataGrid_<?=$j?>_0">
+		<tr id="linhaDataGrid_<?=$j?>" class="<?=$linha?>" width="60%">
+			<td id="linhaDataGrid_<?=$j?>_0">
 				<?=$estoque[$j]->getProdutoNome()?>
 			</td>
-			<td width="5%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$estoque[$j]->getQtd()?>
 			</td>
-			<td width="5%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($estoque[$j]->getTipo()==1)?"Entrada":"Saí=ida";?>
 			</td>
-			<td width="5%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$estoque[$j]->getData()?>
 			</td>
-			<td width="4%" align="center"> 
-				<a href="javascript:doAjaxSemRetorno('ajax_com/estoque.php?acao=editar&id=<?=$estoque[$j]->getId()?>',1,'addPop');addPop_open(550);">
-					<img border="0" src="layout/incones/edit.png"/>
+			<td  align="right"> 
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/estoque.php?acao=editar&id=<?=$estoque[$j]->getId()?>',1,'addPop');addPop_open(550);">
+					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td  width="4%" align="center"> 
-				<a onclick="if(confirm('Deseja Excluir?')){ excluirEstoque(<?=$estoque[$j]->getId()?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png"/>
+
+				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirEstoque(<?=$estoque[$j]->getId()?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>

@@ -30,8 +30,8 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	
 			<div class="linhaConfig" id="busca">  
 				<ul class="nav nav-tabs" role="tablist">
-    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab">Consultar</a></li>
-    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/estoque.php?acao=adicionar',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab">Cadastrar Novo</a></li>
+    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-search" aria-hidden="true"></span> Consultar</a></li>
+    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/estoque.php?acao=adicionar',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-file" aria-hidden="true"></span> Cadastrar Novo</a></li>
     			</ul>
     			
 				<div id="buscaDiv" style="display:none;">

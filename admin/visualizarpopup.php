@@ -34,6 +34,8 @@ include($Main->Configuracoes->HEADER_POPBUSCA);
 	
 </div> <!-- end #main-body -->
 
+<input type="hidden" id="popup" name="popup"  value="true">
+
 <? include($Main->Configuracoes->FOOTER_POPBUSCA); ?>
 
 

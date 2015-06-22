@@ -11,28 +11,41 @@ include($Main->Configuracoes->HEADER_POPBUSCA);
 <div id="main-body">
 	<div id="contentPopUp">
 	
-		<h3 id="recent">Busca <?=ucfirst($_GET["tabela"])?></h3>
+		<div class="title">
+			<div class="row">
+		  		<div class="col-md-10">
+		  			<p class="titlePage" id="recent">Busca <?=ucfirst($_GET["tabela"])?></p>
+				</div>
+			</div>
+		</div>
 		
 		<div id="Saida">
 			<form id="frmBusca" name="frmBusca" action="">
-				Busca: <br />
-				<select id="campo" name="campo">
-					<?
-					for($i=0; $i<count($campos); $i++){
-					?>
-						<option value="<?=$campos[$i]?>"><?=ucfirst($campos[$i])?></option>
-					<?
-					}
-					?>
-				</select>
-				<input type="text" id="valor" name="valor" style="width:98%; border: 1px solid #CFDEFF;">
-				<div id="saidaBusca"> </div>
+				<div class="form-group form-inline">
+				
+					<label for="campo">Busca</label>
+					<select id="campo" name="campo" class="form-control input-sm">
+						<?
+						for($i=0; $i<count($campos); $i++){
+						?>
+							<option value="<?=$campos[$i]?>"><?=ucfirst($campos[$i])?></option>
+						<?
+						}
+						?>
+					</select>
+					<label for="valor">Valor</label>
+					<input type="text" id="valor" name="valor"  class="form-control input-sm">
+				</div>
+				
+				<div id="saidaBusca" class="autocomplete"> </div>
 			</form>
 		</div>
 
 	</div> <!-- end #content -->
 	
 </div> <!-- end #main-body -->
+
+<input type="hidden" id="popup" name="popup"  value="true">
 
 <script>evento.adicionar($('valor'), 'keyup', function (evt) { ajaxEfeitos.gerarCombo('<?=$_GET["tabela"]?>', '<?=$_GET["campoatual"]?>'); });</script>
 <? include($Main->Configuracoes->FOOTER_POPBUSCA); ?>

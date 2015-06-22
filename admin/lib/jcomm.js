@@ -208,7 +208,7 @@ var arrayMa = {
 
 var ajaxEfeitos = {
 	gerarCombo: function (tabela, campoAntigo){
-		$('saidaBusca').style.display = 'inline';
+		$('saidaBusca').style.display = 'block';
 		doAjaxSemRetorno('ajax_com/busca.php?tipo=autoComplete&campoatual='+campoAntigo+'&tabela='+tabela+'&valor='+$('valor').value+'&campo='+$('campo').value, 0, 'saidaBusca');
 	},
 	enviaValor: function (campo, valor){
@@ -675,7 +675,7 @@ var efeitos = {
 		if($(el).style.display=='none'){
 			var height = main.ret_valor($(el).style.height);
 			$(el).style.height = '10px';
-			$(el).style.display = 'inline';
+			$(el).style.display = 'block';
 			efeitos.fadeIn(el,10,0,10);
 				efeitos.fadeDown(el,50,height);
 		}

@@ -833,8 +833,10 @@ function fecharOrdemProducao(id, status){
 	if(status != 2){
 
 		if(status == 1){
-			doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=produzirOrdem&id=' + id, 1 , '');
-			refreshOrdemProducao();
+			if(confirm('Deseja Alterar ordem para Produzindo?')){
+				doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=produzirOrdem&id=' + id, 1 , '');
+				refreshOrdemProducao();
+			}
 		}else if(status == 4){
 			if(confirm('Deseja realmente fechar Ordem?\nIr? ser dada entrada no estoque\nOperação não pode ser cancelada posteriormente!')){
 				doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=fecharOrdem&id=' + id, 1 , '');
@@ -1553,19 +1555,23 @@ jQuery( document ).ready(function() {
 });
 
 function fixHeight(){
-	console.info(" s " + jQuery( window ).height() )
 	var hei = jQuery( window ).height();
-	
-	jQuery("#wrapper").height( hei );
- 	
- 	jQuery("#header, #main-body").width( ( jQuery( document ).width() - 100 ) );
- 	
- 	jQuery("#Saida").height( (hei-150) - jQuery("#busca").height()  );
- 	
- 	jQuery(".modal").height( hei );
- 	jQuery(".modal").width( jQuery( document ).width() );
- 	
- 	jQuery(".panel.pull-right").css( "margin-top", (hei/2)-50);
+	console.info("1")
+	if( $("popup") != undefined ){
+		jQuery("#header, #main-body").width( jQuery( window ).width() );
+		console.info( jQuery( window ).width() )
+	}else{
+		jQuery("#wrapper").height( hei );
+	 	
+	 	jQuery("#header, #main-body").width( ( jQuery( document ).width() - 100 ) );
+	 	
+	 	jQuery("#Saida").height( (hei-150) - jQuery("#busca").height()  );
+	 	
+	 	jQuery(".modal").height( hei );
+	 	jQuery(".modal").width( jQuery( document ).width() );
+	 	
+	 	jQuery(".panel.pull-right").css( "margin-top", (hei/2)-50);
+	}
  	
 }
 

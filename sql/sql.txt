@@ -1,10 +1,10 @@
-UPDATE `stoik`.`param` SET `valor`='logo.png' WHERE `id`='4';
-UPDATE `stoik`.`param` SET `valor`='http://www.stoik.com.br/admin/' WHERE `id`='5';
+UPDATE `param` SET `valor`='logo.png' WHERE `id`='4';
+UPDATE `param` SET `valor`='http://www.stoik.com.br/admin/' WHERE `id`='5';
 
-UPDATE `stoik`.`status_pedidos` SET `nome`='Separando' WHERE `id`='4';
-INSERT INTO `stoik`.`status_ordem` (`id`, `nome`) VALUES ('4', 'Produzindo');
+UPDATE `status_pedidos` SET `nome`='Separando' WHERE `id`='4';
+INSERT INTO `status_ordem` (`id`, `nome`) VALUES ('4', 'Produzindo');
 
-ALTER TABLE `stoik`.`produtos` ADD COLUMN `estoque_atual` INT(20) NULL DEFAULT 0 AFTER `data_cad`;
+ALTER TABLE `produtos` ADD COLUMN `estoque_atual` INT(20) NULL DEFAULT 0 AFTER `data_cad`;
 
 
 
@@ -29,27 +29,37 @@ CREATE TABLE `ordem_separacao` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Ordens de separação';
 
 
-INSERT INTO `stoik`.`status_separacao` (`id`, `nome`) VALUES ('1', 'Á Separar');
-INSERT INTO `stoik`.`status_separacao` (`id`, `nome`) VALUES ('2', 'Separado');
+INSERT INTO `status_separacao` (`id`, `nome`) VALUES ('1', 'Á Separar');
+INSERT INTO `status_separacao` (`id`, `nome`) VALUES ('2', 'Separado');
 
-ALTER TABLE `stoik`.`menus` ADD COLUMN `icone` VARCHAR(45) NULL AFTER `ordem`;
+ALTER TABLE `menus` ADD COLUMN `icone` VARCHAR(45) NULL AFTER `ordem`;
 
-UPDATE `stoik`.`menus` SET `icone`='fa-home' WHERE `id`='1';
-UPDATE `stoik`.`menus` SET `icone`='fa-file' WHERE `id`='2';
-UPDATE `stoik`.`menus` SET `icone`='fa-list-alt' WHERE `id`='3';
-UPDATE `stoik`.`menus` SET `icone`='fa-gears' WHERE `id`='5';
-UPDATE `stoik`.`menus` SET `icone`='fa-money' WHERE `id`='48';
-UPDATE `stoik`.`menus` SET `icone`='fa-area-chart' WHERE `id`='18';
-UPDATE `stoik`.`menus` SET `icone`='fa-credit-card' WHERE `id`='47';
-UPDATE `stoik`.`menus` SET `icone`='fa-bank' WHERE `id`='4';
+UPDATE `menus` SET `icone`='fa-home' WHERE `id`='1';
+UPDATE `menus` SET `icone`='fa-file' WHERE `id`='2';
+UPDATE `menus` SET `icone`='fa-list-alt' WHERE `id`='3';
+UPDATE `menus` SET `icone`='fa-gears' WHERE `id`='5';
+UPDATE `menus` SET `icone`='fa-money' WHERE `id`='48';
+UPDATE `menus` SET `icone`='fa-area-chart' WHERE `id`='18';
+UPDATE `menus` SET `icone`='fa-credit-card' WHERE `id`='47';
+UPDATE `menus` SET `icone`='fa-bank' WHERE `id`='4';
 
 
-INSERT INTO `stoik`.`menus` (`id_menus`, `nome`, `link`, `ordem`) VALUES ('3', 'Ordem de Separação', 'ordem_separacao.php', '3');
+INSERT INTO `menus` (`id_menus`, `nome`, `link`, `ordem`) VALUES ('3', 'Ordem de Separação', 'ordem_separacao.php', '3');
 
-ALTER TABLE `erp`.`funcionarios` ADD COLUMN `salario` DOUBLE NULL AFTER `tel2`;
+ALTER TABLE `funcionarios` ADD COLUMN `salario` DOUBLE NULL AFTER `tel2`;
 
-INSERT INTO `stoik`.`status_pedidos` (`id`, `nome`) VALUES ('6', 'Separado');
+INSERT INTO `status_pedidos` (`id`, `nome`) VALUES ('6', 'Separado');
 
-ALTER TABLE `stoik`.`ordem_separacao` ADD COLUMN `id_ordem_producao` INT(10) NULL AFTER `id_produtos`;
+ALTER TABLE `ordem_separacao` ADD COLUMN `id_ordem_producao` INT(10) NULL AFTER `id_produtos`;
 
-UPDATE `stoik`.`status_ordem` SET `nome`='Produzido' WHERE `id`='4';
+UPDATE `status_ordem` SET `nome`='Produzido' WHERE `id`='4';
+
+
+UPDATE `menus` SET `id_menus`='48' WHERE `id`='11';
+UPDATE `menus` SET `id_menus`='3' WHERE `id`='10';
+
+UPDATE `status_ordem` SET `nome`='Produzindo' WHERE `id`='4';
+
+ALTER TABLE `stoik`.`produtos` 
+ADD COLUMN `preco_custo` DOUBLE NOT NULL DEFAULT 0 AFTER `preco_4`,
+ADD COLUMN `peso` DOUBLE NOT NULL DEFAULT 0 AFTER `preco_custo`;

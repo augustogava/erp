@@ -42,7 +42,7 @@ if($_GET["acao"] == "exportar"){
 
 
 ?>
-<div id="main-body popup">
+<div id="main-body">
 	<div class="title">
 		<div class="row">
 	  		<div class="col-md-12">
@@ -53,7 +53,7 @@ if($_GET["acao"] == "exportar"){
 	<div id="contentPopUp">
 	
 		<div id="Saida">
-			<select id="campo" name="campo" style="width: 100%">
+			<select id="campo" name="campo" style="width: 100%" class="form-control input-sm">
 				<option value="">Selecione</option>
 				<option value="csv">CSV</option>
 				<option value="pdf">PDF</option>
@@ -65,6 +65,8 @@ if($_GET["acao"] == "exportar"){
 	</div> <!-- end #content -->
 	
 </div> <!-- end #main-body -->
+
+<input type="hidden" id="popup" name="popup"  value="true">
 
 <script>
 evento.adicionar($('campo'), 'change', function (evt) { 

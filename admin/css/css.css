@@ -233,15 +233,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 #saidaBusca{
-	border: 1px solid #CFDEFF;
-	width:98%;
+	width:95%;
 	display:none;
-}
-#saidaBusca ul {
-	width:98%;
-}
-#saidaBusca li:hover {
-	background: #CFDEFF;
 }
 
 #Saida{
@@ -383,7 +376,6 @@ input:focus, select:focus, textarea:focus {
 #content h3 {
 	margin: 0 0 10px 0;
 	padding: 0;
-	font-family: Georgia, serif;
 
 	font-weight: normal;
 	font-size: 140%;
@@ -401,7 +393,6 @@ input:focus, select:focus, textarea:focus {
 #contentPopUp h3 {
 	margin: 0 0 10px 0;
 	padding: 0;
-	font-family: Georgia, serif;
 
 	font-weight: normal;
 	font-size: 140%;
@@ -823,7 +814,7 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 
 .table-erp .linha{ background: rgba(30, 150, 205, 0.1) !important;	height: 40px; border-bottom: 1px solid #ddd; }
 .table-erp .linha td, .table-erp .linhaMu td, .table-erp .titulo td, .table-erp .tituloSemLinha td, .table-erp .tituloRed td{   padding: 5px; }
-.table-erp .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 40px; }
+.table-erp .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 40px;  border-bottom: 1px solid #ddd; }
 .table-erp .linha:hover{ background: rgba(30, 150, 205, 0.4) !important; }
 .table-erp .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
 
@@ -853,3 +844,17 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 .form-group { margin-bottom: 0px !important; }
 
 .linhaVermelha{ background: #FFC5C4 !important; height:32px; border-bottom: 1px solid #FFD9D8; }
+
+.autocomplete{ margin-left: 6px; border: 1px solid #DDD; }
+
+.autocomplete li{ height: 30px; line-height: 30px; }
+.autocomplete ul{ width: 100%;   margin-bottom: 0px !important; }
+.autocomplete li:hover{ background: #CFDEFF; cursor:pointer; }
+
+.table-erp .glyphicon, .table-relatorio .glyphicon{ font-size: 20px !important; margin-right: 8px !important; }
+.table-erp a:hover, .table-relatorio a:hover{ text-decoration: none !important; }
+
+.table-erp .fa-arrow-circle-right, .table-erp .fa-arrow-circle-left{ font-size: 26px !important; }
+
+
+li a .glyphicon{ margin-right: 5px !important; }

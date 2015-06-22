@@ -958,15 +958,9 @@ class Pedidos  {
 	public function excluirPedido($id){
 
 		//Exclui lixo
-
-		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$id."'");
-
-		$this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_pedidos = '".$id."'");
-
-		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$id."'");
-
 		
-
+		$this->voltaEstoqueAntigo($id);
+		$this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_pedidos = '".$id."'");
 		$this->ConexaoSQL->deleteQuery("DELETE FROM pedidos WHERE id = '".$id."'");
 
 	}

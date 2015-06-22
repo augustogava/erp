@@ -16,11 +16,17 @@ $Main->DataGrid->setNomeDivPai("Saida");
 include($Main->Configuracoes->HEADER_POPBUSCA);  
 ?>
 <div id="main-body">
+	
+	<div class="title">
+		<div class="row">
+	  		<div class="col-md-10">
+	  			<p class="titlePage" id="recent">Adicionar <?=ucfirst($_GET["tabela"])?></p>
+			</div>
+		</div>
+	</div>
+	
 	<div id="contentPopUp">
 	
-		<h3 id="recent">Adicionar <?=ucfirst($_GET["tabela"])?></h3>
-		
-		
 		<div id="Saida">
 			<div id="addPop" class="caixa" style="display:inline;margin-top:50px;margin-right:10px;height:83%; width:90%;"><? $Main->DataGrid->editaAddDataGrid("adicionarPopUp", $_GET["campoatual"]); ?></div>
 		</div>
@@ -28,6 +34,8 @@ include($Main->Configuracoes->HEADER_POPBUSCA);
 	</div> <!-- end #content -->
 	
 </div> <!-- end #main-body -->
+
+<input type="hidden" id="popup" name="popup"  value="true">
 
 <? include($Main->Configuracoes->FOOTER_POPBUSCA); ?>
 

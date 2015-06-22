@@ -21,14 +21,13 @@ if($_GET["acao"] == "listar"){
 			<td width="10%" >&nbsp;</td>
                         <td width="10%" >Status</td>
 			<td width="10%" >Data</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=<?=$_GET["cliente"]?>&tipo=<?=$_GET["tipo"]?>&tipoFluxo=<?=$_GET["tipoFluxo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
+			<td width="10%" align="right">
+				<a title="Anterior" href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=<?=$_GET["cliente"]?>&tipo=<?=$_GET["tipo"]?>&tipoFluxo=<?=$_GET["tipoFluxo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-left" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=<?=$_GET["cliente"]?>&tipo=<?=$_GET["tipo"]?>&tipoFluxo=<?=$_GET["tipoFluxo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreen.gif"/>
+
+				<a title="Próximo" href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=<?=$_GET["cliente"]?>&tipo=<?=$_GET["tipo"]?>&tipoFluxo=<?=$_GET["tipoFluxo"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-right" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -60,22 +59,22 @@ if($_GET["acao"] == "listar"){
                                 }
 		?>
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$class?>" width="60%">
-			<td width="40%"  id="linhaDataGrid_<?=$j?>_0">
+			<td id="linhaDataGrid_<?=$j?>_0">
 				<?=$fluxo[$j]->getOcorrencia()?>
 			</td>
-			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
+			<td id="linhaDataGrid_<?=$j?>_0">
 				<?=($fluxo[$j]->getClienteNome() != "") ? $fluxo[$j]->getClienteNome() : $fluxo[$j]->getFornecedorNome();?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getTipoFluxoNome()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getValor()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($fluxo[$j]->getTipo()==1)?"Entrada":"Saida";?>
 			</td>
-                        <td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 
                          <?
                          if($fluxo[$j]->getStatus()==0){
@@ -90,17 +89,16 @@ if($_GET["acao"] == "listar"){
                          ?>
 
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getData()?>
 			</td>
-			<td width="4%" align="center"> 
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=editar&id=<?=$fluxo[$j]->getId()?>',1,'addPop');addPop_open(550);">
-					<img border="0" src="layout/incones/edit.png"/>
+			<td align="right"> 
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=editar&id=<?=$fluxo[$j]->getId()?>',1,'addPop');addPop_open(550);">
+					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td  width="4%" align="center"> 
-				<a onclick="if(confirm('Deseja Excluir?')){ excluirFluxo(<?=$fluxo[$j]->getId()?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png"/>
+
+				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxo(<?=$fluxo[$j]->getId()?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -115,7 +113,7 @@ if($_GET["acao"] == "listar"){
 		?>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="2" style="text-align:left;">Total</td>
-			<td width="100%" class="ColunaInfo" colspan="7" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
+			<td width="100%" class="ColunaInfo" colspan="6" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
 		</tr>
 	</tbody>
 </table>

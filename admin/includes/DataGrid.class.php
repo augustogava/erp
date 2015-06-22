@@ -216,7 +216,7 @@ class DataGrid {
 		}else{
 			$AcaoT = $Acao;
 		}
-			
+
 		$this->Html .= "<td align=\"left\" width=\"30%\"><h2>".ucfirst($AcaoT)." Cadastro</h2> </td>";
 		if($Acao != "adicionarPopUp")
 			$this->Html .= "<td align=\"right\" width=\"70%\"><button type=\"button\" class=\"btn btn-default btn-xs\" aria-label=\"Left Align\" onclick=\"addPop_close();\"><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> Fechar </button></td>";
@@ -250,7 +250,7 @@ class DataGrid {
 				if(!empty($idQ)){
 					$this->Html .= "<td align=\"left\" ><img width=\"100px\" src=\"".$imagem."\" alt=\"produto\" id=\"editimg_".$Campos[$i]."\" onClick=\"javascript:window.open('exibiEditaImagem.php?campoatual=".$Campos[$i]."&tabela=".$this->getTabela()."&id=".$this->getId()."', 'Busca', 'height = 200, width = 350, location = no, toolbar = no, menubar=no')\"><td>";
 				}else{
-					$this->Html .= "<td align=\"left\" >Liberado apenas altera��o</td>";
+					$this->Html .= "<td align=\"left\" >Liberado apenas alteração</td>";
 				}
     			$this->Html .= "</tr>";
 				
@@ -308,7 +308,7 @@ class DataGrid {
     			if(count($RetornoConsultaRel) > 0){
 					$this->Html .= "<tr>";
 	    			$this->Html .= "<td align=\"right\"><b>".ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
-	    			$this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\" class=\"form-inline\">";
+	    			$this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\" class=\"form-inline\" style=\"font-size: 13px;\">";
 	    			$this->Html .= "<select class=\"form-control input-sm size-80\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" title=\"".ucfirst($NomeTabelaRelacionamento)."\" class=\"".$requerido."\" ".$onChangeEstado.">";
 		    		//Se for campo tipo cidade e estiver inserindo nao exibi alista intera
 		    		if( eregi("id_cidade",$Campos[$i]) && ( $Acao == "adicionarPopUp" || $Acao == "adicionar" ) ){
@@ -328,15 +328,21 @@ class DataGrid {
 	    			$this->Html .= "</select>";
 					if($Acao != "adicionarPopUp" ){
 						if(!in_array($Campos[$i] , $this->camposIgnoradosVisu)){
-							$this->Html .= "<a href=\"#\" onClick=\"javascript:abrirPopVisu('edit_".$Campos[$i]."', '".$NomeTabelaRelacionamento."');\"><img src=\"layout/incones/visualizar.png\" border=\"0\"></a>";
+							$this->Html .= "<a href=\"#\" onClick=\"javascript:abrirPopVisu('edit_".$Campos[$i]."', '".$NomeTabelaRelacionamento."');\">
+												<span class=\"glyphicon fa fa-desktop\" aria-hidden=\"true\"></span>
+											</a>";
 						}
 						
 						if(!in_array($Campos[$i] , $this->camposIgnoradosBusca)){
-							$this->Html .= "<a href=\"#\" onClick=\"javascript:window.open('buscapopup.php?campoatual=edit_".$Campos[$i]."&tabela=".$NomeTabelaRelacionamento."', 'Busca', 'height = 300, width = 250, location = no, toolbar = no, menubar=no')\"><img src=\"layout/incones/find.png\" border=\"0\"></a>";
+							$this->Html .= "<a href=\"#\" onClick=\"javascript:window.open('buscapopup.php?campoatual=edit_".$Campos[$i]."&tabela=".$NomeTabelaRelacionamento."', 'Busca', 'height = 300, width = 250, location = no, toolbar = no, menubar=no')\">
+												<span class=\"glyphicon fa fa-search\" aria-hidden=\"true\"></span>
+											</a>";
 						}
 						
 						if(!in_array($Campos[$i] , $this->camposIgnoradosAdd)){
-							$this->Html .= "<a href=\"#\" onClick=\"javascript:window.open('addpopup.php?campoatual=edit_".$Campos[$i]."&tabela=".$NomeTabelaRelacionamento."', 'Busca', 'height=".((count($CamposRela) * 20) + 200).", width=550, scrollbars=yes, resizable=yes')\"><img src=\"layout/incones/add16.png\" border=\"0\"></a>";
+							$this->Html .= "<a href=\"#\" onClick=\"javascript:window.open('addpopup.php?campoatual=edit_".$Campos[$i]."&tabela=".$NomeTabelaRelacionamento."', 'Busca', 'height=".((count($CamposRela) * 20) + 200).", width=550, scrollbars=yes, resizable=yes')\">
+												<span class=\"glyphicon fa fa-plus\" aria-hidden=\"true\"></span>
+											</a>";
 						}
 						
 					}
@@ -368,7 +374,9 @@ class DataGrid {
     	if($Acao != "abrir")
     		$this->Html .= "<tr><td align=\"center\" colspan=\"3\">
     								<div class=\"btn-group\" role=\"group\" aria-label=\"...\">
-    									<input class=\"btn btn-success btn-sm\" type=\"button\" value=\"Cadastrar\" onclick=\"if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'require efeitos','erro')){ ".$FuncJava." } }\"> 
+    									<button class=\"btn btn-success btn-sm\" type=\"button\" value=\"Salvar\" onclick=\"if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'require efeitos','erro')){ ".$FuncJava." } }\">
+											<span class=\"glyphicon fa fa-save\" aria-hidden=\"true\"></span> Salvar
+										</button>  
     									<input class=\"btn btn-danger btn-sm\" type=\"button\" value=\"Cancelar\" onclick=\"addPop_close();\">
     								</div>
     						</td></tr>";
@@ -578,7 +586,12 @@ class DataGrid {
     	//print $Query;
     	$RetornoConsulta = $this->ConexaoSQL->Select($this->montaQuery());
     	for($i=0; $i<count($RetornoConsulta); $i++){
-    		$this->Html .= "<tr class=\"linha\" id=\"linhaDataGrid_".$i."\">";
+    		if(($i%2) == 0){
+    			$linha = "linha";
+    		}else{
+    			$linha = "linhaMu";
+    		}
+    		$this->Html .= "<tr class=\"".$linha."\" id=\"linhaDataGrid_".$i."\">";
     		//Numeracao
     		//$this->Html .= "<td width=\"5%\" class=\"ColunaInfo\"> ".($this->getLimiteAtual()+$i+1)." </td>";
     		
@@ -594,7 +607,7 @@ class DataGrid {
     			}else{ unset($RetornoConsultaRel); }
 				
     			
-    			$this->Html .= "<td id=\"linhaDataGrid_".$i."_".$Ind."\" width=\"".$Porcentagem."\" id=\"dataGridTd_".$i."_".$Ind."\" onClick=\"javascript:doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=abrir&id=".$RetornoConsulta[$i]["id"].$Paramentros."',1,'addPop');addPop_open(650);\">";
+    			$this->Html .= "<td id=\"linhaDataGrid_".$i."_".$Ind."\" id=\"dataGridTd_".$i."_".$Ind."\" onClick=\"javascript:doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=abrir&id=".$RetornoConsulta[$i]["id"].$Paramentros."',1,'addPop');addPop_open(650);\">";
     			$Teste[$i][$NomeColuna] = $RetornoConsulta[$i][$Ind];
     			$Teste[$i][$Ind] = $RetornoConsulta[$i][$Ind];
 				//Formata Valor e data
@@ -610,26 +623,38 @@ class DataGrid {
     			$this->Html .= "</td>";
     		}//end foreach
     		
+    		$this->Html .= "<td align=\"right\">";
+    		
 			if(isset($this->CadastroExtra)){
 				foreach($this->CadastroExtra as $res){
-					 $this->Html .= "<td width=\"4%\" align=\"center\"> <a href=\"ajax_com/".$res[1]."?id=".$RetornoConsulta[$i]["id"]."\"><img src=\"".$res[0]."\" border=\"0\" alt=\"".$res[1]."\"></a></td>";
+					 $this->Html .= "<a href=\"ajax_com/".$res[1]."?id=".$RetornoConsulta[$i]["id"]."\">
+									<span class=\"glyphicon fa fa-".$res[0]."\" aria-hidden=\"true\"></span>
+								</a>";
 				}
 			}
 			
 			//Botoes
-               
-    		$this->Html .= "<td width=\"4%\" align=\"center\"> <a href=\"#\" onclick=\"main.openWindow('impressaoDataGrid.php?id=".$RetornoConsulta[$i]["id"].$Paramentros."','400','400');\"><img src=\"layout/incones/relatorio.png\" border=\"0\"></a></td>";
-
-    		if($this->getEditar())
-    			$this->Html .= "<td width=\"4%\" align=\"center\"> <a href=\"javascript:doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=editar&id=".$RetornoConsulta[$i]["id"].$Paramentros."',1,'addPop');addPop_open(630);\"><img src=\"layout/incones/edit.png\" border=\"0\"></a></td>";
-    		//dragA.criar_dragEl('addPop',0);
-    		if($this->getExcluir())
-    			$this->Html .= "<td width=\"4%\" align=\"center\"> <a href=\"javascript:if(confirm('Deseja Excluir?')){efeitos.sumirIE('linhaDataGrid_".$i."', ".count($this->Colunas).");dataGrid.Deletar('&idData=".$RetornoConsulta[$i]["id"].$Paramentros."'); }\"><img src=\"layout/incones/button_cancel.png\" border=\"0\"></a></td>";
-    		
+              
+			
+			
+	    		$this->Html .= "<a href=\"#\" onclick=\"main.openWindow('impressaoDataGrid.php?id=".$RetornoConsulta[$i]["id"].$Paramentros."','400','400');\">
+									<span class=\"glyphicon fa fa-print\" aria-hidden=\"true\"></span>
+								</a>";
+	
+	    		if($this->getEditar())
+	    			$this->Html .= "<a href=\"javascript:doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=editar&id=".$RetornoConsulta[$i]["id"].$Paramentros."',1,'addPop');addPop_open(630);\">
+										<span class=\"glyphicon fa fa-edit\" aria-hidden=\"true\"></span>
+									</a>";
+	    		
+	    		if($this->getExcluir())
+	    			$this->Html .= "<a href=\"javascript:if(confirm('Deseja Excluir?')){efeitos.sumirIE('linhaDataGrid_".$i."', ".count($this->Colunas).");dataGrid.Deletar('&idData=".$RetornoConsulta[$i]["id"].$Paramentros."'); }\">
+										<span class=\"glyphicon fa fa-trash\" aria-hidden=\"true\"></span>
+									</a>";
+	    	$this->Html .= "</td>";
     		$this->Html .= "</tr>";
-    	}//end for
+    	}
     	
-    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+3 + count($this->CadastroExtra))."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-sm size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
+    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+3)."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-sm size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
 								<option value=\"15\" ".(($this->getLimite()==15)?"selected":"").">15</option>
 								<option value=\"30\" ".(($this->getLimite()==30)?"selected":"").">30</option>
 								<option value=\"999999\" ".(($this->getLimite()==999999)?"selected":"").">Todos</option>
@@ -638,7 +663,7 @@ class DataGrid {
     	//Se estiver vazio
     	if(count($RetornoConsulta) == 0){
     		$this->Html .= "<tr class=\"linha\">";
-    		$this->Html .= "<td width=\"100%\" class=\"ColunaInfo\" colspan=\"".(count($this->Colunas) + 4)."\"> N�o Existem Registros";
+    		$this->Html .= "<td width=\"100%\" class=\"ColunaInfo\" colspan=\"".(count($this->Colunas) + 1)."\"> Não Existem Registros";
     		$this->Html .= "</td>";
     		$this->Html .= "</tr>";
     	}//end if
@@ -663,16 +688,18 @@ class DataGrid {
     	$Paramentros = $this->montaParametros();
     	
 		$this->Html .= "<tr class=\"titulo\">";
-		$this->Html .= "<td colspan=\"".(count($this->Colunas)+2+count($this->CadastroExtra))."\" align=\"center\" width=\"96%\"> Exibindo ".$this->getLimiteAtual()." a ".($this->getLimiteAtual()+$this->getLimite())."  </td>";
+		$this->Html .= "<td colspan=\"".(count($this->Colunas))."\" align=\"center\" width=\"96%\"> Exibindo ".$this->getLimiteAtual()." a ".($this->getLimiteAtual()+$this->getLimite())."  </td>";
 		if($this->getExportar()){
-			$this->Html .= "<td width=\"4%\" align=\"center\"><a href=\"#\" onClick=\"main.openWindow('exportarDataGrid.php?a=1&ordena=".$this->getOrder().$Paramentros."', '300', '150')\"><img src=\"layout/incones/exportar.gif\" border=\"0\" width=\"36\" alt=\"Exportar\"></a></td>";
+			$this->Html .= "<td align='right'><a href=\"#\" onClick=\"main.openWindow('exportarDataGrid.php?a=1&ordena=".$this->getOrder().$Paramentros."', '300', '150')\">
+								<span class=\"glyphicon fa fa-print\" style=\"font-size: 30px !important;\" aria-hidden=\"true\"></span>
+							</a></td>";
 		}
 		$this->Html .= "</tr>";
 		
 		$this->Html .= "<tr class=\"titulo\">";
     	
     	//$this->Html .= "<td width=\"5%\" class=\"ColunaInfo\">#</td>";
-    	@$Porcentagem = 85 / count($this->Colunas);
+    	@$Porcentagem = 80 / count($this->Colunas);
     	    	
     	foreach($this->Colunas as $Ind=>$NomeColuna){
     		$Nome = explode(".",$NomeColuna);
@@ -685,30 +712,30 @@ class DataGrid {
     		if( eregi("^id", $Nome[1]) ){
     			$NomeNovo = "C�digo";
     		}
-    		$this->Html .= "<td width=\"".$Porcentagem."\" onClick=\"dataGrid.Enviar('&flagOrdena=S&ordena=".$Nome[0].".".$Nome[1].$Paramentros."');\">";
+    		$this->Html .= "<td width=\"".$Porcentagem."%\" onClick=\"dataGrid.Enviar('&flagOrdena=S&ordena=".$Nome[0].".".$Nome[1].$Paramentros."');\">";
     		$this->Html .= ucfirst($NomeNovo);
     		$this->Html .= "</td>";
     	}//end foreach
-    	
-		if(isset($this->CadastroExtra)){
-				foreach($this->CadastroExtra as $res){
-					 $this->Html .= "<td width=\"4%\" align=\"center\">&nbsp;</td>";
-				}
-			}
 
         //Coluna para exportacao
-        $this->Html .= "<td width=\"4%\" align=\"center\">&nbsp;</td>";
+        $this->Html .= "<td align=\"right\" width=\"20%\">";
 
         //Paginacao
     	if($this->getEditar())
-    		$this->Html .= "<td width=\"4%\" align=\"center\"><a href=\"javascript:dataGrid.Enviar('&flag=anterior&ordena=".$this->getOrder().$Paramentros."');\"><img src=\"layout/incones/bulletgreenleft.gif\" border=\"0\" alt=\"Pr�ximo\"></a></td>";
+    		$this->Html .= "<a href=\"javascript:dataGrid.Enviar('&flag=anterior&ordena=".$this->getOrder().$Paramentros."');\">
+								<span class=\"glyphicon fa fa-arrow-circle-left\" aria-hidden=\"true\"></span>
+							</a>";
     		
     	if($this->pegaQtditens() > ($this->getLimiteAtual() + $this->getLimite()) ){
-    		$this->Html .= "<td width=\"4%\" align=\"center\"><a href=\"javascript:dataGrid.Enviar('&flag=proximo&ordena=".$this->getOrder().$Paramentros."');\"><img src=\"layout/incones/bulletgreen.gif\" border=\"0\" alt=\"Pr�ximo\"></a></td>";
+    		$this->Html .= "<a href=\"javascript:dataGrid.Enviar('&flag=proximo&ordena=".$this->getOrder().$Paramentros."');\">
+								<span class=\"glyphicon fa fa-arrow-circle-right\" aria-hidden=\"true\"></span>
+							</a>";
         }else{
-                $this->Html .= "<td width=\"4%\" align=\"center\"><a href=\"#\"><img src=\"layout/incones/bulletgreen.gif\" border=\"0\" alt=\"Pr�ximo\"></a></td>";
+			$this->Html .= "<span class=\"glyphicon fa fa-arrow-circle-right\" aria-hidden=\"true\"></span>";
         }
     	
+        $this->Html .= "</td>";
+        
     	$this->Html .= "</tr>";
     }//end function
     
@@ -722,8 +749,8 @@ class DataGrid {
     	
     	$Ret = "<div id=\"busca\" class=\"linhaConfig\"> ";
     	$Ret .= "<ul class=\"nav nav-tabs\" role=\"tablist\">
-    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"main.trocad('buscaDiv');\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Consultar</a></li>
-    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=adicionar".$Paramentros."',1,'addPop');addPop_open(630);\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Cadastrar Novo</a></li>
+    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"main.trocad('buscaDiv');\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\"><span class=\"glyphicon fa fa-search\" aria-hidden=\"true\"></span> Consultar</a></li>
+    				<li role=\"presentation\" class=\"\"><a href=\"#\"  onclick=\"doAjaxSemRetorno('ajax_com/editaAddDataGrid.php?acao=adicionar".$Paramentros."',1,'addPop');addPop_open(630);\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\"><span class=\"glyphicon fa fa-file\" aria-hidden=\"true\"> Cadastrar Novo</a></li>
     			</ul>";
 
     	$Ret .= "<div id=\"buscaDiv\" style=\"display:none;\"> <div class=\"form-group form-inline\"> ";
@@ -961,6 +988,7 @@ class DataGrid {
     public function montaParametros(){
     	$Colunas = implode(",",$this->Colunas);
     	$collumnsCurrency = implode(",",$this->collumnsCurrency);
+    	$camposIgnorados = implode(",",$this->camposIgnorados);
     	
 		if(isset($this->CadastroExtra)){
 			foreach($this->CadastroExtra as $res){
@@ -973,7 +1001,7 @@ class DataGrid {
 			
 		}
 		
-    	return "&query=".$this->Query."&collumnsCurrency=".$collumnsCurrency."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
+    	return "&query=".$this->Query."&camposIgnorados=".$camposIgnorados."&collumnsCurrency=".$collumnsCurrency."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
     }//end function
 	
 	/*
@@ -1293,6 +1321,11 @@ class DataGrid {
 	public function addCollumnsCurrency($coluna){
 		$this->collumnsCurrency[] = $coluna;
 	}
+	
+	public function addCamposIgnorados($coluna){
+		$this->camposIgnorados[] = $coluna;
+	}
+	
 	
 	/**
 	 *

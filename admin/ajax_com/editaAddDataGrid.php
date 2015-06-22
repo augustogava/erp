@@ -19,6 +19,11 @@ foreach($collumnsCurrency as $Valor){
 	$Main->DataGrid->addCollumnsCurrency($Valor);
 }
 
+$camposIgnorados = explode(",", $_GET["camposIgnorados"]);
+foreach($camposIgnorados as $Valor){
+	$Main->DataGrid->addCamposIgnorados($Valor);
+}
+
 if(!empty($_GET["cadastroExtras"])){
 	$cadastroExtra = explode("|", $_GET["cadastroExtras"]);
 	if(is_array($cadastroExtra)){

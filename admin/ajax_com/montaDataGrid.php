@@ -13,6 +13,15 @@ foreach($Colunas as $Valor){
 	$Main->DataGrid->setColunas($Valor);
 }
 
+$collumnsCurrency = explode(",", $_GET["collumnsCurrency"]);
+foreach($collumnsCurrency as $Valor){
+	$Main->DataGrid->addCollumnsCurrency($Valor);
+}
+
+$camposIgnorados = explode(",", $_GET["camposIgnorados"]);
+foreach($camposIgnorados as $Valor){
+	$Main->DataGrid->addCamposIgnorados($Valor);
+}
 
 $Main->DataGrid->setOrder($_GET["ordena"]);
 

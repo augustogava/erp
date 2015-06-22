@@ -15,7 +15,7 @@ if($_GET["acao"] == "listar"){
 <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
-			<td width="100%" class="ColunaInfo" colspan="10">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
+			<td width="100%" class="ColunaInfo" colspan="8">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
 		</tr>
 		<tr class="titulo">
 			<td width="20%">Produto</td>
@@ -25,15 +25,13 @@ if($_GET["acao"] == "listar"){
 			<td width="10%" >Data Cadastro</td>
 			<td width="10%" >Data Produzido</td>
 			<td width="10%" >Status</td>
-			<td width="4%" >&nbsp;</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=<?=$_GET["produto"]?>&pedido=<?=$_GET["pedido"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
+			<td width="10%" align="right">
+				<a title="Anterior" href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=<?=$_GET["produto"]?>&pedido=<?=$_GET["pedido"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite-15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-left" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=<?=$_GET["produto"]?>&pedido=<?=$_GET["pedido"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite+15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreen.gif"/>
+				
+				<a title="Próximo" href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=<?=$_GET["produto"]?>&pedido=<?=$_GET["pedido"]?>&dataIni=<?=$_GET["dataIni"]?>&dataFim=<?=$_GET["dataFim"]?>&limite=<?=($limite+15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-right" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -64,26 +62,25 @@ if($_GET["acao"] == "listar"){
 			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$ordem[$j]->getStatusNome()?>
 			</td>
-			<td align="center"> 
+			<td align="right"> 
 				<?php 
 				if( $ordem[$j]->getStatusId() != 2 ){
 				?>
-				<a href="javascript:fecharOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)">
-					<img border="0" src="layout/incones/fechar_22.png" alt="<?=($ordem[$j]->getStatusId()==1?"Produzir": ($ordem[$j]->getStatusId()==4?"Fechar":"") )?>" title="<?=($ordem[$j]->getStatusId()==1?"Produzir": ($ordem[$j]->getStatusId()==4?"Fechar":"") )?>"/>
+				<a title="Fechar" href="javascript:fecharOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)">
+					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
-			</td>
-			<td  align="center"> 
-				<a href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=editar&id=<?=$ordem[$j]->getId()?>',1,'addPop');addPop_open(550);">
-					<img border="0" src="layout/incones/edit.png"/>
+				
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=editar&id=<?=$ordem[$j]->getId()?>',1,'addPop');addPop_open(550);">
+					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td   align="center"> 
+
 				<? if(!$ordem[$j] || ($ordem[$j] && $ordem[$j]->getStatusId() != 2)){ ?>
-				<a onclick="if(confirm('Deseja Excluir?')){ excluirOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png"/>
+				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
+				
 			</td>
 		</tr>
 		<?
@@ -188,7 +185,11 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<? if(!$ordem[0] || ($ordem[0] && $ordem[0]->getStatusId() != 2)){ ?><input class="btn btn-success btn-sm " type="button" onclick="salvaOrdemProducao(<?=$_GET["id"]?>)" value="Salvar" /><? } ?> 
+							<? if(!$ordem[0] || ($ordem[0] && $ordem[0]->getStatusId() != 2)){ ?>
+								<button class="btn btn-success btn-sm " type="button" onclick="salvaOrdemProducao(<?=$_GET["id"]?>)" value="Salvar">
+									<span class="glyphicon fa fa-save" aria-hidden="true"></span> Salvar
+								</button>
+							<? } ?> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						

@@ -31,13 +31,13 @@ include($Main->Configuracoes->HEADER_NADMIN);
                  	if($_GET["idBanco"] > 0){
                  ?>
 						<ul class="nav nav-tabs" role="tablist">
-		    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab">Consultar</a></li>
-		    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=adicionar&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab">Cadastrar Novo</a></li>
+		    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-search" aria-hidden="true"></span> Consultar</a></li>
+		    				<li role="presentation" class=""><a href="#"  onclick="doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=adicionar&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-file" aria-hidden="true"></span> Cadastrar Novo</a></li>
 		    			</ul>
 		    			
 			<?
-                                    }
-                                ?>
+            		}
+            ?>
 			<div id="buscaDiv" style="display:none;">
 				<div class="form-group form-inline">
 					<label for="tipoFluxoBusca">Tipo Fluxo</label>
