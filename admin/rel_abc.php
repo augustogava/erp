@@ -33,7 +33,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<form id="edit" name="edit" >	
 					<div class="form-group form-inline">
 						<label for="filtro3">Clientes</label>
-						<select id="filtro3" name="filtro3" title="Clientes" class="form-control input-sm normalsizeSelect">
+						<select id="filtro3" name="filtro3" title="Clientes" class="form-control input-xs normalsizeSelect">
                                             <option value="">Todos</option>
                                             <?
                                             for($j=0; $j<count($clientes); $j++){
@@ -46,10 +46,10 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					</div>
 					<div class="form-group form-inline">
 						<label for="filtro1">Data Inicial</label>
-						<input type="text" class="form-control input-sm" name="filtro1" id="filtro1" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
+						<input type="text" class="form-control input-xs" name="filtro1" id="filtro1" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
 		
 						<label for="filtro2">Data Final</label>
-						<input type="text" class="form-control input-sm" name="filtro2" id="filtro2" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
+						<input type="text" class="form-control input-xs" name="filtro2" id="filtro2" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
 					</div>
 				</form>
 			</div>

@@ -36,7 +36,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="produtoBusca">Produtos</label>
-						<select id="produtoBusca" name="produtoBusca" class="form-control input-sm normalsizeSelect">
+						<select id="produtoBusca" name="produtoBusca" class="form-control input-xs normalsizeSelect">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($produtos); $j++){
@@ -48,7 +48,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="pedidoBusca">Pedido</label>
-						<select id="pedidoBusca" name="pedidoBusca" class="form-control input-sm normalsizeSelect">
+						<select id="pedidoBusca" name="pedidoBusca" class="form-control input-xs normalsizeSelect">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($pedidos); $j++){
@@ -60,10 +60,10 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="dataIni">Data Inicial</label>
-						<input type="text" class="form-control input-sm" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')">
+						<input type="text" class="form-control input-xs" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')">
 						
 						<label for="dataFim">Data Final</label>
-						<input type="text" class="form-control input-sm" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
+						<input type="text" class="form-control input-xs" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
 						
 						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/ordem_producao.php?acao=listar&produto=' + $('produtoBusca').value + '&pedido=' + $('pedidoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');">Buscar</button>
 					</div>

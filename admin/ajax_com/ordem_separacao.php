@@ -37,8 +37,12 @@ if($_GET["acao"] == "listar"){
 			for($j=0; $j<count($ordem); $j++){
 				$produto = $ordem[$j]->getProdutos();
 				$pedido = $ordem[$j]->getPedidos();	
+				if( $ordem[$j]->getStatusId() == 2 )
+					$linha = "linhaVerde";
+				else
+					$linha = "linhaVermelho";
 		?>
-		<tr id="linhaDataGrid_<?=$j?>" class="linha" width="100%">
+		<tr id="linhaDataGrid_<?=$j?>" class="linha <?=$linha?>" width="100%">
 			<td  id="linhaDataGrid_<?=$j?>_0">
 				<?=$produto[0]->codigo;?>
 			</td>
@@ -62,10 +66,18 @@ if($_GET["acao"] == "listar"){
 			</td>
 			<td align="right"> 
 				
+				<?php if( $ordem[$j]->getStatusId() == 1 ){ ?>
 				<a title="Fechar Ordem" href="javascript:fecharOrdemSeparacao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
-				
+				<?php } ?>
+				<?php 
+				if( $ordem[$j]->getStatusId() == 2 ){ 
+				?>
+				<a title="Cancelar Ordem" href="javascript:cancelarOrdemSeparacao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)">
+					<span class="glyphicon fa fa-close" aria-hidden="true"></span>
+				</a>
+				<?php } ?>
 				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/ordem_separacao.php?acao=editar&id=<?=$ordem[$j]->getId()?>',1,'addPop');addPop_open(550);">
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
@@ -97,7 +109,7 @@ if($_GET["acao"] == "listar"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 					<td align="left" width="40%">
 						<h2>Adicionar Cadastro</h2>
 					</td>
@@ -113,7 +125,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Produto:</b></td>
 					<td align="left" class="form-inline">
-						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-sm">
+						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($produtosLista); $j++){
@@ -133,7 +145,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Pedido:</b></td>
 					<td align="left" class="form-inline">
-						<select id="pedido" name="pedido" title="Pedido" class="erroForm form-control input-sm">
+						<select id="pedido" name="pedido" title="Pedido" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($pedidosLista); $j++){
@@ -154,20 +166,20 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Quantidade:</b></td>
 					<td align="left">
-						<input type="text" name="qtd" id="qtd" class="form-control input-sm" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($ordem[0]) print $ordem[0]->getQtd()?>" >
+						<input type="text" name="qtd" id="qtd" class="form-control input-xs" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($ordem[0]) print $ordem[0]->getQtd()?>" >
 					</td>
 				</tr>
 			
 				<tr>
 					<td align="right"><b>Descrição:</b></td>
 					<td align="left">
-						<input type="text" name="descricao" id="descricao" class="form-control input-sm" value="<? if($ordem[0]) print $ordem[0]->getDescricao()?>">
+						<input type="text" name="descricao" id="descricao" class="form-control input-xs" value="<? if($ordem[0]) print $ordem[0]->getDescricao()?>">
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Data:</b></td>
 					<td align="left">
-						<input type="text" name="data" id="data" size="11" class="form-control input-sm" onkeypress="mascaras.mascara(this,'data')"  value="<? if($ordem[0]) print $ordem[0]->getDataCad()?>">
+						<input type="text" name="data" id="data" size="11" class="form-control input-xs" onkeypress="mascaras.mascara(this,'data')"  value="<? if($ordem[0]) print $ordem[0]->getDataCad()?>">
 					</td>
 				</tr>
 				

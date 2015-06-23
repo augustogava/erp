@@ -17,9 +17,14 @@ if($_GET["acao"] == "listarBancos"){
 			<td width="10%" >Saldo</td>
 		</tr>
 		<?
-                    for($j=0; $j<count($bancos); $j++){
+		for($j=0; $j<count($bancos); $j++){
+			if(($j%2) == 0){
+				$linha = "linha";
+			}else{
+				$linha = "linhaMu";
+			}
 		?>
-		<tr id="" class="linha" width="60%" onclick="window.location = 'fluxo_banco.php?idBanco=<?=$bancos[$j]->getId()?>'">
+		<tr id="" class="<?=$linha?>" width="60%" onclick="window.location = 'fluxo_banco.php?idBanco=<?=$bancos[$j]->getId()?>'">
 			<td width="40%"  id="linhaDataGrid_<?=$j?>_0">
 				<?=$bancos[$j]->getNome()?>
 			</td>
@@ -145,7 +150,7 @@ if($_GET["acao"] == "listarBancos"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
                                     <td align="left" width="40%">
                                             <h2>Adicionar Cadastro</h2>
                                     </td>
@@ -161,7 +166,7 @@ if($_GET["acao"] == "listarBancos"){
                                 <tr>
                                     <td align="right"><b>Banco:</b></td>
                                     <td align="left" class="form-inline">
-                                        <select id="banco" name="banco"  title="banco" class="erroForm form-control input-sm">
+                                        <select id="banco" name="banco"  title="banco" class="erroForm form-control input-xs">
                                             <option value="">Selecione</option>
                                             <?
                                             for($j=0; $j<count($bancos); $j++){
@@ -177,7 +182,7 @@ if($_GET["acao"] == "listarBancos"){
 				<tr>
                                     <td align="right"><b>Tipo Fluxo:</b></td>
                                     <td align="left" class="form-inline">
-                                        <select id="tipoFluxo" name="tipoFluxo"  title="tipoFluxo" class="erroForm form-control input-sm">
+                                        <select id="tipoFluxo" name="tipoFluxo"  title="tipoFluxo" class="erroForm form-control input-xs">
                                             <option value="">Selecione</option>
                                             <?
                                             for($j=0; $j<count($tipoFluxo); $j++){
@@ -193,7 +198,7 @@ if($_GET["acao"] == "listarBancos"){
 				<tr>
                                     <td align="right"><b>Tipo:</b></td>
                                     <td align="left" class="form-inline">
-                                        <select id="tipo" name="tipo"  title="Tipo" class="erroForm form-control input-sm">
+                                        <select id="tipo" name="tipo"  title="Tipo" class="erroForm form-control input-xs">
                                                 <option value="">Selecione</option>
                                                 <option value="1" <? if($fluxo[0] && $fluxo[0]->getTipo() == 1) print "selected"; ?>>Entrada</option>
                                                 <option value="2" <? if($fluxo[0] && $fluxo[0]->getTipo() == 2) print "selected"; ?>>Saída</option>
@@ -204,25 +209,25 @@ if($_GET["acao"] == "listarBancos"){
 				<tr>
 					<td align="right"><b>Ocorrencia:</b></td>
 					<td align="left">
-					  <textarea name="ocorrencia" id="ocorrencia" class="form-control input-sm" rows="6" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getOcorrencia()?></textarea>
+					  <textarea name="ocorrencia" id="ocorrencia" class="form-control input-xs" rows="6" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getOcorrencia()?></textarea>
 					</td>
 				</tr>
                                 <tr>
 					<td align="right"><b>Numero Doc.:</b></td>
 					<td align="left">
-					  <textarea name="numero_doc" id="numero_doc" class="form-control input-sm" rows="1" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getNumeroDoc()?></textarea>
+					  <textarea name="numero_doc" id="numero_doc" class="form-control input-xs" rows="1" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getNumeroDoc()?></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Valor:</b></td>
 					<td align="left">
-						<input type="text" name="valor" id="valor" class="form-control input-sm" size="10" onkeypress="mascaras.Formata(this,20,event,2)"  value="<? if($fluxo[0]) print $fluxo[0]->getValor()?>">
+						<input type="text" name="valor" id="valor" class="form-control input-xs" size="10" onkeypress="mascaras.Formata(this,20,event,2)"  value="<? if($fluxo[0]) print $fluxo[0]->getValor()?>">
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Data:</b></td>
 					<td align="left">
-						<input type="text" name="data" id="data" class="form-control input-sm" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($fluxo[0]) print $fluxo[0]->getData()?>">
+						<input type="text" name="data" id="data" class="form-control input-xs" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($fluxo[0]) print $fluxo[0]->getData()?>">
 					</td>
 				</tr>
 				

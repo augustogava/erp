@@ -30,7 +30,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					
 					<div class="form-group form-inline">
 						<label for="filtro3">Estado</label>
-						<select id="filtro3" name="filtro3" onChange="dataGrid.pegarCidades(this.value);" class="form-control input-sm normalsizeSelect">
+						<select id="filtro3" name="filtro3" onChange="dataGrid.pegarCidades(this.value);" class="form-control input-xs normalsizeSelect">
 								<option value="0">Selecione</option>
 								<?
 								for($j=0; $j<count($estados); $j++){
@@ -42,7 +42,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 							</select>
 						<label for="edit_id_cidade">Cidade</label>
 						<span id="td_id_cidade">
-							<select id="edit_id_cidade" name="edit_id_cidade" class="form-control input-sm normalsizeSelect">
+							<select id="edit_id_cidade" name="edit_id_cidade" class="form-control input-xs normalsizeSelect">
 								<option value="0">Selecione</option>
 							</select>
 					</div>

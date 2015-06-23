@@ -53,7 +53,7 @@ if($_GET["acao"] == "exportar"){
 	<div id="contentPopUp">
 	
 		<div id="Saida">
-			<select id="campo" name="campo" style="width: 100%" class="form-control input-sm">
+			<select id="campo" name="campo" style="width: 100%" class="form-control input-xs">
 				<option value="">Selecione</option>
 				<option value="csv">CSV</option>
 				<option value="pdf">PDF</option>

@@ -112,10 +112,13 @@ if($_GET["acao"] == "listarCotacao"){
 
 			<td  align="right"> 
 
+				<?php 
+				if( $compras[$j]->getStatus() == 0 ){
+				?>
 				<a title="Fechar" href="javascript:virarCompra(<?=$compras[$j]->getId()?>)">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
-				
+				<?php } ?>
 				<a title="Imprimir" href="javascript:impressaoCompra(<?=$compras[$j]->getId()?>, 'Cotação')">
 					<span class="glyphicon fa fa-print" aria-hidden="true"></span>
 				</a>
@@ -244,10 +247,15 @@ if($_GET["acao"] == "listarCotacao"){
 
 			<td  align="right"> 
 
+				<?php 
+				if( $compras[$j]->getStatus() == 0 ){
+				?>
 				<a title="Fechar" href="javascript:fecharCompra(<?=$compras[$j]->getId()?>, '<?=$compras[$j]->getStatus()?>')">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
-				
+				<?php 
+				} 
+				?>
 				<a title="Imprimir" href="javascript:impressaoCompra(<?=$compras[$j]->getId()?>, 'Compra')">
 					<span class="glyphicon fa fa-print" aria-hidden="true"></span>
 				</a>
@@ -303,7 +311,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 			<tbody>
 
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 
 					<td align="left" width="40%">
 
@@ -342,7 +350,7 @@ if($_GET["acao"] == "listarCotacao"){
 					<td align="right"><b>Fornecedores:</b></td>
 
 					<td align="left" id="td_id_menus" class="form-inline">
-						<select id="fornecedores" name="fornecedores" title="fornecedores" class="erroForm form-control input-sm" >
+						<select id="fornecedores" name="fornecedores" title="fornecedores" class="erroForm form-control input-xs" >
 
 							<option value="">Selecione</option>
 
@@ -384,7 +392,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 
 
-						<select id="tipoFluxo" name="tipoFluxo" title="tipoFluxo" class="erroForm form-control input-sm" >
+						<select id="tipoFluxo" name="tipoFluxo" title="tipoFluxo" class="erroForm form-control input-xs" >
 
 							<option value="">Selecione</option>
 
@@ -427,7 +435,7 @@ if($_GET["acao"] == "listarCotacao"){
 					</td>
 
 					<td align="left">
-						<input type="text" name="obs" id="obs" class="form-control input-sm" value="<?if($compra[0] && $compra[0]->getObs() ) print $compra[0]->getObs(); ?>"  />
+						<input type="text" name="obs" id="obs" class="form-control input-xs" value="<?if($compra[0] && $compra[0]->getObs() ) print $compra[0]->getObs(); ?>"  />
 					</td>
 				</tr>
 				<tr>
@@ -435,7 +443,7 @@ if($_GET["acao"] == "listarCotacao"){
 						<b>Imposto:</b>
 					</td>
 					<td align="left">
-						<input type="text" name="imposto" id="imposto" class="form-control input-sm" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($compra[0] && $compra[0]->getImposto() ) print $compra[0]->getImposto(); ?>"  />
+						<input type="text" name="imposto" id="imposto" class="form-control input-xs" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($compra[0] && $compra[0]->getImposto() ) print $compra[0]->getImposto(); ?>"  />
 					</td>
 				</tr>
                 <tr>
@@ -444,7 +452,7 @@ if($_GET["acao"] == "listarCotacao"){
 					</td>
 
 					<td align="left">
-                    	<input type="text" name="desconto" id="desconto" class="form-control input-sm" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($compra[0] && $compra[0]->getDesconto() ) print $compra[0]->getDesconto(); ?>"  />
+                    	<input type="text" name="desconto" id="desconto" class="form-control input-xs" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($compra[0] && $compra[0]->getDesconto() ) print $compra[0]->getDesconto(); ?>"  />
 					</td>
 				</tr>
 				<tr>
@@ -475,9 +483,13 @@ if($_GET["acao"] == "listarCotacao"){
 
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
+							<?php 
+							if( $compra[0] == null ||  $compra[0]->getStatus() == 0 ){
+							?>
 							<button class="btn btn-success btn-sm " type="button" onclick="salvaCompra(<?=$idCompra?>, <?= ($compra[0] && $compra[0]->getStatus()) ? $compra[0]->getStatus() : 0 ?>, '<?=$_GET["local"]?>')" value="Salvar">
 								<span class="glyphicon fa fa-save" aria-hidden="true"></span> Salvar
 							</button>
+							<?php } ?>
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 					</td>
@@ -495,6 +507,9 @@ if($_GET["acao"] == "listarCotacao"){
 	doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra=<?=$idCompra?>',1,'bodyID');
 
 
+	<?php 
+	if( $compra[0] == null ||  $compra[0]->getStatus() == 0 ){
+	?>
 	document.onkeypress = function (evt){
 
 		if(main.procuraTecla(evt,13)){
@@ -504,6 +519,7 @@ if($_GET["acao"] == "listarCotacao"){
 		}
 
 	}
+	<?php } ?>
 
 	</script>
  </div>
@@ -624,21 +640,25 @@ if($_GET["acao"] == "listarCotacao"){
 
 		$precoTotal += $itens[$i]->getTotal();
 
-		
+		if(($i%2) == 0){
+			$linha = "linha";
+		}else{
+			$linha = "linhaMu";
+		}
 
 	?>
 
-	<tr class="linha">
+	<tr class="<?=$linha?>">
 
 		<td class="ColunaInfo" style="text-align:left;">
 
-			<input type="text" class="form-control input-sm twodigits" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoCompra();">
+			<input type="text" class="form-control input-xs twodigits" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoCompra();">
 
 		</td>
 
 		<td  class="ColunaInfo" style="text-align:left;">
 
-			<select class="form-control input-sm fullsize" id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
+			<select class="form-control input-xs fullsize" id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
 				<option value="0" selected>Selecione</option>
 				<?
 				for($j=0; $j<count($produtos); $j++){
@@ -656,7 +676,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 		<td class="ColunaInfo" style="text-align:left;" id="precosProduto_<?=$i?>">
 
-			<input type="text" class="form-control input-sm fourdigits" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoCompra();">
+			<input type="text" class="form-control input-xs fourdigits" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampoCompra(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoCompra();">
 
 		</td>
 
@@ -743,15 +763,19 @@ if($_GET["acao"] == "listarCotacao"){
 	for($i=0; $i<count($formasPagto); $i++){
 
             $precoTotal += $formasPagto[$i]->getValor();
-
+            if(($i%2) == 0){
+            	$linha = "linha";
+            }else{
+            	$linha = "linhaMu";
+            }
         ?>
-     	<tr class="linha">
+     	<tr class="<?=$linha?>">
 
 	         <td class="ColunaInfo" style="text-align:left;" id="precosProduto_<?=$i?>">
-				<input type="text"  class="form-control input-sm twodigits" size="6" id="valor<?=$i?>" name="valor[<?=$formasPagto[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($formasPagto[$i]->getValor())?>" title="valor" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampoCompraFormaPgto(this.title, this.value, <?=$formasPagto[$i]->getId()?>, <?=$i?>);calculaPrecoCompraFormaPgto();">
+				<input type="text"  class="form-control input-xs twodigits" size="6" id="valor<?=$i?>" name="valor[<?=$formasPagto[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($formasPagto[$i]->getValor())?>" title="valor" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampoCompraFormaPgto(this.title, this.value, <?=$formasPagto[$i]->getId()?>, <?=$i?>);calculaPrecoCompraFormaPgto();">
 			</td>
 	       	<td  class="ColunaInfo" style="text-align:left;">
-				<input type="text"  class="form-control input-sm" size="12" id="data<?=$i?>" name="data[<?=$formasPagto[$i]->getId()?>]" value="<?=$Main->Formata->banco2date($formasPagto[$i]->getData())?>"  title="data" onkeypress="mascaras.mascara(this,'data')" onChange="salvaCampoCompraFormaPgto(this.title, this.value, <?=$formasPagto[$i]->getId()?>, <?=$i?>);">
+				<input type="text"  class="form-control input-xs" size="12" id="data<?=$i?>" name="data[<?=$formasPagto[$i]->getId()?>]" value="<?=$Main->Formata->banco2date($formasPagto[$i]->getData())?>"  title="data" onkeypress="mascaras.mascara(this,'data')" onChange="salvaCampoCompraFormaPgto(this.title, this.value, <?=$formasPagto[$i]->getId()?>, <?=$i?>);">
 	
 			</td>
 	

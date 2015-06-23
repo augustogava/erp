@@ -24,7 +24,7 @@ include($Main->Configuracoes->HEADER_POPBUSCA);
 				<div class="form-group form-inline">
 				
 					<label for="campo">Busca</label>
-					<select id="campo" name="campo" class="form-control input-sm">
+					<select id="campo" name="campo" class="form-control input-xs">
 						<?
 						for($i=0; $i<count($campos); $i++){
 						?>
@@ -34,7 +34,7 @@ include($Main->Configuracoes->HEADER_POPBUSCA);
 						?>
 					</select>
 					<label for="valor">Valor</label>
-					<input type="text" id="valor" name="valor"  class="form-control input-sm">
+					<input type="text" id="valor" name="valor"  class="form-control input-xs">
 				</div>
 				
 				<div id="saidaBusca" class="autocomplete"> </div>

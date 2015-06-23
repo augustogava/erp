@@ -4,8 +4,9 @@ include "includes/Main.class.php";
 $Main = new Main();
 $Main->Seguranca->verificaLogado();
 
-$clientes = $Main->Pedidos->pegaClientes();
-				
+
+$tipos = $Main->Padrao->pegaTiposProdutos();
+
 include($Main->Configuracoes->HEADER_NADMIN);  
 ?>
 <div id="main-body">
@@ -20,7 +21,19 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	
 			<div class="linhaConfig" id="busca">  
 			<form id="edit" name="edit" >	
-				<input type="radio" name="filtro1" id="filtro1" value="1" checked> Gerar Relatório <br />
+				<div class="form-group form-inline">
+						<label for="filtro1">Tipo de Produto</label>
+						<select id="filtro1" name="filtro1" class="form-control input-xs normalsizeSelect">
+							<option value="0">Selecione</option>
+							<?
+							for($j=0; $j<count($tipos); $j++){
+							?>					
+							<option value="<?=$tipos[$j]->getId()?>"><?=$tipos[$j]->getNome()?></option>
+							<?
+							}
+							?>
+						</select>
+					</div>
 			</form>
 			</div>
 				<button type="button" onClick="abrirRelatorioProducao();" class="btn btn-success" style="margin-top: 10px">Gerar Relatório</button>

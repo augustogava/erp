@@ -85,13 +85,9 @@ if($_GET["acao"] == "listar"){
 			for($j=0; $j<count($pedidos); $j++){
 
 				if(($j%2) == 0){
-
 					$linha = "linha";
-
 				}else{
-
 					$linha = "linhaMu";
-
 				}
 
 		?>
@@ -200,7 +196,7 @@ if($_GET["acao"] == "listar"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 					<td align="left" width="40%">
 						<h2>Adicionar Cadastro</h2>
 					</td>
@@ -216,13 +212,13 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Código:</b></td>
 					<td align="left" id="td_id_menus" >
-						<input class="form-control input-sm" onkeypress="return false;" type="text" name="codigo" id="codigo"  value="<?if($pedidos[0] && $pedidos[0]->getCodigo() ) print $pedidos[0]->getCodigo(); else print $Main->Pedidos->pegaCodigoNovo(); ?>"  />
+						<input class="form-control input-xs" onkeypress="return false;" type="text" name="codigo" id="codigo"  value="<?if($pedidos[0] && $pedidos[0]->getCodigo() ) print $pedidos[0]->getCodigo(); else print $Main->Pedidos->pegaCodigoNovo(); ?>"  />
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Cliente:</b></td>
 					<td align="left" id="td_id_menus" class="form-inline">
-						<select id="clientes" name="clientes" title="Clientes" class="erroForm form-control input-sm" onChange="pegaRepresentantePedido(this.value); pegaDadosClientePedido(this.value)">
+						<select id="clientes" name="clientes" title="Clientes" class="erroForm form-control input-xs" onChange="pegaRepresentantePedido(this.value); pegaDadosClientePedido(this.value)">
 
 							<option value="">Selecione</option>
 
@@ -259,7 +255,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Representante:</b></td>
 					<td align="left" id="td_id_menus" class="form-inline">
-						<select id="representantes" name="representantes" title="Representantes" class="form-control input-sm">
+						<select id="representantes" name="representantes" title="Representantes" class="form-control input-xs">
 							<option value="">Selecione</option>
 
 							<?
@@ -291,7 +287,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left" class="form-inline">
 
-						<select id="formapagamento" name="formapagamento" title="formapagamento" class="erroForm form-control input-sm">
+						<select id="formapagamento" name="formapagamento" title="formapagamento" class="erroForm form-control input-xs">
 
 							<option value="">Selecione</option>
 
@@ -320,7 +316,7 @@ if($_GET["acao"] == "listar"){
 						<b>Obs:</b>
 					</td>
 					<td align="left">
-						<input class="form-control input-sm" type="text" name="obs" id="obs"  value="<?if($pedidos[0] && $pedidos[0]->getObs() ) print $pedidos[0]->getObs(); ?>"  />
+						<input class="form-control input-xs" type="text" name="obs" id="obs"  value="<?if($pedidos[0] && $pedidos[0]->getObs() ) print $pedidos[0]->getObs(); ?>"  />
 					</td>
 				</tr>
 				<tr>
@@ -328,7 +324,7 @@ if($_GET["acao"] == "listar"){
 						<b>Tipo Entrega:</b>
 					</td>
 					<td align="left" class="form-inline">
-						<select id="tipoentrega" name="tipoentrega" title="tipoentrega" class="form-control input-sm">
+						<select id="tipoentrega" name="tipoentrega" title="tipoentrega" class="form-control input-xs">
 
 							<option value="">Selecione</option>
 
@@ -364,7 +360,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left">
 
-						<input class="form-control input-sm" type="text" name="valorEntrega" id="valorEntrega" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getValorEntrega() ) print $pedidos[0]->getValorEntrega(); ?>"  />
+						<input class="form-control input-xs" type="text" name="valorEntrega" id="valorEntrega" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getValorEntrega() ) print $pedidos[0]->getValorEntrega(); ?>"  />
 
 					</td>
 
@@ -380,7 +376,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left">
 
-						<input class="form-control input-sm" type="text" name="imposto" id="imposto" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getImposto() ) print $pedidos[0]->getImposto(); ?>"  />
+						<input class="form-control input-xs" type="text" name="imposto" id="imposto" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getImposto() ) print $pedidos[0]->getImposto(); ?>"  />
 
 					</td>
 
@@ -395,7 +391,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left">
 
-						<input class="form-control input-sm" type="text" name="dataimposto" id="dataimposto" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<?if($pedidos[0] && $pedidos[0]->getDataImposto() ) print $pedidos[0]->getDataImposto(); ?>"  />
+						<input class="form-control input-xs" type="text" name="dataimposto" id="dataimposto" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<?if($pedidos[0] && $pedidos[0]->getDataImposto() ) print $pedidos[0]->getDataImposto(); ?>"  />
 
 					</td>
 
@@ -411,7 +407,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left" class="form-inline">
 
-						<input class="form-control input-sm fourdigits" type="text" name="comissao" id="comissao" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getComissao() ) print $pedidos[0]->getComissao(); ?>"  /> %
+						<input class="form-control input-xs fourdigits" type="text" name="comissao" id="comissao" onkeypress="mascaras.Formata(this,20,event,2);"  value="<?if($pedidos[0] && $pedidos[0]->getComissao() ) print $pedidos[0]->getComissao(); ?>"  /> %
 
 					</td>
 
@@ -427,7 +423,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left">
 
-						<select id="status" name="status" title="Status" class="form-control input-sm" >
+						<select id="status" name="status" title="Status" class="form-control input-xs" >
 
 							<option value="">Selecione</option>
 
@@ -550,14 +546,19 @@ if($_GET["acao"] == "listar"){
 
 		$qtdTotal += $itens[$i]->getQtd();
 		$precoTotal += $itens[$i]->getTotal();
+		if(($i%2) == 0){
+			$linha = "linha";
+		}else{
+			$linha = "linhaMu";
+		}
 	?>
-	<tr class="linha">
+	<tr class="<?=$linha?>">
 		<td class="ColunaInfo" style="text-align:left;">
-			<input class="form-control input-sm twodigits" type="text" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+			<input class="form-control input-xs twodigits" type="text" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
 		</td>
 
 		<td  class="ColunaInfo" style="text-align:left;">
-			<select class="form-control input-sm fullsize" id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
+			<select class="form-control input-xs fullsize" id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
 				<option value="0" selected>Selecione</option>
 				<?
 				for($j=0; $j<count($produtos); $j++){
@@ -578,11 +579,11 @@ if($_GET["acao"] == "listar"){
 				<input type="radio" name="tipoComissao<?=$i?>" id="tipoComissao2<?=$i?>" value="2" <? if($itens[$i]->getTipoComissao() == 2) print "checked"; ?> title="tipo_comissao" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);"> Valor
 			</label>	
 
-			<input class="form-control input-sm fourdigits " type="text" size="2" id="valorComissao<?=$i?>" name="valorComissao[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getValorComissao()?>" title="comissao_valor" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);" onkeypress="mascaras.Formata(this,20,event,2);">
+			<input class="form-control input-xs fourdigits " type="text" size="2" id="valorComissao<?=$i?>" name="valorComissao[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getValorComissao()?>" title="comissao_valor" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);" onkeypress="mascaras.Formata(this,20,event,2);">
 		</td>
 
 		<td class="ColunaInfo" style="text-align:left;" id="precosProduto_<?=$i?>">
-			<input class="form-control input-sm fourdigits" type="text" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+			<input class="form-control input-xs fourdigits" type="text" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
 		</td>
 
 		<td  class="ColunaInfo" style="text-align:left;" id ="campoTotal_<?=$i?>">

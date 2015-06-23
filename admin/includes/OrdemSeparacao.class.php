@@ -105,7 +105,24 @@ class OrdemSeparacao  {
 	* @param $id
 	*/
 	public function excluir($id){
-			$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id = '".$id."'");
+		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id = '".$id."'");
+	}
+	
+	/**
+	 * Excluir ordem separacao
+	 * @param $id
+	 */
+	public function cancelarOrdem($id){
+		$ordem = $this->pegaOrdemSeparacao("", "", "", "", $id);
+		if( $ordem[0]->getStatusId() == 2 ){
+			$produto 	= $ordem[0]->getProdutos();
+			$pedido 	= $ordem[0]->getPedidos();
+			
+			Pedidos::alteraStatusPedidoSeparado( $pedido[0]->id, 4 );
+
+			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '". $ordem[0]->getQtd()."' WHERE id = '". $produto[0]->getId(). "'");
+			$this->ConexaoSQL->updateQuery("UPDATE ordem_separacao SET data_status = NOW(), id_status_separacao = '1' WHERE id = '".$id."'");
+		}
 	}
 	
 	/**
@@ -123,7 +140,7 @@ class OrdemSeparacao  {
 			
 			$lstOrdens = $this->pegaOrdemSeparacao("", $pedido[0]->id, "","","","", 1);// pega todas ordens pra esse pedido que esteja aberta
 			if( count($lstOrdens) == 0){//não exste nenhuma aberta, altera status pedido
-				Pedidos::alteraStatusPedidoSeparado( $pedido[0]->id );
+				Pedidos::alteraStatusPedidoSeparado( $pedido[0]->id, 6 );
 			}
 		}else{
 			print "<script>window.alert('Não existe estoque suficiente para este produto Estoque atual: ".$produto[0]->getEstoqueAtual()." ');</script>";

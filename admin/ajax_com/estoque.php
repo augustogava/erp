@@ -81,7 +81,7 @@ if($_GET["acao"] == "listar"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 					<td align="left" width="40%">
 						<h2>Adicionar Cadastro</h2>
 					</td>
@@ -97,7 +97,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Produto:</b></td>
 					<td align="left" class="form-inline">
-						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-sm">
+						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($produtos); $j++){
@@ -116,7 +116,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Tipo:</b></td>
 					<td align="left" class="form-inline">
-						<select id="tipo" name="tipo"  title="Tipo" class="erroForm form-control input-sm">
+						<select id="tipo" name="tipo"  title="Tipo" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<option value="1" <? if($estoque[0] && $estoque[0]->getTipo() == 1) print "selected"; ?>>Entrada</option>
 							<option value="2" <? if($estoque[0] && $estoque[0]->getTipo() == 2) print "selected"; ?>>Saída</option>
@@ -127,25 +127,25 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Quantidade:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="qtd" id="qtd" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($estoque[0]) print $estoque[0]->getQtd()?>" >
+						<input type="text" class="form-control input-xs" name="qtd" id="qtd" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($estoque[0]) print $estoque[0]->getQtd()?>" >
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Valor:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="preco" id="preco" size="10" onkeypress="mascaras.Formata(this,20,event,2)"  value="<? if($estoque[0]) print $estoque[0]->getPreco()?>">
+						<input type="text" class="form-control input-xs" name="preco" id="preco" size="10" onkeypress="mascaras.Formata(this,20,event,2)"  value="<? if($estoque[0]) print $estoque[0]->getPreco()?>">
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Descrição:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="descricao" id="descricao"  value="<? if($estoque[0]) print $estoque[0]->getDescricao()?>">
+						<input type="text" class="form-control input-xs" name="descricao" id="descricao"  value="<? if($estoque[0]) print $estoque[0]->getDescricao()?>">
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Data:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="data" id="data" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($estoque[0]) print $estoque[0]->getData()?>">
+						<input type="text" class="form-control input-xs" name="data" id="data" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($estoque[0]) print $estoque[0]->getData()?>">
 					</td>
 				</tr>
 				

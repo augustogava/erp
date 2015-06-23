@@ -33,8 +33,13 @@ if($_GET["acao"] == "listar"){
 		</tr>
 		<?
 			for($j=0; $j<count($composicao); $j++){
+				if(($j%2) == 0){
+					$linha = "linha";
+				}else{
+					$linha = "linhaMu";
+				}
 		?>
-		<tr id="linhaDataGrid_<?=$j?>" class="linha" width="60%">
+		<tr id="linhaDataGrid_<?=$j?>" class="<?=$linha?>" width="60%">
 			<td width="60%"  id="linhaDataGrid_<?=$j?>_0">
 				<?=$composicao[$j]->getProdutoNome()?>
 			</td>
@@ -69,7 +74,7 @@ if($_GET["acao"] == "listar"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 					<td align="left" width="40%">
 						<h2>Adicionar</h2>
 					</td>
@@ -85,7 +90,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Produto:</b></td>
 					<td align="left" class="form-inline">
-						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-sm">
+						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($produtos); $j++){
@@ -104,13 +109,13 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Quantidade:</b></td>
 					<td align="left">
-						<input type="text" name="qtd" id="qtd" class="form-control input-sm" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($composicao[0]) print $composicao[0]->getQtd()?>" >
+						<input type="text" name="qtd" id="qtd" class="form-control input-xs" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($composicao[0]) print $composicao[0]->getQtd()?>" >
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Descrição:</b></td>
 					<td align="left">
-						<input type="text" name="descricao" class="form-control input-sm" id="descricao"  value="<? if($composicao[0]) print $composicao[0]->getDescricao()?>">
+						<input type="text" name="descricao" class="form-control input-xs" id="descricao"  value="<? if($composicao[0]) print $composicao[0]->getDescricao()?>">
 					</td>
 				</tr>
 				

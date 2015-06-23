@@ -695,55 +695,41 @@ class Compras  {
 
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT sum(total) as total FROM compras_itens WHERE compras_itens.id_compras = '".$idCompra."' ");
 
-                $RetornoConsultaForma = $this->ConexaoSQL->Select("SELECT sum(valor) as total FROM compras_formaPagamento WHERE compras_formaPagamento.id_compras = '".$idCompra."' ");
+		$RetornoConsultaForma = $this->ConexaoSQL->Select("SELECT sum(valor) as total FROM compras_formaPagamento WHERE compras_formaPagamento.id_compras = '".$idCompra."' ");
 
-                if( ( $RetornoConsulta[0]["total"]-Formata::valor2banco($dadosCompra[0]->getDesconto())+Formata::valor2banco($dadosCompra[0]->getImposto()) ) != $RetornoConsultaForma[0]["total"]){
-                    $this->ConexaoSQL->updateQuery("UPDATE compras SET status = '0' WHERE id = '".$idCompra."'");
-                    $this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_compras = '".$idCompra."'");
-                            $this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_compras = '".$idCompra."'");
-                    print "<script>window.alert('Formas pagamentos errado, valor total deve ser igual total compra!')</script>";
-                }else{
+        if( ( $RetornoConsulta[0]["total"]-Formata::valor2banco($dadosCompra[0]->getDesconto())+Formata::valor2banco($dadosCompra[0]->getImposto()) ) != $RetornoConsultaForma[0]["total"]){
+        	$this->ConexaoSQL->updateQuery("UPDATE compras SET status = '0' WHERE id = '".$idCompra."'");
+            $this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_compras = '".$idCompra."'");
+            $this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_compras = '".$idCompra."'");
+                    
+            print "<script>window.alert('Formas pagamentos errado, valor total deve ser igual total compra!')</script>";
+        }else{
 
-                    $precoTotal = $RetornoConsulta[0]["total"];
+        	$precoTotal = $RetornoConsulta[0]["total"];
+			$this->ConexaoSQL->updateQuery("UPDATE compras SET status = '1' WHERE id = '".$idCompra."'");
 
+            $RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM compras_itens WHERE id_compras = '".$idCompra."' ");
+            $RetornoFormasPgto = $this->ConexaoSQL->Select("SELECT * FROM compras_formaPagamento WHERE id_compras = '".$idCompra."' ");
 
+            if(count($RetornoConsulta) > 0){
+            	//Deleta lixo
+                $this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_compras = '".$idCompra."'");
+                $this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_compras = '".$idCompra."'");
 
-                    $this->ConexaoSQL->updateQuery("UPDATE compras SET status = '1' WHERE id = '".$idCompra."'");
-
-
-
-                    $RetornoConsulta = $this->ConexaoSQL->Select("SELECT * FROM compras_itens WHERE id_compras = '".$idCompra."' ");
-
-                    $RetornoFormasPgto = $this->ConexaoSQL->Select("SELECT * FROM compras_formaPagamento WHERE id_compras = '".$idCompra."' ");
-
-
-
-                    if(count($RetornoConsulta) > 0){
-
-                            //Deleta lixo
-
-                            $this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_compras = '".$idCompra."'");
-                            $this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_compras = '".$idCompra."'");
-
-
-                            //INSERE ESTOQUE
-
-                            for($j=0; $j<count($RetornoConsulta); $j++){
-
-                                    $this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_compras, descricao, tipo, qtd, preco, data) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idCompra."', 'Compra: ".$dadosCompra[0]->getCodigo()." ', '1','".$RetornoConsulta[$j]["qtd"]."','".$RetornoConsulta[$j]["preco"]."', NOW())");
-
-                            }
-
-                            //INSERE Fluxo
-                            if($fluxo == "s"){
-                                for($j=0; $j<count($RetornoFormasPgto); $j++){
-
-                                        $this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_fornecedores, id_tipo_fluxo, id_compras, ocorrencia, data, tipo, valor) VALUES('".$dadosCompra[0]->getFornecedoresId()."', '".$dadosCompra[0]->getTipoFluxoId()."', '".$idCompra."', 'Código Compra: ".$dadosCompra[0]->getCodigo()."', '".$RetornoFormasPgto[$j]["data"]."', '2', '".$RetornoFormasPgto[$j]["valor"]."')");
-
-                                }
-                            }
-                    }
+                //INSERE ESTOQUE
+                for($j=0; $j<count($RetornoConsulta); $j++){
+                	
+                	Estoque::adicionaEstoque( $RetornoConsulta[$j]["id_produtos"], "", $idCompra, "Compra: ".$idCompra, $RetornoConsulta[$j]["qtd"], $RetornoConsulta[$j]["preco"] );
+                	
                 }
+
+                if($fluxo == "s"){
+                	for($j=0; $j<count($RetornoFormasPgto); $j++){
+						$this->ConexaoSQL->insertQuery("INSERT INTO fluxo (id_fornecedores, id_tipo_fluxo, id_compras, ocorrencia, data, tipo, valor) VALUES('".$dadosCompra[0]->getFornecedoresId()."', '".$dadosCompra[0]->getTipoFluxoId()."', '".$idCompra."', 'Código Compra: ".$dadosCompra[0]->getCodigo()."', '".$RetornoFormasPgto[$j]["data"]."', '2', '".$RetornoFormasPgto[$j]["valor"]."')");
+					}
+                }
+            }
+		}
 
 	}
 
@@ -891,10 +877,7 @@ class Compras  {
 
 	public function salvarCompra($id, $fornecedores, $codigo, $obs, $imposto, $desconto, $tipoFluxo){
 
-	
-
 		$this->ConexaoSQL->updateQuery("UPDATE compras SET desconto = '".Formata::valor2banco($desconto)."', imposto = '".Formata::valor2banco($imposto)."', obs = '".$obs."', codigo = '".$codigo."', id_fornecedores = '".$fornecedores."', id_tipo_fluxo = '".$tipoFluxo."' WHERE id = '".$id."'");
-
 		
 		$this->verficaFechado($id);
 
@@ -915,15 +898,10 @@ class Compras  {
 		$RetornoConsulta = $this->ConexaoSQL->Select("SELECT status, cotacao FROM compras WHERE id = '".$id."' AND status IN (1) ");
 
 		if(count($RetornoConsulta) > 0){
-                        print 1;
 			if($RetornoConsulta[0]["status"] == 1 && $RetornoConsulta[0]["cotacao"] == "n" ){
-print 2;
 				$this->fecharCompra($id);
-
 			}
-
 		}
-
 	}
 
 	

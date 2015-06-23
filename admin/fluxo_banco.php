@@ -41,7 +41,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 			<div id="buscaDiv" style="display:none;">
 				<div class="form-group form-inline">
 					<label for="tipoFluxoBusca">Tipo Fluxo</label>
-					<select id="tipoFluxoBusca" class="form-control input-sm normalsizeSelect" name="tipoFluxoBusca">
+					<select id="tipoFluxoBusca" class="form-control input-xs normalsizeSelect" name="tipoFluxoBusca">
 						<option value="">Selecione</option>
 						<?
 						for($j=0; $j<count($tipoFluxo); $j++){
@@ -53,7 +53,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					</select>
 					
 					<label for="tipoBusca">Tipo</label>
-					<select id="tipoBusca" class="form-control input-sm normalsizeSelect" name="tipoBusca">
+					<select id="tipoBusca" class="form-control input-xs normalsizeSelect" name="tipoBusca">
 						<option value="">Selecione</option>
 						<option value="1">Entrada</option>
 						<option value="2">Saída</option>
@@ -61,7 +61,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					
 					
 					<label for="dataIni">Data Inicial</label>
-					<input type="text" class="form-control input-sm" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
+					<input type="text" class="form-control input-xs" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
 					
 					<a href="javascript:doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=listar&idBanco=<?=$_GET["idBanco"]?>&tipo=' + $('tipoBusca').value + '&tipoFluxo=' + $('tipoFluxoBusca').value + '&dataIni=' + $('dataIni').value  ,1,'Saida');" href="#">
 						<img border="0" src="layout/incones/find.png"/>

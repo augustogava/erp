@@ -98,6 +98,17 @@ body {
   width: 80px;
   margin-top: 5px;
 }
+
+.titulo{
+	background:#1E96CD;
+	color: white;
+	font-weight: bold;
+	height:26px;
+}
+.table-relatorio{ border-spacing: 0;   box-sizing: border-box;  border-collapse: collapse; width: 99%; margin: 5px auto 0 auto; }
+.table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px; border-bottom: 1px solid #ddd; }
+.table-relatorio .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 20px; border-bottom: 1px solid #ddd; }
+.table-relatorio .linha:hover, .table-relatorio .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
 </style>
 </head>
 <body>
@@ -118,9 +129,8 @@ body {
 		</div>
 	</div>
 
-	<table border="1" style="background: #EBF0FD; width: 100%;">
-		<tr
-			style="background: #CFDEFF; color: #215DF6; border-bottom: 1px solid #000; font-weight: bold; height: 26px;">
+	<table style="" class="table-relatorio">
+		<tr class="titulo">
 			<?
 			for($i = 0; $i < count ( $dados ["campos"] ); $i ++) {
 				print "<td>" . ucfirst ( $dados ["campos"] [$i] ) . "</td>";
@@ -129,14 +139,27 @@ body {
 			</tr>
 			
 			<?
-			for($i = 0; $i < count ( $dados ["valores"] ); $i ++) {
-				print "<tr style=\"background: #EBF0FD;height:32px;\">";
-				if (isset ( $dados ["valores"] [$i] )) {
-					foreach ( $dados ["valores"] [$i] as $campo => $valor ) {
-						print "<td style=\"text-align:left;font-size:10px;\">&nbsp;" . $valor . "</td>";
+			if(  count( $dados ["valores"] ) > 0 ){
+				for($i = 0; $i < count ( $dados ["valores"] ); $i ++) {
+					if(($i%2) == 0){
+						$linha = "linha";
+					}else{
+						$linha = "linhaMu";
 					}
+					
+					print "<tr class=\"".$linha."\">";
+					if (isset ( $dados ["valores"] [$i] )) {
+						$index = 0;
+						foreach ( $dados ["valores"] [$i] as $campo => $valor ) {
+							$align = ( $dados ["align"][$index++]);
+							
+							print "<td style=\"text-align:".$align.";font-size:11px;\">&nbsp;" . $valor . "</td>";
+						}
+					}
+					print "</tr>";
 				}
-				print "</tr>";
+			}else{
+				print "<tr class=\"linha\"> <td colspan=\"".count ( $dados ["campos"] )."\">Sem Registros</td></tr>";
 			}
 			?>
 		</table>

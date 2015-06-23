@@ -83,23 +83,48 @@ class Estoque  {
 	*/
 	public function salvarEstoque($id = "", $produto = "", $tipo = "", $qtd = "", $preco = "", $data = "", $descricao = ""){
 		if(empty($id)){
+			if( $tipo == 1 ){
+				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$qtd."' WHERE id = '".$produto."'");
+			}else{
+				$produtoLst = Pedidos::pegaProduto($produto);
+				if( $produtoLst[0]->getEstoqueAtual() >= $qtd  ){
+					$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$qtd."' WHERE id = '".$produto."'");
+				}else{
+					print "<script>window.alert('Não existe estoque suficiente para dar saida de estoque! Estoque atual: ".$produtoLst[0]->getEstoqueAtual()." ');</script>";
+					
+					return ;
+				}
+			}
+			
 			$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, tipo, qtd, preco, data, descricao) VALUES('".$produto."', '".$tipo."','".$qtd."','".Formata::valor2banco($preco)."', '".Formata::date2banco($data)."','".$descricao."')");
 			
-			if( $tipo == 1 )
-				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual += '".$qtd."' WHERE id = '".$produto."'");
-			else 
-				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual -= '".$qtd."' WHERE id = '".$produto."'");
-			
 		}else{
-			
 			$estoqueAntigo = $this->pegaEstoque(null, null, null, null, $id, null );
 			$qtdAntigo = $estoqueAntigo[0]->getQtd();
 			
 			$diff = abs( $qtdAntigo - $qtd );
-			if( $qtdAntigo < $qtd )
-				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$diff."' WHERE id = '".$produto."'");
-			else 
-				$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$diff."' WHERE id = '".$produto."'");
+			if( $qtdAntigo < $qtd ){
+				if( $estoqueAntigo[0]->getTipo() == 1 ){
+					$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$diff."' WHERE id = '".$produto."'");
+				}else{
+					$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$diff."' WHERE id = '".$produto."'");
+				}
+				
+			}else{
+				if( $estoqueAntigo[0]->getTipo() == 1 ){
+					$produtoLst = Pedidos::pegaProduto($produto);
+					if( $produtoLst[0]->getEstoqueAtual() >= $diff  ){
+						$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual - '".$diff."' WHERE id = '".$produto."'");
+					}else{
+						print "<script>window.alert('Não existe estoque suficiente para dar saida de estoque! Estoque atual: ".$produtoLst[0]->getEstoqueAtual()." ');</script>";
+						
+						return;
+					}
+				
+				}else{
+					$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$diff."' WHERE id = '".$produto."'");
+				}
+			}
 			
 			$this->ConexaoSQL->updateQuery("UPDATE estoque SET id_produtos = '".$produto."', descricao = '".$descricao."', tipo = '".$tipo."', qtd = '".$qtd."', preco = '".Formata::valor2banco($preco)."', data = '".Formata::date2banco($data)."' WHERE id = '".$id."'");
 		}
@@ -125,9 +150,9 @@ class Estoque  {
 	 * Excluir estoque
 	 * @param $id
 	 */
-	public function adicionaEstoque( $idProduto = "", $idPedido = "", $descr = "", $qtd = "" ){
+	public function adicionaEstoque( $idProduto = "", $idPedido = "", $idCompra = "", $descr = "", $qtd = "", $preco = "" ){
 		$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '".$qtd."' WHERE id = '".$idProduto."'");
-		$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_pedidos, descricao, tipo, qtd, preco, data) VALUES('".$idProduto."', '".$idPedido."', '".$descr."', '1', '".$qtd."','', NOW())");
+		$this->ConexaoSQL->insertQuery("INSERT INTO estoque (id_produtos, id_pedidos, id_compras, descricao, tipo, qtd, preco, data) VALUES('".$idProduto."', '".$idPedido."', '".$idCompra."', '".$descr."', '1', '".$qtd."','".$preco."', NOW())");
 		
 	}
 	

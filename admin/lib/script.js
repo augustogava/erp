@@ -203,8 +203,9 @@ function abrirRelatorioClientes(){
 
 
 function abrirRelatorioProducao(){
-
-	window.open('relatorios.php?cadastro=producao', "janelaRelatorios", "height=600, width=800, scrollbars=yes, resizable=yes");
+	var filtro1 = $('filtro1').value;
+	console.info( filtro1 );
+	window.open('relatorios.php?cadastro=producao&filtro1=' + filtro1, "janelaRelatorios", "height=600, width=800, scrollbars=yes, resizable=yes");
 
 }
 
@@ -917,22 +918,25 @@ function excluirOrdemSeparacao(id, status){
 }
 
 function fecharOrdemSeparacao(id, status){
-
 	if(status != 2){
-
 		if(status == 1){
 			if(confirm('Deseja realmente fechar?\nIrá ser dada saida no estoque')){
 				doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=fecharOrdem&id=' + id, 1 , '');
 				refreshOrdemSeparacao();
 			}
 		}
-
 	}else{
-
 		alert('Ordem já fechada!');
-
 	}
+}
 
+function cancelarOrdemSeparacao(id, status){
+		if(status == 2){
+			if(confirm('Deseja realmente cancelar Separação?\nIrá ser dada entrada no estoque')){
+				doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=cancelarOrdem&id=' + id, 1 , '');
+				refreshOrdemSeparacao();
+			}
+		}
 
 }
 
@@ -1565,7 +1569,7 @@ function fixHeight(){
 	 	
 	 	jQuery("#header, #main-body").width( ( jQuery( document ).width() - 100 ) );
 	 	
-	 	jQuery("#Saida").height( (hei-150) - jQuery("#busca").height()  );
+	 	jQuery("#Saida, #SaidaMain").height( (hei-150) - jQuery("#busca").height()  );
 	 	
 	 	jQuery(".modal").height( hei );
 	 	jQuery(".modal").width( jQuery( document ).width() );

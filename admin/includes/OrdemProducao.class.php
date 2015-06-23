@@ -120,7 +120,7 @@ class OrdemProducao  {
 		$pedido = $ordem[0]->getPedidos();
 		
 		$this->ConexaoSQL->updateQuery("UPDATE ordem_producao SET data_status = NOW(), id_status_ordem = '2' WHERE id = '".$id."'");
-		Estoque::adicionaEstoque( $produto[0]->id, $pedido[0]->id, "Ordem Produção: ".$ordem[0]->getId()." para o pedido: ".$pedido[0]->codigo , $ordem[0]->getQtd() );
+		Estoque::adicionaEstoque( $produto[0]->id, $pedido[0]->id, "", "Ordem Produção: ".$ordem[0]->getId()." para o pedido: ".$pedido[0]->codigo , $ordem[0]->getQtd() );
 	}
 	
 	/**

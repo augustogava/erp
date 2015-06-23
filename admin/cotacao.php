@@ -35,11 +35,11 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="codigoBusca">Código</label>
-						<input class="form-control input-sm"type="text" name="codigoBusca" id="codigoBusca" size="15">
+						<input class="form-control input-xs"type="text" name="codigoBusca" id="codigoBusca" size="15">
 						
 						
 						<label for="fornecedoresBusca">Fornecedores</label>
-						<select  class="form-control input-sm normalsizeSelect" id="fornecedoresBusca" name="fornecedoresBusca">
+						<select  class="form-control input-xs normalsizeSelect" id="fornecedoresBusca" name="fornecedoresBusca">
 							<option value="0">Selecione</option>
 							<?
 							for($j=0; $j<count($fornecedores); $j++){
@@ -51,9 +51,9 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="dataIni">Data Inicial</label>
-						<input class="form-control input-sm" type="text" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
+						<input class="form-control input-xs" type="text" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
 						<label for="dataFim">Data Final</label>
-						<input class="form-control input-sm" type="text" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
+						<input class="form-control input-xs" type="text" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
 						
 						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/compras.php?acao=listarCotacao&fornecedores=' + $('fornecedoresBusca').value  + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value + '&codigo=' + $('codigoBusca').value, 1, 'SaidaMain');">Buscar</button>
 					</div>

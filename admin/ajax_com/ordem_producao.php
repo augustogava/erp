@@ -39,8 +39,13 @@ if($_GET["acao"] == "listar"){
 			for($j=0; $j<count($ordem); $j++){
 				$produto = $ordem[$j]->getProdutos();
 				$pedido = $ordem[$j]->getPedidos();	
+				
+				if( $ordem[$j]->getStatusId() == 2 )
+					$linha = "linhaVerde";
+				else
+					$linha = "linhaVermelho";
 		?>
-		<tr id="linhaDataGrid_<?=$j?>" class="linha" width="60%">
+		<tr id="linhaDataGrid_<?=$j?>" class="linha <?=$linha?>" width="60%">
 			<td  id="linhaDataGrid_<?=$j?>_0">
 				<?=$produto[0]->codigo;?>
 			</td>
@@ -105,7 +110,7 @@ if($_GET["acao"] == "listar"){
 	<form id="edit" name="edit" action="">
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
-				<tr>
+				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 					<td align="left" width="40%">
 						<h2>Adicionar Cadastro</h2>
 					</td>
@@ -121,7 +126,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Produto:</b></td>
 					<td align="left" class="form-inline">
-						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-sm">
+						<select id="produto" name="produto" title="Produto" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($produtosLista); $j++){
@@ -141,7 +146,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Pedido:</b></td>
 					<td align="left" class="form-inline">
-						<select id="pedido" name="pedido" title="Pedido" class="erroForm form-control input-sm">
+						<select id="pedido" name="pedido" title="Pedido" class="erroForm form-control input-xs">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($pedidosLista); $j++){
@@ -162,20 +167,20 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="right"><b>Quantidade:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="qtd" id="qtd" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($ordem[0]) print $ordem[0]->getQtd()?>" >
+						<input type="text" class="form-control input-xs" name="qtd" id="qtd" size="5" onkeypress="mascaras.mascara(this,'soNumeros')" value="<? if($ordem[0]) print $ordem[0]->getQtd()?>" >
 					</td>
 				</tr>
 			
 				<tr>
 					<td align="right"><b>Descrição:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="descricao" id="descricao"  value="<? if($ordem[0]) print $ordem[0]->getDescricao()?>">
+						<input type="text" class="form-control input-xs" name="descricao" id="descricao"  value="<? if($ordem[0]) print $ordem[0]->getDescricao()?>">
 					</td>
 				</tr>
 				<tr>
 					<td align="right"><b>Data:</b></td>
 					<td align="left">
-						<input type="text" class="form-control input-sm" name="data" id="data" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($ordem[0]) print $ordem[0]->getDataCad()?>">
+						<input type="text" class="form-control input-xs" name="data" id="data" size="11" onkeypress="mascaras.mascara(this,'data')"  value="<? if($ordem[0]) print $ordem[0]->getDataCad()?>">
 					</td>
 				</tr>
 				

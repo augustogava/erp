@@ -209,7 +209,7 @@ class DataGrid {
      */
     public function editaAddDataGrid($Acao, $Campo = ""){
     	$this->Html .= "<form action=\"\" name=\"edit\" id =\"edit\"><table border=\"1\" width=\"100%\" cellpadding=\"0\" cellspacing=\"5\" align=\"left\">";
-    	$this->Html .= "<tr>";
+    	$this->Html .= "<tr style=\"border-bottom: 1px solid #ddd; height: 30px;\">";
 		
 		if($Acao == "adicionarPopUp"){
 			$AcaoT = "Adicionar";
@@ -283,7 +283,7 @@ class DataGrid {
 				}
 				$requerido = $this->verificaRequerido($this->getTabela(), $Campos[$i]);
 				
-    			$this->Html .= "<td align=\"left\" ><input class=\"form-control input-sm\" type=\"text\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" ".$valida." title=\"".$Campos[$i]."\" class=\"".$requerido."\" value=\"".$valorFormatado."\"><td>";
+    			$this->Html .= "<td align=\"left\" ><input class=\"form-control input-xs\" type=\"text\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" ".$valida." title=\"".$Campos[$i]."\" class=\"".$requerido."\" value=\"".$valorFormatado."\"><td>";
     			$this->Html .= "</tr>";
     			if(empty($campo))
     				$campo = $Campos[$i];
@@ -309,7 +309,7 @@ class DataGrid {
 					$this->Html .= "<tr>";
 	    			$this->Html .= "<td align=\"right\"><b>".ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
 	    			$this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\" class=\"form-inline\" style=\"font-size: 13px;\">";
-	    			$this->Html .= "<select class=\"form-control input-sm size-80\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" title=\"".ucfirst($NomeTabelaRelacionamento)."\" class=\"".$requerido."\" ".$onChangeEstado.">";
+	    			$this->Html .= "<select class=\"form-control input-xs size-80\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" title=\"".ucfirst($NomeTabelaRelacionamento)."\" class=\"".$requerido."\" ".$onChangeEstado.">";
 		    		//Se for campo tipo cidade e estiver inserindo nao exibi alista intera
 		    		if( eregi("id_cidade",$Campos[$i]) && ( $Acao == "adicionarPopUp" || $Acao == "adicionar" ) ){
 		    			$this->Html .= "<option value=\"\">Selecione Estado</option>";
@@ -654,7 +654,7 @@ class DataGrid {
     		$this->Html .= "</tr>";
     	}
     	
-    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+3)."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-sm size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
+    	$this->Html .= "<tr><td colspan=\"".(count($this->Colunas)+3)."\" align=\"left\" class='form-inline'>Exibir: <select class='form-control input-xs size-60px' name=\"Limite\" id=\"Limite\" onChange=\"dataGrid.Limite('".$Paramentros."'); \">
 								<option value=\"15\" ".(($this->getLimite()==15)?"selected":"").">15</option>
 								<option value=\"30\" ".(($this->getLimite()==30)?"selected":"").">30</option>
 								<option value=\"999999\" ".(($this->getLimite()==999999)?"selected":"").">Todos</option>
@@ -768,7 +768,7 @@ class DataGrid {
     			$RetornoConsultaRel = $this->ConexaoSQL->Select($QueryRel);
     			if(count($RetornoConsultaRel) > 0){
 	    			$Ret .= " ".ucfirst($NomeTabelaRelacionamento);
-	    			$Ret .= "<select class=\"form-control input-sm\" name=\"".$Nome[1]."\" id=\"".$Nome[1]."\">";
+	    			$Ret .= "<select class=\"form-control input-xs\" name=\"".$Nome[1]."\" id=\"".$Nome[1]."\">";
 	    			$Ret .= "<option value=\"0\">Selecione</option>";
 	    			for($j=0; $j<count($RetornoConsultaRel); $j++){
 	    				$Nm = ($RetornoConsultaRel[$j]["nome"]) ? $RetornoConsultaRel[$j]["nome"] : $RetornoConsultaRel[$j]["id"];
@@ -780,7 +780,7 @@ class DataGrid {
     			}//end if
 			}else{
 			
-				$Ret .= "<label for=\"".$Nome[1]."\">".ucfirst($Nome[1])."</label> <input class=\"form-control input-sm\" type=\"text\" name=\"$Nome[1]\" id=\"$Nome[1]\" > ";
+				$Ret .= "<label for=\"".$Nome[1]."\">".ucfirst($Nome[1])."</label> <input class=\"form-control input-xs\" type=\"text\" name=\"$Nome[1]\" id=\"$Nome[1]\" > ";
 			}//end if eregi
 		}//end for
 

@@ -37,7 +37,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="clientesBusca">Clientes</label>
-						<select class="form-control input-sm normalsizeSelect" id="clientesBusca" name="clientesBusca">
+						<select class="form-control input-xs normalsizeSelect" id="clientesBusca" name="clientesBusca">
 							<option value="0">Selecione</option>
 							<?
 							for($j=0; $j<count($clientes); $j++){
@@ -49,7 +49,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="statusBusca">Status</label>
-						<select class="form-control input-sm normalsizeSelect" id="statusBusca" name="statusBusca">
+						<select class="form-control input-xs normalsizeSelect" id="statusBusca" name="statusBusca">
 							<option value="0">Selecione</option>
 							<?
 							for($j=0; $j<count($status); $j++){
@@ -62,16 +62,16 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					</div>
 					<div class="form-group form-inline">
 						<label for="codigoBusca">Código</label>
-						<input class="form-control input-sm" type="text" name="codigoBusca" id="codigoBusca" size="15">
+						<input class="form-control input-xs" type="text" name="codigoBusca" id="codigoBusca" size="15">
 						<label for="dataIni">Data Inicial:</label>
-						 <input class="form-control input-sm" type="text" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
+						 <input class="form-control input-xs" type="text" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
 						<label for="dataFim">Data Final:</label>
-						 <input class="form-control input-sm" type="text" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
+						 <input class="form-control input-xs" type="text" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 31, date("Y"))) ?>">
 						
 						<label for="dataEnvioIni">Data Envio Inicial:</label>
-						<input class="form-control input-sm" type="text" name="dataEnvioIni" id="dataEnvioIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="">
+						<input class="form-control input-xs" type="text" name="dataEnvioIni" id="dataEnvioIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="">
 						<label for="dataEnvioFim">Data Final Final:</label>
-						<input class="form-control input-sm" type="text" name="dataEnvioFim" id="dataEnvioFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="">
+						<input class="form-control input-xs" type="text" name="dataEnvioFim" id="dataEnvioFim" size="11" onkeypress="mascaras.mascara(this,'data')" value="">
 						
 						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes=' + $('clientesBusca').value + '&status=' + $('statusBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value + '&codigo=' + $('codigoBusca').value + '&dataEnvioIni=' + $('dataEnvioIni').value + '&dataEnvioFim=' + $('dataEnvioFim').value,1,'SaidaMain');">Buscar</button>
 					</div>

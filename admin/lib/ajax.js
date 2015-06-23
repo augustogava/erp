@@ -71,6 +71,7 @@ function doRealAjaxSemRetorno(){
 	if(exibirloading == 1 && IdEleLoading != '' && IdEleLoading != ' '){
 		$(IdEleLoading).innerHTML = '';
 		$(IdEleLoading).innerHTML = '<div class="loadingAjax">Carregando...<br><img src="layout/load.gif" border="0"></div>';
+		$(IdEleLoading).innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div>';
 	}else if(exibirloading == 2){
 		/*var tipNameSpaceURI = "http://www.w3.org/1999/xhtml";
 		tipContainer = document.createElementNS ? document.createElementNS(tipNameSpaceURI, "div") : document.createElement("div");
@@ -79,7 +80,8 @@ function doRealAjaxSemRetorno(){
 		document.getElementById("global").appendChild(tipContainer);*/
 		//$('global').innerHTML += '<div id=\"addPop\" class=\"caixa\"></div>';
 
-		$('addPop').innerHTML = '<div class="loadingAjax">Carregando...<br><img src="layout/load.gif" border="0"></div>';
+//		$('addPop').innerHTML = '<div class="loadingAjax">Carregando...<br><img src="layout/load.gif" border="0"></div>';
+		$('addPop').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div>';
 		
 		addPop_open(350);
 	}

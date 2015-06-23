@@ -34,10 +34,10 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<form id="edit" name="edit" >	
 					<div class="form-group form-inline">
 						<label for="filtro2">Data Início</label>
-						<input name="filtro2" class="form-control input-sm" id="filtro2" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10"  value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>"> 
+						<input name="filtro2" class="form-control input-xs" id="filtro2" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10"  value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>"> 
 
 						<label for="filtro3">Data Fim</label>
-						<input name="filtro3"  class="form-control input-sm" id="filtro3" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 30, date("Y"))) ?>"> <br />
+						<input name="filtro3"  class="form-control input-xs" id="filtro3" type="text" onKeyPress="mascaras.mascara(this,'data')" size="10" value="<?=date("d/m/Y", mktime(0,0,0, date("m"), 30, date("Y"))) ?>"> <br />
 					</div>
 					<div class="form-group form-inline">
 						Listar Por: <input type="radio" name="filtro1" id="filtro1" value="1" checked> Pedido 

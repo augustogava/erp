@@ -59,12 +59,11 @@ body.login { background: url('../imagens/login_image.jpg') no-repeat center cent
 	-webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
   	box-shadow: 0 5px 15px rgba(0,0,0,.5);
   	
-  	border: 1px solid #999;
-	border: 1px solid #82ADFF;
-	border-radius: 6px;
+  	border: 1px solid #DDD;
+	border-radius: 3px;
 	outline: 0;
-	-webkit-box-shadow: 0 3px 9px #82ADFF;
-	box-shadow: 0 3px 9px #82ADFF;
+	-webkit-box-shadow: 0 3px 9px #000;
+	box-shadow: 0 3px 9px #000;
 }
 
 .caixa h2 {
@@ -812,11 +811,17 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 
 .table-striped>tbody>tr:nth-of-type(odd){  background: #1E96CD; }
 
-.table-erp .linha{ background: rgba(30, 150, 205, 0.1) !important;	height: 40px; border-bottom: 1px solid #ddd; }
+.linhaVerde{ background: rgba(4, 215, 47, 0.2) !important; }
+.linhaVermelho{ background: rgba(218, 8, 8, 0.14) !important;   border: 1px solid rgba(255, 0, 0, 0.26) !important; }
+
+.table-erp .linha{ background: rgba(30, 150, 205, 0.1) ;	height: 40px; border-bottom: 1px solid #ddd; }
+
 .table-erp .linha td, .table-erp .linhaMu td, .table-erp .titulo td, .table-erp .tituloSemLinha td, .table-erp .tituloRed td{   padding: 5px; }
-.table-erp .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 40px;  border-bottom: 1px solid #ddd; }
+.table-erp .linhaMu{ background: rgba(30, 150, 205, 0.15) ; height: 40px;  border-bottom: 1px solid #ddd; }
+
 .table-erp .linha:hover{ background: rgba(30, 150, 205, 0.4) !important; }
 .table-erp .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+
 
 .table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px; border-bottom: 1px solid #ddd; }
 .table-relatorio .linha td, .table-relatorio .linhaMu td, .table-relatorio .titulo td{   padding: 3px; }
@@ -858,3 +863,5 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 
 
 li a .glyphicon{ margin-right: 5px !important; }
+
+.input-xs { height: 26px !important; padding: 5px 5px !important;  font-size: 12px !important; line-height: 1.5 !important; border-radius: 3px !important; }

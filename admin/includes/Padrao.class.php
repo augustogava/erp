@@ -87,6 +87,27 @@ class Padrao {
 	}
 	
 	/**
+	 * retorna lista tipos de produtos
+	 *@return array .
+	 */
+	public function pegaTiposProdutos( $id = "" ){
+	
+		if(!empty($id))
+			$where = " AND tipo_produdo.id = '".$id."'";
+	
+		$RetornoConsultaRel = $this->ConexaoSQL->Select("SELECT * FROM tipo_produdo WHERE 1 ".$where." ORDER By tipo_produdo.nome ASC");
+		 
+		if(count($RetornoConsultaRel) > 0){
+			for($j=0; $j<count($RetornoConsultaRel); $j++){
+				$Retorno[$j] = new PropriedadesPadrao();
+				$Retorno[$j]->setId($RetornoConsultaRel[$j]["id"]);
+				$Retorno[$j]->setNome($RetornoConsultaRel[$j]["nome"]);
+			}
+		}
+		return $Retorno;
+	}
+	
+	/**
 	* retorna lista de estado.
 	*@return array estado.
 	*/

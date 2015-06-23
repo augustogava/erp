@@ -27,7 +27,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="itensBusca">Produtos</label>
-						<select id="itensBusca" class="form-control input-sm normalsizeSelect" name="itensBusca">
+						<select id="itensBusca" class="form-control input-xs normalsizeSelect" name="itensBusca">
 							<option value="">Selecione</option>
 							<?
 							$produtos = $Main->Pedidos->pegaProduto();

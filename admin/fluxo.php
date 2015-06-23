@@ -40,7 +40,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="clienteBusca">Cliente</label>
-						<select id="clienteBusca" class="form-control input-sm normalsizeSelect" name="clienteBusca">
+						<select id="clienteBusca" class="form-control input-xs normalsizeSelect" name="clienteBusca">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($clientes); $j++){
@@ -52,7 +52,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="tipoFluxoBusca">Tipo Fluxo</label>
-						<select id="tipoFluxoBusca" class="form-control input-sm normalsizeSelect" name="tipoFluxoBusca">
+						<select id="tipoFluxoBusca" class="form-control input-xs normalsizeSelect" name="tipoFluxoBusca">
 							<option value="">Selecione</option>
 							<?
 							for($j=0; $j<count($tipoFluxo); $j++){
@@ -64,17 +64,17 @@ include($Main->Configuracoes->HEADER_NADMIN);
 						</select>
 						
 						<label for="tipoBusca">Tipo</label>
-						<select id="tipoBusca" class="form-control input-sm normalsizeSelect" name="tipoBusca">
+						<select id="tipoBusca" class="form-control input-xs normalsizeSelect" name="tipoBusca">
 							<option value="">Selecione</option>
 							<option value="1">Entrada</option>
 							<option value="2">Saída</option>
 						</select>
 						<br>
 						<label for="dataIni">Data Inicial</label>
-						<input type="text" class="form-control input-sm" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
+						<input type="text" class="form-control input-xs" name="dataIni" id="dataIni" size="11" onkeypress="mascaras.mascara(this,'data')" value="<?=date("d/m/Y", mktime(0,0,0,date("m"), 01, date("Y"))) ?>">
 						
 						<label for="dataFim">Data Final</label>
-						<input type="text" class="form-control input-sm" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
+						<input type="text" class="form-control input-xs" name="dataFim" id="dataFim" size="11" onkeypress="mascaras.mascara(this,'data')">
 						
 						
 						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/fluxo.php?acao=listar&cliente=' + $('clienteBusca').value + '&tipo=' + $('tipoBusca').value + '&tipoFluxo=' + $('tipoFluxoBusca').value + '&dataIni=' + $('dataIni').value + '&dataFim=' + $('dataFim').value ,1,'Saida');">Buscar</button>
