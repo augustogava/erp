@@ -32,7 +32,7 @@ if($acao=="alt"){
 			mysql_query("INSERT INTO login (funcionario,usuario,senha,nivel) VALUES('$id','$usuario','$senha','$nivel')");
 			print "<script>window.location='index.php?url=clientes.php'</script>";
 		}else{
-			print "<script>window.alert('Nome de usuário já existente!');window.location='index.php?url=clientes.php&acao=log&id=$id'</script>";
+			print "<script>window.alert('Nome de usuï¿½rio jï¿½ existente!');window.location='index.php?url=clientes.php&acao=log&id=$id'</script>";
 		}
 	}
 }else if($acao=="exc"){
@@ -43,7 +43,7 @@ if($acao=="alt"){
 }
 ?>
 <? if($acao=="entrar"){ ?>
-<h1>Funcionários</h1>
+<h1>Funcionï¿½rios</h1>
 <div align="center">
   <table width="417" border="0" align="left" cellpadding="0" cellspacing="0">
     <tr>

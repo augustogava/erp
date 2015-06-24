@@ -32,6 +32,7 @@ class DataGrid {
 	private $Exportar = 1;
 	private $Colunas = array();
 	private $collumnsCurrency = array();
+	private $collumnsAlias = array();
 	private $CadastroExtra = array();
 	private $camposIgnoradosVisu = array("");
 	private $camposIgnorados = array("");
@@ -232,14 +233,16 @@ class DataGrid {
     	$Campos = $this->ConexaoSQL->pegaCamposTabela($this->getTabela());
     	
     	$Paramentros = $this->montaParametros();
-    	
+//     	print_r($Campos);
     	//percorre campos
     	for($i=0; $i<count($Campos); $i++){
 	    	
 			if(!is_int($Campos[$i]) && eregi("^img",$Campos[$i])  ){
+				$alias = $this->getCurrencyAlias( $Campos[$i] );
+				$fildName = empty($alias) ? ucfirst($Campos[$i]) : $alias;
 				
 				$this->Html .= "<tr>";
-    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst($Campos[$i]).":</b></td>";
+    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".$fildName.":</b></td>";
 				
 				if(!empty($RetornoConsulta[0][$Campos[$i]])){
 					$imagem = "../img_prod/".$RetornoConsulta[0][$Campos[$i]];
@@ -256,7 +259,13 @@ class DataGrid {
 				
 			}else if(!is_int($Campos[$i]) && $Campos[$i]!="id" && !eregi("^id",$Campos[$i]) && !in_array($Campos[$i] , $this->camposIgnorados) ){
 				$this->Html .= "<tr>";
-    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>".ucfirst(Formata::removeCaractres($Campos[$i])).":</b></td>";
+				$alias = $this->getCurrencyAlias( $Campos[$i] );
+				$fildName = empty($alias) ? ucfirst(Formata::removeCaractres($Campos[$i])) : $alias;
+				
+    			$this->Html .= "	<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\">
+    									<b>".$fildName.":</b>
+    								</td>";
+    			
 				if($ret = $this->verificaFiltro($Campos[$i])){
 					$valida = "onkeypress=\"mascaras.mascara(this,'".$ret["nome"]."')\" maxlength=\"".$ret["tamanho"]."\"";
 				}else if($ret = $this->verificaFiltroReal($Campos[$i])){
@@ -277,9 +286,8 @@ class DataGrid {
 
 				if(count($camposData) > 0){
 					
-					$scriptAdicionar = "
-							var campos = new Array('".implode("','", $camposData)."');
-							dataGrid.addCalendar(campos); ";
+					$scriptAdicionar = "var campos = new Array('".implode("','", $camposData)."');
+										dataGrid.addCalendar(campos); ";
 				}
 				$requerido = $this->verificaRequerido($this->getTabela(), $Campos[$i]);
 				
@@ -302,12 +310,15 @@ class DataGrid {
 				}
 				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Campos[$i]);
 				
+				$alias = $this->getCurrencyAlias( $Campos[$i] );
+				$fildName = empty($alias) ? ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ) : $alias;
+				
 				$QueryRel = " SELECT * FROM ".$NomeTabelaRelacionamento." ".$queyCidade." Order By id ASC ";
 				$CamposRela = $this->ConexaoSQL->pegaCamposTabela($NomeTabelaRelacionamento);
     			$RetornoConsultaRel = $this->ConexaoSQL->Select($QueryRel);
     			if(count($RetornoConsultaRel) > 0){
 					$this->Html .= "<tr>";
-	    			$this->Html .= "<td align=\"right\"><b>".ucfirst( Formata::removeCaractres($NomeTabelaRelacionamento) ).":</b></td>";
+	    			$this->Html .= "<td align=\"right\"><b>".$fildName.":</b></td>";
 	    			$this->Html .= "<td align=\"left\" id = \"td_".$Campos[$i]."\" class=\"form-inline\" style=\"font-size: 13px;\">";
 	    			$this->Html .= "<select class=\"form-control input-xs size-80\" name=\"edit_".$Campos[$i]."\" id=\"edit_".$Campos[$i]."\" title=\"".ucfirst($NomeTabelaRelacionamento)."\" class=\"".$requerido."\" ".$onChangeEstado.">";
 		    		//Se for campo tipo cidade e estiver inserindo nao exibi alista intera
@@ -611,9 +622,11 @@ class DataGrid {
     			$Teste[$i][$NomeColuna] = $RetornoConsulta[$i][$Ind];
     			$Teste[$i][$Ind] = $RetornoConsulta[$i][$Ind];
 				//Formata Valor e data
+				$nomeColunasExplode = explode(".",$NomeColuna);
+				
 				if(eregi("data", $this->pegaNomeCampo($NomeColuna))){
 					$valorFormatado =  Formata::banco2date($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
-				}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || $this->isCurrencyCollumn($NomeColuna)){
+				}else if(eregi("preco", $this->pegaNomeCampo($NomeColuna)) || ( count($nomeColunasExplode) > 1 &&  $this->isCurrencyCollumn($nomeColunasExplode[1]) ) ) {
 					$valorFormatado =  Formata::banco2valor($RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)]);
 				}else{
 					$valorFormatado =  $RetornoConsulta[$i][$this->pegaNomeCampo($NomeColuna)];
@@ -700,17 +713,24 @@ class DataGrid {
     	
     	//$this->Html .= "<td width=\"5%\" class=\"ColunaInfo\">#</td>";
     	@$Porcentagem = 80 / count($this->Colunas);
-    	    	
     	foreach($this->Colunas as $Ind=>$NomeColuna){
     		$Nome = explode(".",$NomeColuna);
-    		$NomeTabelaRelacionamento = "";
-    		//Busca relacionamento outra tabela 
-    		if( eregi("^id_", $Nome[1]) ){
-    				$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
-    		}//end if eregi
-    		$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
-    		if( eregi("^id", $Nome[1]) ){
-    			$NomeNovo = "C�digo";
+
+    		$alias = $this->getCurrencyAlias($Nome[1]);
+    		if( empty( $alias ) ){
+	    		$NomeTabelaRelacionamento = "";
+	    		//Busca relacionamento outra tabela 
+	    		if( eregi("^id_", $Nome[1]) ){
+	    			$NomeTabelaRelacionamento = Formata::retornaNomeTabela($Nome[1]);
+	    		}
+	    		
+	    		if( eregi("^id", $Nome[1]) ){
+	    			$NomeNovo = "Código";
+	    		}
+	    		
+	    		$NomeNovo = (!empty($NomeTabelaRelacionamento)) ? $NomeTabelaRelacionamento : $Nome[1];
+    		}else{
+    			$NomeNovo = $alias;
     		}
     		$this->Html .= "<td width=\"".$Porcentagem."%\" onClick=\"dataGrid.Enviar('&flagOrdena=S&ordena=".$Nome[0].".".$Nome[1].$Paramentros."');\">";
     		$this->Html .= ucfirst($NomeNovo);
@@ -987,6 +1007,15 @@ class DataGrid {
      */
     public function montaParametros(){
     	$Colunas = implode(",",$this->Colunas);
+//     	$collumnsAlias = implode(",", $this->collumnsAlias );
+    	
+    	for($i=0; $i<count($this->collumnsAlias); $i++){
+    		$collumnsAlias .= ",";
+    		foreach( $this->collumnsAlias[$i] as $k=>$v){
+    			$collumnsAlias .= $k."||".$v;
+    		}
+    		
+    	}
     	$collumnsCurrency = implode(",",$this->collumnsCurrency);
     	$camposIgnorados = implode(",",$this->camposIgnorados);
     	
@@ -1001,7 +1030,7 @@ class DataGrid {
 			
 		}
 		
-    	return "&query=".$this->Query."&camposIgnorados=".$camposIgnorados."&collumnsCurrency=".$collumnsCurrency."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
+    	return "&query=".$this->Query."&camposIgnorados=".$camposIgnorados."&collumnsAlias=".$collumnsAlias."&collumnsCurrency=".$collumnsCurrency."&colunas=".$Colunas."&tabela=".$this->getNomeTable()."&editar=".$this->getEditar()."&excluir=".$this->getExcluir()."&nomedivpai=".$this->getNomeDivPai()."&tabelaBD=".$this->getTabela()."&limite=".$this->getLimite()."&limiteatual=".$this->getLimiteAtual()."&buscaItens=".$this->getBusca()."&cadastroExtras=".$cadastroExtra;
     }//end function
 	
 	/*
@@ -1066,6 +1095,22 @@ class DataGrid {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Returns if Collums is currency type.
+	 *
+	 * @param unknown $collumn
+	 */
+	public function getCurrencyAlias($collumn){
+		foreach($this->collumnsAlias as $v){
+			foreach($v as $campo=>$alias){
+				if( $collumn == $campo)
+					return $alias;
+			}
+		}
+	
+		return "";
 	}
 	
 	 /**
@@ -1322,6 +1367,17 @@ class DataGrid {
 		$this->collumnsCurrency[] = $coluna;
 	}
 	
+	/**
+	 *
+	 * Set Colunas alias.
+	 *
+	 * @param Colunas a user usada
+	 *
+	 */
+	public function addCollumnsAlias($coluna){
+		$this->collumnsAlias[] = $coluna;
+	}
+	
 	public function addCamposIgnorados($coluna){
 		$this->camposIgnorados[] = $coluna;
 	}
@@ -1334,6 +1390,15 @@ class DataGrid {
 	 */
 	public function getCollumnsCurrency(){
 		return $this->collumnsCurrency;
+	}
+	
+	/**
+	 *
+	 * Set colunas.
+	 *
+	 */
+	public function getCollumnsAlias(){
+		return $this->collumnsAlias;
 	}
 	
 	/**

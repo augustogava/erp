@@ -9,6 +9,10 @@ $Main->DataGrid->setColunas("bancos.nome.like");
 $Main->DataGrid->setColunas("bancos.agencia.like");
 $Main->DataGrid->setColunas("bancos.conta.like");
 $Main->DataGrid->setColunas("bancos.saldo_atual");
+$Main->DataGrid->addCollumnsCurrency("saldo_atual");
+
+$Main->DataGrid->addCollumnsAlias( array("saldo_atual"=>"Saldo Atual") );
+
 $Main->DataGrid->setLimite(15);
 $Main->DataGrid->setEditar("1");
 $Main->DataGrid->setExcluir("1");

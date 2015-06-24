@@ -1,5 +1,4 @@
 <?
-header("Content-Type: text/html;  charset=ISO-8859-1",true);
 include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
@@ -49,7 +48,7 @@ if($_GET["acao"] == "listar"){
 				
 				
                                 if($fluxo[$j]->getStatus() == 0){
-                                    $class = "linhaVermelha";
+                                    $class = "linha linhaVermelho";
                                 }else{
                                		if(($j%2) == 0){
 										$class = "linha";

@@ -1,5 +1,4 @@
 <?
-header("Content-Type: text/html;  charset=ISO-8859-1",true);
 include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
@@ -38,16 +37,15 @@ if($_GET["acao"] == "listarBancos"){
 				<?=$Main->Formata->banco2valor($bancos[$j]->getSaldo());?>
 			</td>
 		</tr>
-                <?
-                    }
+		<?
+        }
 		?>
 	</tbody>
 </table>
 <?
 }else if($_GET["acao"] == "listar"){
 	$fluxo = $Main->FluxoBanco->pegaFluxoBanco($_GET["idBanco"], $_GET["tipo"], $_GET["tipoFluxo"], $_GET["dataIni"], $_GET["dataFim"], "");
-	print_r($fluxo);
-        $bancos = $Main->FluxoBanco->pegaBancos($_GET["idBanco"]);
+    $bancos = $Main->FluxoBanco->pegaBancos($_GET["idBanco"]);
 	
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
@@ -57,15 +55,9 @@ if($_GET["acao"] == "listarBancos"){
 			<td width="10%" >Tipo</td>
 			<td width="10%" >Valor</td>
 			<td width="10%" >&nbsp;</td>
-                        <td width="10%" >&nbsp;</td>
+            <td width="10%" >&nbsp;</td>
 			<td width="10%" >Data</td>
-                        <td width="4%">
-                            &nbsp;
-			</td>
-			<td width="4%">
-                            &nbsp;
-			</td>
-			<td width="4%">
+			<td width="10%">
                             &nbsp;
 			</td>
 		</tr>
@@ -86,39 +78,38 @@ if($_GET["acao"] == "listarBancos"){
 
 		?>
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$class?>" width="60%">
-			<td width="40%"  id="linhaDataGrid_<?=$j?>_0">
+			<td   id="linhaDataGrid_<?=$j?>_0">
 				<?=$fluxo[$j]->getOcorrencia()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getTipoFluxoNome()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getValor()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($fluxo[$j]->getTipo()==1)?"Entrada":"Saída";?>
 			</td>
                         <td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($fluxo[$j]->getStatus()==0)?"Não Pago":"Pago";?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getData()?>
 			</td>
-                        <td width="4%" align="center">
-                            <? if($fluxo[$j]->getStatus() == 0){ ?>
-                                <a href ="#" onclick="pagarBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>)">
-					<img border="0" src="layout/incones/pagar.png" alt="Pagar"/>
+			<td align="right">
+
+				<? if($fluxo[$j]->getStatus() == 0){ ?>
+				<a title="Pagar" onclick="pagarBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>)" href="#">
+					<span class="glyphicon fa fa-usd" aria-hidden="true"></span>
 				</a>
-                            <? } ?>
-			</td>
-			<td width="4%" align="center"> 
-				<a href="javascript:doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=editar&id=<?=$fluxo[$j]->getId()?>&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(550);">
-					<img border="0" src="layout/incones/edit.png"/>
+				<? } ?>
+				
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/fluxoBanco.php?acao=editar&id=<?=$fluxo[$j]->getId()?>&idBanco=<?=$_GET["idBanco"]?>',1,'addPop');addPop_open(550);">
+					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td  width="4%" align="center"> 
-				<a onclick="if(confirm('Deseja Excluir?')){ excluirFluxoBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png"/>
+
+				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxoBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -144,7 +135,7 @@ if($_GET["acao"] == "listarBancos"){
 	}
 
 	$tipoFluxo = $Main->FluxoBanco->pegaTipoFluxo();
-        $bancos    = $Main->FluxoBanco->pegaBancos($_GET["idBanco"]);
+	$bancos    = $Main->FluxoBanco->pegaBancos($_GET["idBanco"]);
 ?>
 <div style="border: 1px solid rgb(235, 240, 253);" id="SaidaPop">
 	<form id="edit" name="edit" action="">

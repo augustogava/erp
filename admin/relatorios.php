@@ -4,7 +4,7 @@ include "includes/Main.class.php";
 $Main = new Main ();
 $Main->Seguranca->verificaLogado ();
 
-$dados = $Main->Relatorios->geraRelatorio ( $_GET );
+$dados = $Main->Relatorios->geraRelatorio( $_GET );
 // print_r($dados);
 ?>
 <!DOCTYPE html>
@@ -105,9 +105,10 @@ body {
 	font-weight: bold;
 	height:26px;
 }
-.table-relatorio{ border-spacing: 0;   box-sizing: border-box;  border-collapse: collapse; width: 99%; margin: 5px auto 0 auto; }
-.table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px; border-bottom: 1px solid #ddd; }
-.table-relatorio .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 20px; border-bottom: 1px solid #ddd; }
+.table-relatorio{ border-spacing: 0;   box-sizing: border-box;   width: 99%; margin: 5px auto 0 auto; }
+.table-relatorio td { border: 1px solid rgba(3, 163, 236, 0.12); font-size:12px;   padding: 3px; } 
+.table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px;  }
+.table-relatorio .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 20px; }
 .table-relatorio .linha:hover, .table-relatorio .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
 </style>
 </head>
@@ -132,14 +133,21 @@ body {
 	<table style="" class="table-relatorio">
 		<tr class="titulo">
 			<?
+			$index = 0;
 			for($i = 0; $i < count ( $dados ["campos"] ); $i ++) {
-				print "<td>" . ucfirst ( $dados ["campos"] [$i] ) . "</td>";
+				$width = ( $dados["width"][$index] ? "width='".$dados["width"][$index]."'" : "");
+				$align = ( $dados["align"][$index] ? $dados["align"][$index] : "left");
+				print "<td ".$width." style=\"text-align:".$align.";\">" . ucfirst ( $dados ["campos"] [$i] ) . "</td>";
+				
+				$index++;
 			}
 			?>
 			</tr>
 			
 			<?
 			if(  count( $dados ["valores"] ) > 0 ){
+// 				print "<pre>";
+// 				print_r( $dados ["valores"] );
 				for($i = 0; $i < count ( $dados ["valores"] ); $i ++) {
 					if(($i%2) == 0){
 						$linha = "linha";
@@ -151,9 +159,11 @@ body {
 					if (isset ( $dados ["valores"] [$i] )) {
 						$index = 0;
 						foreach ( $dados ["valores"] [$i] as $campo => $valor ) {
-							$align = ( $dados ["align"][$index++]);
+							$align = ( $dados ["align"][$index] ? $dados ["align"][$index] : "left");
 							
-							print "<td style=\"text-align:".$align.";font-size:11px;\">&nbsp;" . $valor . "</td>";
+							print "<td style=\"text-align:".$align.";\">" . $valor . "</td>";
+							
+							$index++;
 						}
 					}
 					print "</tr>";

@@ -1,5 +1,4 @@
 <?
-header("Content-Type: text/html;  charset=ISO-8859-1",true);
 include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
@@ -14,24 +13,18 @@ if($_GET["acao"] == "listar"){
 
     <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
-            <tr class="tituloSemLinha">
-		<td width="10%" colspan="7">Vencidas</td>
+            <tr class="titulo">
+		<td width="10%" colspan="8">Vencidas</td>
             </tr>
-		<tr class="tituloRed">
+		<tr class="titulo">
 			<td width="20%">Ocorrencia</td>
 			<td width="20%">&nbsp;</td>
 			<td width="10%" >Tipo</td>
 			<td width="10%" >Valor</td>
 			<td width="10%" >&nbsp;</td>
-                        <td width="10%" >Status</td>
+			<td width="10%" >Status</td>
 			<td width="10%" >Data</td>
-			<td width="4%">
-				
-			</td>
-                        <td width="4%">
-
-			</td>
-			<td width="4%">
+			<td width="10%">
 				
 			</td>
 		</tr>
@@ -46,25 +39,25 @@ if($_GET["acao"] == "listar"){
 					$total += $Main->Formata->valor2banco($fluxo[$j]->getValor());
 				}*/
                             $total += $Main->Formata->valor2banco($fluxo[$j]->getValor());
-                            $class = "linhaVermelha";
+                            $class = "linhaVermelho";
 		?>
-		<tr id="linhaDataGrid_<?=$j?>" class="<?=$class?>" width="60%">
-			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
+		<tr id="linhaDataGrid_<?=$j?>" class="linha <?=$class?>" width="60%">
+			<td id="linhaDataGrid_<?=$j?>_0">
 				<?=$fluxo[$j]->getOcorrencia()?>
 			</td>
-			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
+			<td  id="linhaDataGrid_<?=$j?>_0">
 				<?=($fluxo[$j]->getClienteNome() != "") ? $fluxo[$j]->getClienteNome() : $fluxo[$j]->getFornecedorNome();?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getTipoFluxoNome()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getValor()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($fluxo[$j]->getTipo()==1)?"Entrada":"Sa?da";?>
 			</td>
-                        <td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+            <td  id="linhaDataGrid_<?=$j?>_1"/>
                             
                          <?
                          if($fluxo[$j]->getStatus()==0){
@@ -79,22 +72,20 @@ if($_GET["acao"] == "listar"){
                          ?>
                         
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxo[$j]->getData()?>
 			</td>
-			<td width="4%" align="center"> 
-				<a href ="#" onclick="pagarContasReceber(<?=$fluxo[$j]->getId()?>)">
-					<img border="0" src="layout/incones/pagar.png" alt="Pagar"/>
+			<td align="right"> 
+				<a title="Pagar" onclick="pagarContasReceber(<?=$fluxo[$j]->getId()?>)" href="#">
+					<span class="glyphicon fa fa-usd" aria-hidden="true"></span>
 				</a>
-			</td>
-                        <td width="4%" align="center">
-				<a href ="#" onclick="descontarContasReceber(<?=$fluxo[$j]->getId()?>)">
-					<img border="0" src="layout/incones/desconto.png" alt="Descontar" width="32px"/>
+				
+				<a title="Descontar" onclick="descontarContasReceber(<?=$fluxo[$j]->getId()?>)" href="#" >
+					<span class="glyphicon fa fa-money" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td  width="4%" align="center"> 
-				<a onclick="if(confirm('Deseja Cancelar?')){ excluirContasReceber(<?=$fluxo[$j]->getId()?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png" alt="Cancelar"/>
+
+				<a title="Excluir" onclick="if(confirm('Deseja Cancelar?')){ excluirContasReceber(<?=$fluxo[$j]->getId()?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -109,7 +100,7 @@ if($_GET["acao"] == "listar"){
 		?>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="2" style="text-align:left;">Total</td>
-			<td width="100%" class="ColunaInfo" colspan="8" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
+			<td width="100%" class="ColunaInfo" colspan="6" style="text-align:left;<?=$fonte?>" ><?=$Main->Formata->banco2valor($total)?></td>
 		</tr>
 	</tbody>
     </table>
@@ -118,39 +109,26 @@ if($_GET["acao"] == "listar"){
 
     <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
-            <tr class="tituloSemLinha">
-		<td width="10%" colspan="7">Contas receber</td>
+            <tr class="titulo">
+		<td width="10%" colspan="8">Contas receber</td>
             </tr>
-		<tr class="tituloRed">
+		<tr class="titulo">
 			<td width="20%">Ocorrencia</td>
 			<td width="20%">&nbsp;</td>
 			<td width="10%" >Tipo</td>
 			<td width="10%" >Valor</td>
 			<td width="10%" >&nbsp;</td>
-                        <td width="10%" >Status</td>
+			<td width="10%" >Status</td>
 			<td width="10%" >Data</td>
-			<td width="4%">
-				
-			</td>
-                        <td width="4%">
-
-			</td>
-			<td width="4%">
+			<td width="10%">
 				
 			</td>
 		</tr>
 		<?
 			$total = 0;
 			for($j=0; $j<count($fluxoReceber); $j++){
-				/*if($fluxo[$j]->getTipo() == 2){
-					$class = "linhaVermelha";
-					$total -= $Main->Formata->valor2banco($fluxo[$j]->getValor());
-				}else{
-					$class = "linha";
-					$total += $Main->Formata->valor2banco($fluxo[$j]->getValor());
-				}*/
-                            if($fluxoReceber[$j]->getStatus() == 0)
-                                $total += $Main->Formata->valor2banco($fluxoReceber[$j]->getValor());
+				if($fluxoReceber[$j]->getStatus() == 0)
+                	$total += $Main->Formata->valor2banco($fluxoReceber[$j]->getValor());
 
 			if(($j%2) == 0){
 				$class = "linha";
@@ -159,22 +137,22 @@ if($_GET["acao"] == "listar"){
 			}
 		?>
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$class?>" width="60%">
-			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
+			<td  id="linhaDataGrid_<?=$j?>_0">
 				<?=$fluxoReceber[$j]->getOcorrencia()?>
 			</td>
-			<td width="20%"  id="linhaDataGrid_<?=$j?>_0">
+			<td id="linhaDataGrid_<?=$j?>_0">
 				<?=($fluxoReceber[$j]->getClienteNome() != "") ? $fluxoReceber[$j]->getClienteNome() : $fluxoReceber[$j]->getFornecedorNome();?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxoReceber[$j]->getTipoFluxoNome()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxoReceber[$j]->getValor()?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=($fluxoReceber[$j]->getTipo()==1)?"Entrada":"Sa?da";?>
 			</td>
-                        <td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
                             <?
                          if($fluxoReceber[$j]->getStatus()==0){
                             print "Não Paga";
@@ -187,41 +165,39 @@ if($_GET["acao"] == "listar"){
                          }
                          ?>
 			</td>
-			<td width="10%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td  id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$fluxoReceber[$j]->getData()?>
 			</td>
-			<td width="4%" align="center">
-			<?
-                         if($fluxoReceber[$j]->getStatus()==0){
-                        ?>
-                            <a href ="#"onclick="if(confirm('Deseja Pagar?')){doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=<?=$fluxoReceber[$j]->getId()?>', 1, '');refreshContasReceber();}">
-					<img border="0" src="layout/incones/pagar.png" alt="Pagar"/>
+			<td align="right">
+                <?
+				if($fluxoReceber[$j]->getStatus()==0){
+                ?>
+                <a title="Pagar" onclick="if(confirm('Deseja Pagar?')){doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=<?=$fluxoReceber[$j]->getId()?>', 1, '');refreshContasReceber();}" href="#">
+					<span class="glyphicon fa fa-usd" aria-hidden="true"></span>
 				</a>
-                        <?
-                         }
-                        ?>
-			</td>
-                        <td width="4%" align="center">
-                        <?
-                            if($fluxoReceber[$j]->getStatus()==0){
-                        ?>
-                                <a href ="#" onclick="if(confirm('Deseja Descontar?')){doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=<?=$fluxoReceber[$j]->getId()?>', 1, '');refreshContasReceber();}">
-					<img border="0" src="layout/incones/desconto.png" alt="Descontar" width="32px"/>
+				<?
+                }
+                ?>
+                
+				<?
+				if($fluxoReceber[$j]->getStatus()==0){
+                ?>
+				<a title="Descontar" onclick="if(confirm('Deseja Descontar?')){doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=<?=$fluxoReceber[$j]->getId()?>', 1, '');refreshContasReceber();}" href="#" >
+					<span class="glyphicon fa fa-money" aria-hidden="true"></span>
 				</a>
-                        <?
-                            }
-                        ?>
-			</td>
-			<td  width="4%" align="center">
-			<?
-                        if($fluxoReceber[$j]->getStatus()==0){
-                        ?>
-                            <a onclick="if(confirm('Deseja Cancelar?')){ excluirContasReceber(<?=$fluxoReceber[$j]->getId()?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png" alt="Cancelar"/>
+				<?
+                }
+                ?>
+                
+				<?
+				if($fluxoReceber[$j]->getStatus()==0){
+                ?>
+				<a title="Excluir" onclick="if(confirm('Deseja Cancelar?')){ excluirContasReceber(<?=$fluxoReceber[$j]->getId()?>);  }" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
-                        <?
-                        }
-                        ?>
+				<?
+                }
+                ?>
 			</td>
 		</tr>
 		<?

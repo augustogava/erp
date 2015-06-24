@@ -1,30 +1,19 @@
 <?php
-class A
-{
-	function foo()
-	{
-		if (isset($this)) {
-			echo '$this foi definido (';
-			echo get_class($this);
-			echo ")<br>";
-		} else {
-			echo "<br>$this não foi definido.<br>";
-		}
-	}
-}
+include "includes/Main.class.php";
+// chama a classe principal
+$Main = new Main();
 
-class B
-{
-	function bar()
-	{
-		A::foo();
-	}
-}
-
-// $a = new A();
-// $a->foo();
-// A::foo();
-$b = new B();
-$b->bar();
-// B::bar();
+$tipos = $Main->Padrao->pegaStatusOrdemProducao();
+print_r($tipos);
 ?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=8">
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	</head>
+	<body>
+	ção
+	</body>
+</html>
+		

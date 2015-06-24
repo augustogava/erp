@@ -2,7 +2,8 @@
 <html lang="en">
 	<head>
 		<title> ERP <? print $Main->Padrao->nome; ?></title>
-		<meta charset="utf-8">
+<!-- 		<meta charset="utf-8"> -->
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 		<meta name="description" content="<? print $Main->Padrao->descricao; ?>" >
 		<meta name="keywords" content="<? print $Main->Padrao->keywords; ?>" >
 		<meta name="author" content="Augusto Gava" >

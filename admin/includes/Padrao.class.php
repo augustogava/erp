@@ -128,5 +128,26 @@ class Padrao {
 		return $Retorno;
 	}
 	
+	/**
+	 * retorna lista tipos de produtos
+	 *@return array .
+	 */
+	public function pegaStatusOrdemProducao( $id = "" ){
+	
+		if(!empty($id))
+			$where = " AND status_ordem.id = '".$id."'";
+	
+		$RetornoConsultaRel = $this->ConexaoSQL->Select("SELECT * FROM status_ordem WHERE 1 ".$where." ORDER By status_ordem.nome ASC");
+			
+		if(count($RetornoConsultaRel) > 0){
+			for($j=0; $j<count($RetornoConsultaRel); $j++){
+				$Retorno[$j] = new PropriedadesPadrao();
+				$Retorno[$j]->setId($RetornoConsultaRel[$j]["id"]);
+				$Retorno[$j]->setNome($RetornoConsultaRel[$j]["nome"]);
+			}
+		}
+		return $Retorno;
+	}
+	
 }
 ?>

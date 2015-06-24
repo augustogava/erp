@@ -5,7 +5,7 @@ $Main = new Main();
 $Main->Seguranca->verificaLogado();
 
 
-$tipos = $Main->Padrao->pegaTiposProdutos();
+$tipos = $Main->Padrao->pegaStatusOrdemProducao();
 
 include($Main->Configuracoes->HEADER_NADMIN);  
 ?>
@@ -19,23 +19,23 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	</div>
 	<div id="content">
 	
-			<div class="linhaConfig" id="busca">  
+		<div class="linhaConfig" id="busca">  
 			<form id="edit" name="edit" >	
 				<div class="form-group form-inline">
-						<label for="filtro1">Tipo de Produto</label>
-						<select id="filtro1" name="filtro1" class="form-control input-xs normalsizeSelect">
-							<option value="0">Selecione</option>
-							<?
-							for($j=0; $j<count($tipos); $j++){
-							?>					
-							<option value="<?=$tipos[$j]->getId()?>"><?=$tipos[$j]->getNome()?></option>
-							<?
-							}
-							?>
-						</select>
-					</div>
+					<label for="filtro1">Tipo de Produto</label>
+					<select id="filtro1" name="filtro1" class="form-control input-xs normalsizeSelect">
+						<option value="0">Selecione</option>
+						<?
+						for($j=0; $j<count($tipos); $j++){
+						?>					
+						<option value="<?=$tipos[$j]->getId()?>"><?=$tipos[$j]->getNome()?></option>
+						<?
+						}
+						?>
+					</select>	
+				</div>
 			</form>
-			</div>
+		</div>
 				<button type="button" onClick="abrirRelatorioProducao();" class="btn btn-success" style="margin-top: 10px">Gerar Relatório</button>
 				
 					<script>

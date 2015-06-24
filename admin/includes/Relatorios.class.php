@@ -6,12 +6,9 @@
 #  Author: Augusto Gava (augusto_gava@msn.com)
 #  Criado: 14/01/08
 #  
-#  Classe respons�vel pelos relat�rios
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
- * Classe respons�vel pelos relat�rios
- *
  * @author Augusto Gava
  * @version 1.0
  */
@@ -22,12 +19,12 @@ class Relatorios {
     /**
 	 * M�todo construtor.
 	 *
-	 * @param ConexaoSQL conex�o com o banco.
+	 * @param ConexaoSQL conexão com o banco.
 	 * @param Formata formata dados.
 	 */
     public function Relatorios($ConexaoSQL){
         $this->ConexaoSQL = $ConexaoSQL;
-    }//end function
+    }
     
     /**
      *
@@ -71,7 +68,7 @@ class Relatorios {
 		
 		return $retorno;
         
-    }//end function
+    }
 
  	/**
      *
@@ -83,45 +80,133 @@ class Relatorios {
     private function montaRelProducao($parametros){
 
     	if(!empty($parametros["filtro1"])){
-    		$where = " AND produtos.id_tipo_produdo = '".$parametros["filtro1"]."'";
+    		$where = " AND op.id_status_ordem = '".$parametros["filtro1"]."'";
     	}
 
+    	$query = "SELECT SUM(op.qtd) as total, c.nome, pr.codigo, p.id from ordem_producao as op
+					INNER JOIN pedidos p ON p.id = op.id_pedido 
+					INNER JOIN clientes c ON c.id = p.id_clientes
+					INNER JOIN produtos pr ON pr.id = op.id_produtos
+    				WHERE 1 ".$where." 
+					group by p.id_clientes , op.id_produtos
+					ORDER By pr.codigo, c.nome";
+				
+		$retorno["titulo"] = "Ordem de Produção ";
+		
+	    $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
+    	
+	    $retorno["campos"][] = "Produto";
+		if(count($RetornoConsultaRel) > 0){
+			for($j=0; $j<count($RetornoConsultaRel); $j++){
+				$campos[$RetornoConsultaRel[$j]["nome"]] = $RetornoConsultaRel[$j]["nome"];
+				
+				$dados[$RetornoConsultaRel[$j]["codigo"]][ $RetornoConsultaRel[$j]["nome"] ] = $RetornoConsultaRel[$j]["total"];
+			}
+
+			$retorno["align"][] = "left";
+			foreach ( $campos  as $c ){ 
+				$retorno["campos"][] = $c;
+				$retorno["align"][] = "center";
+			}
+			
+			
+			$i = 0;
+			foreach ( $dados  as $produto => $clientes ) {
+				$retorno["valores"][$i][ "Produto" ] = $produto;
+				
+				for($j=0; $j<count($retorno["campos"]); $j++){
+					if( $retorno["campos"][$j] == "Produto")
+						continue;
+					
+					
+					$retorno["valores"][$i][ $retorno["campos"][$j] ] = $clientes[ $retorno["campos"][$j] ];
+					
+					$total[$produto] += $clientes[ $retorno["campos"][$j] ];
+					$totalCliente[$retorno["campos"][$j]] += $clientes[ $retorno["campos"][$j] ];
+				}
+				
+				$i++;
+			}
+
+			/** COLUNA TOTAL */
+			$retorno["align"][] = "right";
+			$retorno["campos"][] = "Total";
+			$i=0;
+			foreach ( $total as $t ) {
+				$retorno["valores"][$i++]["Total"] = "<b>".$t."</b>";
+			}
+			
+			/** Linha TOTAL */
+			$i = count($retorno["valores"]);
+			for($j=0; $j<count($retorno["campos"]); $j++){
+				if( $retorno["campos"][$j] == "Produto"){
+					$retorno["valores"][$i]["Produto"] = "<b>Total</b>";
+					continue;
+				}
+			
+				$retorno["valores"][$i][ $retorno["campos"][$j]] = "<b>".$totalCliente[ $retorno["campos"][$j] ]."</b>";
+				$totalGeral +=  $totalCliente[ $retorno["campos"][$j] ];
+				
+			}
+			
+// 			print_r($retorno["align"]);
+			$retorno["valores"][$i]["Total"] = "<b>".$totalGeral."</b>";
+			
+		}
+		
+		return $retorno;
+        
+    }
+    
+    /**
+     *
+     * Monta query de busca de producao.
+     *
+     *@param parametros GET
+     *@return query
+     */
+    private function montaRelEstoqueAtual($parametros){
+    
+    	if(!empty($parametros["filtro1"])){
+    		$where = " AND produtos.id_tipo_produdo = '".$parametros["filtro1"]."'";
+    	}
+    
     	$query = "SELECT produtos.codigo, produtos.nome, produtos.descricao, tipo_produdo.nome as tipo_produto,
 					produtos.estoque_atual, case when os.qtd is null then 0 else sum(os.qtd) end as qtd
-					FROM produtos 
-					INNER JOIN tipo_produdo ON tipo_produdo.id = produtos.id_tipo_produdo 
+					FROM produtos
+					INNER JOIN tipo_produdo ON tipo_produdo.id = produtos.id_tipo_produdo
 					LEFT JOIN ordem_separacao os on os.id_produtos = produtos.id
-					WHERE 
+					WHERE
 					case when os.id IS NOT NULL then
 						os.id_status_separacao = 1
-						else 
+						else
 						1
 					end
     				".$where."
 					group by produtos.id
 					ORDER By produtos.id_tipo_produdo, produtos.codigo
 					;";
-				
-		$retorno["titulo"] = "Produção ";
-		
-	    $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
-    	
+    
+    	$retorno["titulo"] = "Estoque Atual";
+    
+    	$RetornoConsultaRel = $this->ConexaoSQL->Select($query);
+    	 
     	$retorno["campos"] = array("Tipo", "Produto", "Estoque Atual" ,"Em Separaçao", "Total");
     	$retorno["align"] = array("center", "left", "center" ,"center", "center");
-    	
-		if(count($RetornoConsultaRel) > 0){
-			for($j=0; $j<count($RetornoConsultaRel); $j++){
-				$retorno["valores"][$j]["Tipo"] = $RetornoConsultaRel[$j]["tipo_produto"];
-				$retorno["valores"][$j]["Produto"] = $RetornoConsultaRel[$j]["codigo"]." - ".$RetornoConsultaRel[$j]["descricao"];
-				$retorno["valores"][$j]["Estoque"] = $RetornoConsultaRel[$j]["estoque_atual"];
-				$retorno["valores"][$j]["Separacao"] = $RetornoConsultaRel[$j]["qtd"];
-				$retorno["valores"][$j]["Total"] = $RetornoConsultaRel[$j]["estoque_atual"]-$RetornoConsultaRel[$j]["qtd"];
-			}
-		}
-		
-		return $retorno;
-        
-    }//end function
+    	 
+    	if(count($RetornoConsultaRel) > 0){
+    		for($j=0; $j<count($RetornoConsultaRel); $j++){
+    			$retorno["valores"][$j]["Tipo"] = $RetornoConsultaRel[$j]["tipo_produto"];
+    			$retorno["valores"][$j]["Produto"] = $RetornoConsultaRel[$j]["codigo"]." - ".$RetornoConsultaRel[$j]["descricao"];
+    			$retorno["valores"][$j]["Estoque"] = $RetornoConsultaRel[$j]["estoque_atual"];
+    			$retorno["valores"][$j]["Separacao"] = $RetornoConsultaRel[$j]["qtd"];
+    			$retorno["valores"][$j]["Total"] = $RetornoConsultaRel[$j]["estoque_atual"]-$RetornoConsultaRel[$j]["qtd"];
+    		}
+    	}
+    
+    	return $retorno;
+    
+    }
     
     /**
      *
@@ -152,12 +237,14 @@ class Relatorios {
                                 AND A.id_status_pedidos IN (4, 5)
                                                 GROUP By B.id_produtos Order By media DESC";
 				
-	$retorno["titulo"] = "Curva ABC ";
+		$retorno["titulo"] = "Curva ABC";
 
         //print $query;
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
 
-    	$retorno["campos"] = array("Produto","%", "Qtd");
+    	$retorno["campos"] = array("Produto", "Quantidade", "%");
+    	$retorno["width"] = array("75%", "15%", "10%");
+    	$retorno["align"] = array("left", "right", "right" );
     	
         if(count($RetornoConsultaRel) > 0){
             for($j=0; $j<count($RetornoConsultaRel); $j++){
@@ -169,7 +256,7 @@ class Relatorios {
 
         return $retorno;
         
-    }//end function
+    }
     
      /**
      *
@@ -186,9 +273,17 @@ class Relatorios {
 																				WHERE fluxo.tipo = '1' 
 																				AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
 																				AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59' GROUP By pedidos.id ORDER By valor DESC";
+        	
+        	$queryTotal = "SELECT sum(fluxo.valor) as total FROM fluxo
+																				INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
+																				WHERE fluxo.tipo = '1'
+																				AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																				AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'";
 																				
         	$retorno["titulo"] = "Faturamento por Pedido";
-        	$retorno["campos"] = array("Có�digo","valor");
+        	
+        	$retorno["campos"] = array("Código", "Faturamento", "% Participação");
+			$retorno["width"] = array("60%", "20%", "20%");
 			
         }else if($parametros["filtro1"] == 2){
 			$query = "SELECT SUM(fluxo.valor) as valor, representantes.nome as nome FROM fluxo 
@@ -198,8 +293,16 @@ class Relatorios {
 																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
 																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'
 																					GROUP By representantes.id ORDER By valor DESC";
+			$queryTotal = "SELECT SUM(fluxo.valor) as total, representantes.nome as nome FROM fluxo
+																					INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
+																					LEFT JOIN representantes ON representantes.id = pedidos.id_representantes
+																					WHERE fluxo.tipo = '1'
+																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'";
+			
 			$retorno["titulo"] = "Faturamento por Representante";
-			$retorno["campos"] = array("Nome","valor");
+			$retorno["campos"] = array("Nome", "Faturamento", "% Participação");
+			$retorno["width"] = array("60%", "20%", "20%");
 			
         }else if($parametros["filtro1"] == 3){
 			$query = "SELECT SUM(fluxo.valor) as valor, clientes.nome as nome FROM fluxo 
@@ -209,31 +312,45 @@ class Relatorios {
 																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
 																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59'
 																					GROUP By clientes.id ORDER By valor DESC";
+			
+			$queryTotal = "SELECT SUM(fluxo.valor) as total from fluxo
+																					INNER JOIN pedidos ON pedidos.id = fluxo.id_pedidos
+																					LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
+																					WHERE fluxo.tipo = '1'
+																					AND fluxo.data >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
+																					AND fluxo.data <= '".Formata::date2banco($parametros["filtro3"])." 23:59:59' ";
+
 			$retorno["titulo"] = "Faturamento por Cliente";
-			$retorno["campos"] = array("Nome","valor");
+			$retorno["campos"] = array("Nome", "Faturamento", "% Participação");
+			$retorno["width"] = array("60%", "20%", "20%");
         }
+
+        $retorno["align"] = array("left", "right", "right" );
         
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
-    	
+        $RetornoConsultaRelTotal = $this->ConexaoSQL->Select($queryTotal);
+        
 		if(count($RetornoConsultaRel) > 0){
 			for($j=0; $j<count($RetornoConsultaRel); $j++){
 				if(empty($RetornoConsultaRel[$j]["nome"])){
 					$RetornoConsultaRel[$j]["nome"] = "Sem Representante";
 				}
-				$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["nome"]. str_replace("<br>", "", $RetornoConsultaRel[$j]["ocorrencia"]);
-				$retorno["valores"][$j][1] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+				$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["nome"]." - ". str_replace("<br>", "", $RetornoConsultaRel[$j]["ocorrencia"]);
+				$retorno["valores"][$j][1] = "R$ ".Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+				$retorno["valores"][$j][2] = round( ( ( $RetornoConsultaRel[$j]["valor"]*100) / $RetornoConsultaRelTotal[0]["total"] ), 1)." %";
 				
 				$total += $RetornoConsultaRel[$j]["valor"];
 			}
 			
 			$retorno["valores"][$j][0] = "<b>Total:</b> ";
-			$retorno["valores"][$j][1] = "<b>".Formata::banco2valor( $total )."<b>";
+			$retorno["valores"][$j][1] = "<b>R$ ".Formata::banco2valor( $total )."<b>";
+			$retorno["valores"][$j][2] = "<b>100%<b>";
 				
 		}
 		
 		return $retorno;
         
-    }//end function
+    }
     
      /**
      *
@@ -379,7 +496,7 @@ class Relatorios {
 		
 		return $retorno;
         
-    }//end function
+    }
 
      /**
      *
@@ -393,44 +510,44 @@ class Relatorios {
 		$retorno["titulo"] = "Fluxo ";
 
     	$retorno["campos"] = array("Mes", "Entrada", "Saida", "Total");
-	for($i=0; $i<=12; $i++){
-	        
-			$dtInicio = date("Y-m-d", mktime(0,0,0, date("m")+$i, 1, date("Y")));
-			$dtFim = date("Y-m-d", mktime(0,0,0, date("m")+$i+1, 1-1, date("Y")));
-			
-			$query = "SELECT fluxo.* FROM fluxo WHERE status = '0' AND data >= '".$dtInicio." 00:00:01' AND data <= '".$dtFim." 23:59:59' ORDER By fluxo.data ASC ";
-	        $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
-	        
-	        if(count($RetornoConsultaRel) > 0){
-	           $totalEntrada = 0;
-	           $totalSaida = 0;
-	           
-	           for($j=0; $j<count($RetornoConsultaRel); $j++){
-	                if($RetornoConsultaRel[$j]["tipo"] == 1){
-	                    $totalEntrada += $RetornoConsultaRel[$j]["valor"];
-	                }else{
-	                    $totalSaida -= $RetornoConsultaRel[$j]["valor"];
-	                }
-	            }
-	            $totalEntradaEnd += $totalEntrada;
-	            $totalSaidaEnd   += $totalSaida;
+		for($i=0; $i<=12; $i++){
+		        
+				$dtInicio = date("Y-m-d", mktime(0,0,0, date("m")+$i, 1, date("Y")));
+				$dtFim = date("Y-m-d", mktime(0,0,0, date("m")+$i+1, 1-1, date("Y")));
+				
+				$query = "SELECT fluxo.* FROM fluxo WHERE status = '0' AND data >= '".$dtInicio." 00:00:01' AND data <= '".$dtFim." 23:59:59' ORDER By fluxo.data ASC ";
+		        $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
+		        
+		        if(count($RetornoConsultaRel) > 0){
+		           $totalEntrada = 0;
+		           $totalSaida = 0;
+		           
+		           for($j=0; $j<count($RetornoConsultaRel); $j++){
+		                if($RetornoConsultaRel[$j]["tipo"] == 1){
+		                    $totalEntrada += $RetornoConsultaRel[$j]["valor"];
+		                }else{
+		                    $totalSaida -= $RetornoConsultaRel[$j]["valor"];
+		                }
+		            }
+		            $totalEntradaEnd += $totalEntrada;
+		            $totalSaidaEnd   += $totalSaida;
+	
+		            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
+		            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntrada);
+		            $retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaida);
+		            $retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaida+$totalEntrada) );
+		        }else{
+		            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
+		            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor(0);
+		            $retorno["valores"][$i]["Saida"] = Formata::banco2valor(0);
+		            $retorno["valores"][$i]["Total"] = Formata::banco2valor(0);
+		        }
+		}
 
-	            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
-	            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntrada);
-	            $retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaida);
-	            $retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaida+$totalEntrada) );
-	        }else{
-	            $retorno["valores"][$i]["Mes"] = date("m/Y", mktime(0,0,0, date("m")+$i, 1, date("Y")));
-	            $retorno["valores"][$i]["Entrada"] = Formata::banco2valor(0);
-	            $retorno["valores"][$i]["Saida"] = Formata::banco2valor(0);
-	            $retorno["valores"][$i]["Total"] = Formata::banco2valor(0);
-	        }
-	}
-
-	  $retorno["valores"][$i]["Mes"] = "Total";
-	  $retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntradaEnd);
-	  $retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaidaEnd);
-	  $retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaidaEnd + $totalEntradaEnd) );
+		$retorno["valores"][$i]["Mes"] = "Total";
+		$retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntradaEnd);
+		$retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaidaEnd);
+		$retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaidaEnd + $totalEntradaEnd) );
 
         return $retorno;
 
@@ -493,6 +610,7 @@ class Relatorios {
                 $retorno["valores"][$j]["Data"] = "";
                 $retorno["valores"][$j]["Total"] = "";
                 $retorno["valores"][$j]["Comissao"] =  Formata::banco2valor( $tot );
+                $retorno["valores"][$j]["%"] = "";
         }
 		
         return $retorno;
@@ -511,6 +629,8 @@ class Relatorios {
         	$dados = $this->montaRelClientes($parametros);
         }else if($parametros["cadastro"] == "producao"){
         	$dados = $this->montaRelProducao($parametros);
+        }else if($parametros["cadastro"] == "estoqueAtual"){
+        	$dados = $this->montaRelEstoqueAtual($parametros);
         }else if($parametros["cadastro"] == "curvaabc"){
         	$dados = $this->montaRelCurvaAbc($parametros);
         }else if($parametros["cadastro"] == "faturamento"){

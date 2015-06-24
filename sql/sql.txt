@@ -60,6 +60,11 @@ UPDATE `menus` SET `id_menus`='3' WHERE `id`='10';
 
 UPDATE `status_ordem` SET `nome`='Produzindo' WHERE `id`='4';
 
-ALTER TABLE `stoik`.`produtos` 
+ALTER TABLE `produtos` 
 ADD COLUMN `preco_custo` DOUBLE NOT NULL DEFAULT 0 AFTER `preco_4`,
 ADD COLUMN `peso` DOUBLE NOT NULL DEFAULT 0 AFTER `preco_custo`;
+
+
+INSERT INTO `menus` (`id_menus`, `nome`, `link`, `alt`, `data_cad`, `ordem`) VALUES ('18', 'Estoque Atual', 'rel_estoque_atual.php', 'Estoque Atual', '2015-06-24', '3');
+
+ALTER DATABASE `stoik` CHARSET = UTF8 COLLATE = utf8_general_ci;

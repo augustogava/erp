@@ -204,11 +204,13 @@ function abrirRelatorioClientes(){
 
 function abrirRelatorioProducao(){
 	var filtro1 = $('filtro1').value;
-	console.info( filtro1 );
-	window.open('relatorios.php?cadastro=producao&filtro1=' + filtro1, "janelaRelatorios", "height=600, width=800, scrollbars=yes, resizable=yes");
-
+	window.open('relatorios.php?cadastro=producao&filtro1=' + filtro1, "janelaRelatorios", "height=600, width=" + jQuery(document).width() + ", scrollbars=yes, resizable=yes");
 }
 
+function abrirRelatorioEstoqueAtual(){
+	var filtro1 = $('filtro1').value;
+	window.open('relatorios.php?cadastro=estoqueAtual&filtro1=' + filtro1, "janelaRelatorios", "height=600, width=800, scrollbars=yes, resizable=yes");
+}
 
 
 function abrirRelatorioCurvaABC(){

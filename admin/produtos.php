@@ -9,7 +9,12 @@ $Main->DataGrid->setColunas("produtos.codigo");
 $Main->DataGrid->setColunas("produtos.nome.like");
 $Main->DataGrid->setColunas("produtos.descricao.like");
 $Main->DataGrid->setColunas("produtos.estoque_atual");
+
 $Main->DataGrid->addCadastroExtra(array('list-ul', '../produtos_composicao.php'));
+
+$Main->DataGrid->addCollumnsAlias( array("img"=>"Foto Produto") );
+$Main->DataGrid->addCollumnsAlias( array("estoque_atual"=>"Estoque") );
+
 $Main->DataGrid->setLimite(15);
 $Main->DataGrid->setEditar("1");
 $Main->DataGrid->setExcluir("1");

@@ -1,5 +1,4 @@
 <?
-header("Content-Type: text/html;  charset=ISO-8859-1",true);
 include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
@@ -11,6 +10,12 @@ $Main->DataGrid->setQuery($_GET["query"]);
 $Colunas = explode(",", $_GET["colunas"]);
 foreach($Colunas as $Valor){
 	$Main->DataGrid->setColunas($Valor);
+}
+
+$collumnsAlias = explode(",", $_GET["collumnsAlias"]);
+foreach($collumnsAlias as $Valor){
+	$p = explode("||", $Valor);
+	$Main->DataGrid->addCollumnsAlias( array($p[0]=>$p[1]) );
 }
 
 $collumnsCurrency = explode(",", $_GET["collumnsCurrency"]);

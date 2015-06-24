@@ -1,16 +1,8 @@
 <?
-
-// header("Content-Type: text/html;  charset=UTF-8",true);
-// header("Content-Type: text/html;  charset=ISO-8859-1");
-
 include "../includes/Main.class.php";
-
 // chama a classe principal
-
 $Main = new Main();
-
 $Main->Seguranca->verificaLogado();
-
 
 if($_GET["acao"] == "listar"){
 

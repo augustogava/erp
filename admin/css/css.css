@@ -812,7 +812,7 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 .table-striped>tbody>tr:nth-of-type(odd){  background: #1E96CD; }
 
 .linhaVerde{ background: rgba(4, 215, 47, 0.2) !important; }
-.linhaVermelho{ background: rgba(218, 8, 8, 0.14) !important;   border: 1px solid rgba(255, 0, 0, 0.26) !important; }
+.linhaVermelho{ background: rgba(218, 8, 8, 0.14) !important;  }
 
 .table-erp .linha{ background: rgba(30, 150, 205, 0.1) ;	height: 40px; border-bottom: 1px solid #ddd; }
 
@@ -847,8 +847,6 @@ select.form-control{ width: 80%;   margin-left: 5px;   max-width: 80%; }
 
 .table-erp{   border: 1px solid #DDD; }
 .form-group { margin-bottom: 0px !important; }
-
-.linhaVermelha{ background: #FFC5C4 !important; height:32px; border-bottom: 1px solid #FFD9D8; }
 
 .autocomplete{ margin-left: 6px; border: 1px solid #DDD; }
 

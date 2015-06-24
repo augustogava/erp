@@ -72,6 +72,7 @@ class ConexaoMySQL extends banco_query {
     */
 	public function conecta(){	
         $this->ConexaoSQL = mysql_connect($this->Configuracoes->MySQLHostname, $this->Configuracoes->MySQLUsuario, $this->Configuracoes->MySQLSenha) or $erro="Nao foi possivel Conectar!";
+        mysql_set_charset('utf8', $this->ConexaoSQL);
         if (!mysql_select_db($this->Configuracoes->BancodeDados, $this->ConexaoSQL)) {
             $this->Erro("Ocorreu um erro ao conectar no banco de dados. ".mysql_error());
             return false;
