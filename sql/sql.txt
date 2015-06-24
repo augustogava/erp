@@ -110,3 +110,5 @@ INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('3', 'Boleto');
 INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('4', 'Transf. Bancária');
 
 ALTER TABLE `stoik`.`fluxo`  ADD COLUMN `id_tipo_pagamentos` INT(10) NOT NULL AFTER `id_bancos`;
+
+INSERT INTO `stoik`.`menus` (`id_menus`, `nome`, `link`, `alt`, `data_cad`, `ordem`) VALUES ('4', 'Tipo Pagamentos', 'tipo_pagamentos.php', 'Tipo Pagamentos', '2015-06-24', '4');
