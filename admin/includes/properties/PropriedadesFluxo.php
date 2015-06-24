@@ -22,11 +22,15 @@ class PropriedadesFluxo{
 	var $fornecedorNome;
 	var $tipoFluxoId;
 	var $tipoFluxoNome;
+	var $bancoId;
+	var $bancoNome;
+	var $tipoPagamentoId;
+	var $tipoPagamentoNome;
 	var $tipo;
 	var $ocorrencia;
 	var $valor;
 	var $data;
-        var $status;
+    var $status;
 	
 	public function getId(){
 		return $this->id;
@@ -116,12 +120,50 @@ class PropriedadesFluxo{
 		$this->data = $data;
 	}
 
-        public function getStatus(){
+    public function getStatus(){
 		return $this->status;
 	}
 	
 	public function setStatus($status){
 		$this->status = $status;
 	}
+	
+	
+	
+	
+	public function getBancoId(){
+		return $this->bancoId;
+	}
+	
+	public function setBancoId($bancoId){
+		$this->bancoId = $bancoId;
+	}
+	
+	public function getBancoNome(){
+		return $this->bancoNome;
+	}
+	
+	public function setBancoNome($bancoNome){
+		$this->bancoNome = $bancoNome;
+	}
+	
+	
+	
+	public function getTipoPagamentoId(){
+		return $this->tipoPagamentoId;
+	}
+	
+	public function setTipoPagamentoId($tipoPagamentoId){
+		$this->tipoPagamentoId = $tipoPagamentoId;
+	}
+	
+	public function getTipoPagamentoNome(){
+		return $this->tipoPagamentoNome;
+	}
+	
+	public function setTipoPagamentoNome($tipoPagamentoNome){
+		$this->tipoPagamentoNome = $tipoPagamentoNome;
+	}
+	
 }
 ?>

@@ -68,3 +68,45 @@ ADD COLUMN `peso` DOUBLE NOT NULL DEFAULT 0 AFTER `preco_custo`;
 INSERT INTO `menus` (`id_menus`, `nome`, `link`, `alt`, `data_cad`, `ordem`) VALUES ('18', 'Estoque Atual', 'rel_estoque_atual.php', 'Estoque Atual', '2015-06-24', '3');
 
 ALTER DATABASE `stoik` CHARSET = UTF8 COLLATE = utf8_general_ci;
+
+UPDATE `stoik`.`produtos` SET `nome`='Válvula Injetora' WHERE `id`='103';
+
+ALTER TABLE `fluxo`  ADD COLUMN `id_bancos` INT(11) NOT NULL AFTER `id_compras`;
+ALTER TABLE `tipo_fluxo` ADD COLUMN `id_tipo_fluxo_movimentos` INT(10) NOT NULL AFTER `id`;
+
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='1' WHERE `id`='1';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='1' WHERE `id`='8';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='2';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='3';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='4';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='5';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='6';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='7';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='9';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='10';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='11';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='12';
+UPDATE `tipo_fluxo` SET `id_tipo_fluxo_movimentos`='2' WHERE `id`='13';
+
+CREATE TABLE `tipo_fluxo_movimentos` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Cadastro tipos movimentos';
+
+
+INSERT INTO `tipo_fluxo_movimentos` (`id`, `nome`) VALUES ('1', 'Receitas');
+INSERT INTO `tipo_fluxo_movimentos` (`id`, `nome`) VALUES ('2', 'Despesas');
+
+CREATE TABLE `tipo_pagamentos` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Cadastro tipos pagamentos';
+
+INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('1', 'Dinheiro');
+INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('2', 'Cartão de crédito');
+INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('3', 'Boleto');
+INSERT INTO `tipo_pagamentos` (`id`, `nome`) VALUES ('4', 'Transf. Bancária');
+
+ALTER TABLE `stoik`.`fluxo`  ADD COLUMN `id_tipo_pagamentos` INT(10) NOT NULL AFTER `id_bancos`;

@@ -142,7 +142,7 @@ class FluxoBanco  {
 	public function salvarFluxo($id = "", $idBanco = "", $tipo = "", $tipoFluxo = "", $ocorrencia = "", $valor = "", $data = "", $numeroDoc = ""){
 
             if(empty($id)){
-                    $this->ConexaoSQL->insertQuery("INSERT INTO fluxo_bancos (id_bancos, tipo, id_tipo_fluxo, ocorrencia, valor, numero_doc, data) VALUES('".$idBanco."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".Formata::valor2banco($valor)."', '".$numeroDoc."', '".Formata::date2banco($data)."')");
+            	$this->ConexaoSQL->insertQuery("INSERT INTO fluxo_bancos (id_bancos, tipo, id_tipo_fluxo, ocorrencia, valor, numero_doc, data) VALUES('".$idBanco."', '".$tipo."', '".$tipoFluxo."', '".$ocorrencia."','".Formata::valor2banco($valor)."', '".$numeroDoc."', '".Formata::date2banco($data)."')");
             }else{
             	$valorantigo = $this->pegaFluxoBanco("", "", "", "", "", $id);
                 $valorNovo = Formata::valor2banco($valor) - Formata::valor2banco($valorantigo[0]->getValor());
@@ -152,25 +152,23 @@ class FluxoBanco  {
                 
 	}
 
-        /**
+	/**
 	* pagar.
 	* @param $id
 	*/
 	public function pagarFluxo($id = "", $info = ""){
 
-            $fluxo = $this->pegaFluxoBanco("", "", "", "", "", $id);
+		$fluxo = $this->pegaFluxoBanco("", "", "", "", "", $id);
+		$valor = Formata::valor2banco($fluxo[0]->getValor());
 
-            $valor = Formata::valor2banco($fluxo[0]->getValor());
-
-            if($fluxo[0]->getTipo() == 1){
-                $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".$valor."') WHERE id = '".$fluxo[0]->getBancoId()."'");
-            }else{
-                $this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual - '".$valor."') WHERE id = '".$fluxo[0]->getBancoId()."'");
-            }
-
-            $this->ConexaoSQL->updateQuery("UPDATE fluxo_bancos SET status = '1', ocorrencia = '".$fluxo[0]->getOcorrencia()."\n".$info."' WHERE id = '".$id."'");
+        if($fluxo[0]->getTipo() == 1){
+        	$this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual + '".$valor."') WHERE id = '".$fluxo[0]->getBancoId()."'");
+		}else{
+        	$this->ConexaoSQL->updateQuery("UPDATE bancos SET saldo_atual = ( saldo_atual - '".$valor."') WHERE id = '".$fluxo[0]->getBancoId()."'");
+		}
 		
-
+		$this->ConexaoSQL->updateQuery("UPDATE fluxo_bancos SET status = '1', ocorrencia = '".$fluxo[0]->getOcorrencia()."\n".$info."' WHERE id = '".$id."'");
+		
 	}
 	
 	/**

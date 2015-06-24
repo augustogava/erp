@@ -5,9 +5,9 @@ $Main = new Main();
 $Main->Seguranca->verificaLogado();
 
 if($_REQUEST["acao"] == "pagar"){
-	$Main->Fluxo->pagarFluxo($_GET["id"], $_GET["info"]);
+	$Main->Fluxo->pagarFluxo($_GET["id"], $_GET["tipoPagamento"], $_GET["ocorrencia"], $_GET["valor"]);
 }else if($_REQUEST["acao"] == "descontar"){
-	$Main->Fluxo->descontarFluxo($_GET["id"], $_GET["info"]);
+	$Main->Fluxo->descontarFluxo($_GET["id"], $_GET["tipoPagamento"], $_GET["ocorrencia"], $_GET["valor"]);
 }else if($_REQUEST["acao"] == "cancelar"){
 	$Main->Fluxo->cancelarFluxo($_GET["id"]);
 }

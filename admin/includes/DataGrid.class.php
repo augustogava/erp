@@ -218,9 +218,9 @@ class DataGrid {
 			$AcaoT = $Acao;
 		}
 
-		$this->Html .= "<td align=\"left\" width=\"30%\"><h2>".ucfirst($AcaoT)." Cadastro</h2> </td>";
+		$this->Html .= "<td align=\"left\" width=\"30%\" style=\"padding-bottom: 5px;\"><h2>".ucfirst($AcaoT)." Cadastro</h2> </td>";
 		if($Acao != "adicionarPopUp")
-			$this->Html .= "<td align=\"right\" width=\"70%\"><button type=\"button\" class=\"btn btn-default btn-xs\" aria-label=\"Left Align\" onclick=\"addPop_close();\"><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> Fechar </button></td>";
+			$this->Html .= "<td align=\"right\" width=\"70%\" style=\"padding-bottom: 5px;\"><button type=\"button\" class=\"btn btn-default btn-xs\" aria-label=\"Left Align\" onclick=\"addPop_close();\"><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> Fechar </button></td>";
 		$this->Html .= "</tr>";
     	$this->Html .= "<tr><td align=\"center\" colspan=\"3\" id=\"erro\" style=\"color:red;\">&nbsp;</td></tr>";
     	
@@ -366,7 +366,7 @@ class DataGrid {
 					$valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
 					
 					$this->Html .= "<tr>";
-	    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>C�digo:</b></td>";
+	    			$this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>Código:</b></td>";
 	    			$this->Html .= "<td align=\"left\" >".$valorFormatado."<td>";
 	    			$this->Html .= "</tr>";
 				}
@@ -401,7 +401,7 @@ class DataGrid {
     	$this->Html .= "</table>  </form> <script>
 					document.onkeypress = function (evt){
 						if(main.procuraTecla(evt,13)){
-							if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'efeitos','erro')){ ".$FuncJava." } }
+							//if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'efeitos','erro')){ ".$FuncJava." } }
 						}
 					} 
 					".$scriptAdicionar."
@@ -454,7 +454,7 @@ class DataGrid {
 				}//end if eregi
 				$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
 				if( eregi("^id", $Nome[1]) ){
-					$NomeNovo = "C�digo";
+					$NomeNovo = "Código";
 				}
 				$this->Html .= "<td width=\"".$Porcentagem."\" >";
 				$this->Html .= ucfirst($NomeNovo);
@@ -527,7 +527,7 @@ class DataGrid {
 				}//end if eregi
 				$NomeNovo = ($NomeTabelaRelacionamento) ? $NomeTabelaRelacionamento : $Nome[1];
 				if( eregi("^id", $Nome[1]) ){
-					$NomeNovo = "C�digo";
+					$NomeNovo = "Código";
 				}
 				
 				$this->Html .= "\"".ucfirst($NomeNovo)."\",";
@@ -951,7 +951,7 @@ class DataGrid {
                         $valorFormatado =  $RetornoConsulta[0][$Campos[$i]];
 
                     $this->Html .= "<tr>";
-                    $this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>C�digo:</b></td>";
+                    $this->Html .= "<td align=\"right\" style=\"font-family: Lucida Grande, Verdana, sans-serif;font-size:11px;color: #383d44;\"><b>Código:</b></td>";
                     $this->Html .= "<td align=\"left\" >".$valorFormatado."<td>";
                     $this->Html .= "</tr>";
                 }

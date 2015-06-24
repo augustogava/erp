@@ -65,7 +65,7 @@ if($_GET["acao"] == "listarBancos"){
 			$total = 0;
 			for($j=0; $j<count($fluxo); $j++){
                             if($fluxo[$j]->getStatus() == 0){
-                                $class = "linhaVermelha";
+                                $class = "linha linhaVermelha";
                                 if($fluxo[$j]->getTipo() == 1){
                                     $soma += $Main->Formata->valor2banco( $fluxo[$j]->getValor() );
                                 }else{
@@ -142,17 +142,17 @@ if($_GET["acao"] == "listarBancos"){
 		<table cellspacing="5" cellpadding="0" border="1" align="left" width="100%">
 			<tbody>
 				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
-                                    <td align="left" width="40%">
+                                    <td align="left" width="30%" style="padding-bottom: 5px;">
                                             <h2>Adicionar Cadastro</h2>
                                     </td>
-                                    <td align="right" width="60%">
+                                    <td align="right" width="70%" style="padding-bottom: 5px;">
                                         <button type="button" class="btn btn-default btn-xs" aria-label="Left Align" onclick="addPop_close();">
 										  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Fechar
 										</button>
                                     </td>
 				</tr>
 				<tr>
-					<td align="center" style="color: red;" id="erro" colspan="3"></td>
+					<td align="center" style="color: red;" id="erro" colspan="3">&nbsp;</td>
 				</tr>
                                 <tr>
                                     <td align="right"><b>Banco:</b></td>
@@ -200,13 +200,13 @@ if($_GET["acao"] == "listarBancos"){
 				<tr>
 					<td align="right"><b>Ocorrencia:</b></td>
 					<td align="left">
-					  <textarea name="ocorrencia" id="ocorrencia" class="form-control input-xs" rows="6" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getOcorrencia()?></textarea>
+					  <textarea name="ocorrencia" id="ocorrencia" class="form-control" rows="6" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getOcorrencia()?></textarea>
 					</td>
 				</tr>
                                 <tr>
 					<td align="right"><b>Numero Doc.:</b></td>
 					<td align="left">
-					  <textarea name="numero_doc" id="numero_doc" class="form-control input-xs" rows="1" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getNumeroDoc()?></textarea>
+					  <textarea name="numero_doc" id="numero_doc" class="form-control" rows="1" cols="50" wrap="off"><? if($fluxo[0]) print $fluxo[0]->getNumeroDoc()?></textarea>
 					</td>
 				</tr>
 				<tr>

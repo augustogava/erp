@@ -310,13 +310,11 @@ if($_GET["acao"] == "listarCotacao"){
 
 				<tr style="border-bottom: 1px solid #ddd; height: 30px;">
 
-					<td align="left" width="40%">
-
+					<td align="left" width="30%" style="padding-bottom: 5px;">
 						<h2>Adicionar Cadastro</h2>
-
 					</td>
 
-					<td align="right" width="60%">
+					<td align="right" width="70%" style="padding-bottom: 5px;">
 						<button type="button" class="btn btn-default btn-xs" aria-label="Left Align" onclick="addPop_close();">
 						  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Fechar
 						</button>
@@ -326,7 +324,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 				<tr>
 
-					<td align="center" style="color: red;" id="erro" colspan="3"></td>
+					<td align="center" style="color: red;" id="erro" colspan="3">&nbsp;</td>
 
 				</tr>
 

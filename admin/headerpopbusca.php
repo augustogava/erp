@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title> :: MultPoint Admin :: <? print $Main->Padrao->nome; ?></title>
-		<meta charset="utf-8">
+	<title> ERP <? print $Main->Padrao->nome; ?></title>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 	<meta name="description" content="<? print $Main->Padrao->descricao; ?>" >
 	<meta name="keywords" content="<? print $Main->Padrao->keywords; ?>" >
 	<meta name="author" content="Augusto Gava" >
