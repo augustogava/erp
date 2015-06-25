@@ -239,7 +239,7 @@ class Relatorios {
 				
 		$retorno["titulo"] = "Curva ABC";
 
-        //print $query;
+//         print $query;
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
 
     	$retorno["campos"] = array("Produto", "Quantidade", "%");
@@ -247,11 +247,18 @@ class Relatorios {
     	$retorno["align"] = array("left", "right", "right" );
     	
         if(count($RetornoConsultaRel) > 0){
+            $sQtd=0;
             for($j=0; $j<count($RetornoConsultaRel); $j++){
                 $retorno["valores"][$j]["Produto"] = $RetornoConsultaRel[$j]["codigo"]." - ".$RetornoConsultaRel[$j]["descricao"];
-                $retorno["valores"][$j]["%"] = round($RetornoConsultaRel[$j]["media"], 2);
                 $retorno["valores"][$j]["Qtd"] = $RetornoConsultaRel[$j]["qtdTotal"];
+                $retorno["valores"][$j]["%"] = round($RetornoConsultaRel[$j]["media"], 2);
+                
+                $sQtd += $RetornoConsultaRel[$j]["qtdTotal"];
             }
+            
+            $retorno["valores"][$j][0] = "<b>Total:</b> ";
+            $retorno["valores"][$j][1] = "<b>".$sQtd."<b>";
+            $retorno["valores"][$j][2] = "<b>100%<b>";
         }
 
         return $retorno;
@@ -363,7 +370,7 @@ class Relatorios {
 
         if($parametros["filtro1"] == 1){
 
-            $query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, produtos.codigo as nome FROM pedidos
+            $query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, produtos.codigo as nome FROM pedidos
                     INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
                     INNER JOIN produtos ON produtos.id = pedidos_itens.id_produtos
                     WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
@@ -372,10 +379,13 @@ class Relatorios {
                     GROUP By produtos.id ORDER By valor DESC ";
 
         	$retorno["titulo"] = "Vendas por Produto";
-        	$retorno["campos"] = array("Descricao","valor");
+        	
+        	$retorno["campos"] = array("Descricao", "Quantidade", "valor");
+        	$retorno["align"] = array("left", "right", "right");
+        	$retorno["width"] = array("60%", "15%", "25%");
 			
         }else if($parametros["filtro1"] == 2){
-			$query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, representantes.nome as nome,
+			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, representantes.nome as nome,
                         SUM( CASE WHEN pedidos.comissao = 0 THEN
                                                                                 ( (pedidos_itens.total * 7) / 100 )
                                                                         ELSE
@@ -391,10 +401,13 @@ class Relatorios {
                                 GROUP By representantes.id ORDER By valor DESC";
 
 			$retorno["titulo"] = "Vendas por Representante";
-			$retorno["campos"] = array("Nome","valor", "Comissão");
+			$retorno["campos"] = array("Nome", "Quantidade", "Valor", "Comissão");
+			
+			$retorno["align"] = array("left", "right", "right", "right");
+			$retorno["width"] = array("60%", "10%", "15%", "15%");
 			
         }else if($parametros["filtro1"] == 3){
-			$query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, clientes.nome as nome,
+			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, clientes.nome as nome,
                             								SUM(CASE WHEN pedidos.comissao = 0 THEN
                                                                                 ( (pedidos_itens.total * 7) / 100 )
                                                                         ELSE
@@ -410,7 +423,10 @@ class Relatorios {
                                     GROUP By clientes.id ORDER By valor DESC";
 
 			$retorno["titulo"] = "Vendas por Clientes";
-			$retorno["campos"] = array("Nome","valor");
+			$retorno["campos"] = array("Nome", "Quantidade", "Valor");
+			
+			$retorno["align"] = array("left", "right", "right");
+			$retorno["width"] = array("60%", "15%", "20%");
         }else if($parametros["filtro1"] == 4){
 			if( !empty($parametros["filtro4"]))
 				$cli = "AND pedidos.id_clientes = '".$parametros["filtro4"]."'";
@@ -427,17 +443,24 @@ class Relatorios {
 
 			$retorno["titulo"] = "Vendas por Clientes";
 			$retorno["campos"] = array("Codigo","Cliente","Qtd","Valor Total", "Data");
+			
+			$retorno["align"] = array("left", "left", "right", "right", "right");
+			$retorno["width"] = array("10%", "40%", "10%", "16%", "20%");
         }
         
         if($parametros["filtro1"] == 5){
         	$retorno["titulo"] = "Vendas Mensalmente";
 			$retorno["campos"] = array("Mes", "Qtd", "Valor");
+			
+			$retorno["align"] = array("left", "right", "right");
+			$retorno["width"] = array("70%", "10%", "30%");
+			
 			$j = 0;
 			for($i=1; $i<=date("m"); $i++){
 				$dtInicio 	= date("Y-m-d", mktime(0, 0, 0 , $i, 1, date("Y") ));
 				$dtFim 		= date("Y-m-d", mktime(0, 0, 0 , $i+1, 1-1, date("Y") ));
 				
-				$query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor,SUM(pedidos_itens.qtd) as qtd 
+				$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor,SUM(pedidos_itens.qtd) as qtd 
                             								
                                     FROM pedidos
                                     LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
@@ -451,7 +474,7 @@ class Relatorios {
 				
 				$retorno["valores"][$j][0] = $this->mes[$i-1];
 				$retorno["valores"][$j][1] = $RetornoConsultaRel[0]["qtd"];
-				$retorno["valores"][$j++][2] = Formata::banco2valor($RetornoConsultaRel[0]["valor"]);
+				$retorno["valores"][$j++][2] = "R$ ".Formata::banco2valor($RetornoConsultaRel[0]["valor"]);
 				
 			}
         	
@@ -465,7 +488,7 @@ class Relatorios {
 						$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["codigo"];
 						$retorno["valores"][$j][1] = $RetornoConsultaRel[$j]["nome"];
 						$retorno["valores"][$j][2] = $RetornoConsultaRel[$j]["qtd"];
-						$retorno["valores"][$j][3] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+						$retorno["valores"][$j][3] = "R$ ".Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
 						$retorno["valores"][$j][4] = Formata::banco2date($RetornoConsultaRel[$j]["data_fechada"]);
 						
 						$totalValor += $RetornoConsultaRel[$j]["valor"];
@@ -475,21 +498,30 @@ class Relatorios {
 					$retorno["valores"][$j][0] = "<b>Total:</b> ";
 					$retorno["valores"][$j][1] = "";
 					$retorno["valores"][$j][2] = "<b>".$totalQtd."<b>";
-					$retorno["valores"][$j][3] = "<b>".Formata::banco2valor( $totalValor )."<b>";
+					$retorno["valores"][$j][3] = "<b>R$".Formata::banco2valor( $totalValor )."<b>";
 					$retorno["valores"][$j][4] = "";
 				}else{
 					for($j=0; $j<count($RetornoConsultaRel); $j++){
 						$retorno["valores"][$j][0] = $RetornoConsultaRel[$j]["nome"];
-						$retorno["valores"][$j][1] = Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+						$retorno["valores"][$j][1] = $RetornoConsultaRel[$j]["qtdTotal"];
+						$retorno["valores"][$j][2] = "R$ ".Formata::banco2valor($RetornoConsultaRel[$j]["valor"]);
+						
 						if($parametros["filtro1"] == 2){
-							$retorno["valores"][$j][2] = Formata::banco2valor($RetornoConsultaRel[$j]["comissao"]);
+							$retorno["valores"][$j][3] = "R$ ".Formata::banco2valor($RetornoConsultaRel[$j]["comissao"]);
 						}
 						
 						$total += $RetornoConsultaRel[$j]["valor"];
+						$totalQtd += $RetornoConsultaRel[$j]["qtdTotal"];
+						$totalComissao += $RetornoConsultaRel[$j]["comissao"];
 					}
 					
 					$retorno["valores"][$j][0] = "<b>Total:</b> ";
-					$retorno["valores"][$j][1] = "<b>".Formata::banco2valor( $total )."<b>";				
+					$retorno["valores"][$j][1] = "<b>".$totalQtd."<b>";
+					$retorno["valores"][$j][2] = "<b>R$ ".Formata::banco2valor( $total )."<b>";		
+
+					if($parametros["filtro1"] == 2){
+						$retorno["valores"][$j][3] = "<b>R$ ".Formata::banco2valor( $totalComissao )."<b>";
+					}
 				}
 			}
         }
@@ -510,6 +542,8 @@ class Relatorios {
 		$retorno["titulo"] = "Fluxo ";
 
     	$retorno["campos"] = array("Mes", "Entrada", "Saida", "Total");
+    	$retorno["align"] = array("left", "right", "right" ,"right");
+    	$retorno["width"] = array("40%", "20%", "20%", "20%");
 		for($i=0; $i<=12; $i++){
 		        
 				$dtInicio = date("Y-m-d", mktime(0,0,0, date("m")+$i, 1, date("Y")));
@@ -544,10 +578,10 @@ class Relatorios {
 		        }
 		}
 
-		$retorno["valores"][$i]["Mes"] = "Total";
-		$retorno["valores"][$i]["Entrada"] = Formata::banco2valor($totalEntradaEnd);
-		$retorno["valores"][$i]["Saida"] = Formata::banco2valor($totalSaidaEnd);
-		$retorno["valores"][$i]["Total"] = Formata::banco2valor( ($totalSaidaEnd + $totalEntradaEnd) );
+		$retorno["valores"][$i]["Mes"] = "<b>Total</b>";
+		$retorno["valores"][$i]["Entrada"] = "<b>R$".Formata::banco2valor($totalEntradaEnd)."</b>";
+		$retorno["valores"][$i]["Saida"] = "<b>R$".Formata::banco2valor($totalSaidaEnd)."</b>";
+		$retorno["valores"][$i]["Total"] = "<b>R$ ".Formata::banco2valor( ($totalSaidaEnd + $totalEntradaEnd) )."</b>";
 
         return $retorno;
 
@@ -592,24 +626,25 @@ class Relatorios {
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
 
     	$retorno["campos"] = array("Codigo", "Cliente", "Data", "Total", "Comissao", "%");
+    	$retorno["align"] = array("left", "left", "right", "right", "right", "right");
     	
         if(count($RetornoConsultaRel) > 0){
             for($j=0; $j<count($RetornoConsultaRel); $j++){
                 $retorno["valores"][$j]["Codigo"] = $RetornoConsultaRel[$j]["codigo"];
                 $retorno["valores"][$j]["Cliente"] = $RetornoConsultaRel[$j]["nome"];
                 $retorno["valores"][$j]["Data"] = Formata::banco2date( $RetornoConsultaRel[$j]["data_fechada"] );
-                $retorno["valores"][$j]["Total"] = Formata::banco2valor( $RetornoConsultaRel[$j]["total"] );
-                $retorno["valores"][$j]["Comissao"] =  Formata::banco2valor( $RetornoConsultaRel[$j]["comissao"] );
+                $retorno["valores"][$j]["Total"] = "R$ ".Formata::banco2valor( $RetornoConsultaRel[$j]["total"] );
+                $retorno["valores"][$j]["Comissao"] =  "R$ ".Formata::banco2valor( $RetornoConsultaRel[$j]["comissao"] );
                 $retorno["valores"][$j]["%"] = $RetornoConsultaRel[$j]["porcentagem"];
                 $tot += $RetornoConsultaRel[$j]["comissao"];
             }
             
             
-             	$retorno["valores"][$j]["Codigo"] = "Total";
+             	$retorno["valores"][$j]["Codigo"] = "<b>Total</b>";
                 $retorno["valores"][$j]["Cliente"] = "";
                 $retorno["valores"][$j]["Data"] = "";
                 $retorno["valores"][$j]["Total"] = "";
-                $retorno["valores"][$j]["Comissao"] =  Formata::banco2valor( $tot );
+                $retorno["valores"][$j]["Comissao"] =  "<b>R$ ".Formata::banco2valor( $tot )."</b>";
                 $retorno["valores"][$j]["%"] = "";
         }
 		

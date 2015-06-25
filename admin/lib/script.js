@@ -1541,12 +1541,12 @@ function descontarContasReceber(id) {
 
 function abrirRelatorioFechamento() {
 	main.openWindow('relatorios_fechamento.php?filtro1=' + $('filtro1').value
-			+ '&filtro2=' + $('filtro2').value, '500', '600');
+			+ '&filtro2=' + $('filtro2').value, '700', '500');
 }
 
 function abrirRelatorioDespesas() {
 	main.openWindow('relatorios_despesas.php?filtro1=' + $('filtro1').value
-			+ '&filtro2=' + $('filtro2').value, '500', '600');
+			+ '&filtro2=' + $('filtro2').value, '700', '500');
 }
 
 function radioValue(radioButton) {

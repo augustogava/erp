@@ -10,6 +10,9 @@ if($_GET["acao"] == "listarBancos"){
 <table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
+			<td width="100%" colspan='4' align='center'>Selecione o Banco</td>
+		</tr>
+		<tr class="titulo">
 			<td width="40%">Nome</td>
 			<td width="25%" >Agencia</td>
 			<td width="25%" >Conta</td>
@@ -23,7 +26,7 @@ if($_GET["acao"] == "listarBancos"){
 				$linha = "linhaMu";
 			}
 		?>
-		<tr id="" class="<?=$linha?>" width="60%" onclick="window.location = 'fluxo_banco.php?idBanco=<?=$bancos[$j]->getId()?>'">
+		<tr id="" class="<?=$linha?>" width="100%" style="cursor:pointer;	" onclick="window.location = 'fluxo_banco.php?idBanco=<?=$bancos[$j]->getId()?>'">
 			<td width="40%"  id="linhaDataGrid_<?=$j?>_0">
 				<?=$bancos[$j]->getNome()?>
 			</td>

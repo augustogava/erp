@@ -27,7 +27,6 @@
 					document.getElementsByTagName("head")[0].appendChild(fileref);
 				}
 			}
-			
 		</script>
 				
 		<script src="lib/jcomm.js" type="text/javascript"></script>

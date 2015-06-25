@@ -65,6 +65,18 @@ body {
   margin-top: 5px;
 }
 
+.titulo{
+	background:#1E96CD;
+	color: white;
+	font-weight: bold;
+	height:26px;
+}
+.table-relatorio{ border-spacing: 0;   box-sizing: border-box;   width: 99%; margin: 5px auto 0 auto; }
+.table-relatorio td { border: 1px solid rgba(3, 163, 236, 0.12); font-size:12px;   padding: 3px; } 
+.table-relatorio .linha{ background: rgba(30, 150, 205, 0.1) !important; height: 20px;  }
+.table-relatorio .linhaMu{ background: rgba(30, 150, 205, 0.15) !important; height: 20px; }
+.table-relatorio .linha:hover, .table-relatorio .linhaMu:hover{ background: rgba(30, 150, 205, 0.4) !important; }
+
 </style>
 </head>
 <body>
@@ -90,7 +102,7 @@ body {
 	</div>
 </div>
 
-<table border="1" style="background: #EBF0FD;width:100%;">
+<table class="table-relatorio">
         <?
         $total = 0;
         if(isset($tipoDespesas))
@@ -99,21 +111,25 @@ body {
                 $totalE = 0;
         ?>
 
-                <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;height:26px;">
+                <tr class="titulo">
                     <td align="left"><?=(($nome)?$nome:"Sem descrição")?></td>
                 </tr>
-                <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;height:26px;">
+                <tr >
                     <td align="left">
-
-                        <table  style="background: #EBF0FD;width:100%;">
-
+                        <table class="table-relatorio">
                            <?
 
                            for($j=0; $j<count($despesas); $j++){
                                 $total +=$despesas[$j]->getValor();
                                 $totalE +=$despesas[$j]->getValor();
+                                
+                                if(($i%2) == 0){
+                                	$linha = "linha";
+                                }else{
+                                	$linha = "linhaMu";
+                                }
                            ?>
-                            <tr style="background:#EBF0FD;color:#383D44;border-bottom: 1px solid #000;height:20px;">
+                            <tr class="<?=$linha?>">
                                 <td align="left" width="30%"><?=$Main->Formata->banco2date($despesas[$j]->getData())?></td>
                                 <td align="left" width="40%"><?=$despesas[$j]->getOcorrencia()?></td>
                                 <td align="left" width="30%"><?=$Main->Formata->banco2valor($despesas[$j]->getValor());?></td>
@@ -122,7 +138,7 @@ body {
                             
                            }
                             ?>
- 							<tr style="background:#EBF0FD;color:#383D44;border-bottom: 1px solid #000;height:20px;font-weight: bold;">
+ 							<tr class="titulo">
                                 <td align="left" width="30%">Total</td>
                                 <td align="left" width="40%"></td>
                                 <td align="left" width="30%"> <?=$Main->Formata->banco2valor($totalE);?></td>
@@ -139,7 +155,7 @@ body {
         <tr >
             <td align="left">&nbsp;</td>
         </tr>
-        <tr style="background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;">
+        <tr class="titulo">
             <td align="left">Total: <?=$Main->Formata->banco2valor($total);?></td>
         </tr>
 </table>
