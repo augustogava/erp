@@ -1597,18 +1597,23 @@ function salvarUsuarioSenha() {
 	if (confirm('Deseja salvar?')) {
 		
 		if( $('saveOK').value == 1 ){
-			if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-	
-				doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvarSenha'
-						+ '&id=' + $('id').value 
-						+ '&senhaAntiga=' + $('senhaAntiga').value 
-						+ '&senhaNova=' + $('senhaNova').value
-							, 1, '');
-	
-				addPop_close();
-	
-				alert('Salvo com sucesso!');
-	
+			console.info( $('senhaNova').value.length )
+			if( $('senhaNova').value.length > 5 ){
+				if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		
+					doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvarSenha'
+							+ '&id=' + $('id').value 
+							+ '&senhaAntiga=' + $('senhaAntiga').value 
+							+ '&senhaNova=' + $('senhaNova').value
+								, 1, '');
+		
+					addPop_close();
+		
+					alert('Salvo com sucesso!');
+		
+				}
+			}else{
+				alert('Senha deve ser maior que 5 digitos.');
 			}
 		}else{
 			alert('Senhas devem ser iguais.');
