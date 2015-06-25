@@ -1570,6 +1570,61 @@ function radioValue(radioButton) {
 
 }// end function
 
+function salvarUsuario() {
+
+	if (confirm('Deseja salvar?')) {
+
+		console.info( $('nome').value  )
+		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+
+			doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvar'
+					+ '&id=' + $('id').value 
+					+ '&nome=' + $('nome').value 
+					+ '&email=' + $('email').value
+					+ '&login=' + $('login').value
+						, 1, '');
+
+			addPop_close();
+
+			alert('Salvo com sucesso!');
+
+		}
+	}
+}
+
+function salvarUsuarioSenha() {
+
+	if (confirm('Deseja salvar?')) {
+		
+		if( $('saveOK').value == 1 ){
+			if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+	
+				doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvarSenha'
+						+ '&id=' + $('id').value 
+						+ '&senhaAntiga=' + $('senhaAntiga').value 
+						+ '&senhaNova=' + $('senhaNova').value
+							, 1, '');
+	
+				addPop_close();
+	
+				alert('Salvo com sucesso!');
+	
+			}
+		}else{
+			alert('Senhas devem ser iguais.');
+		}
+	}
+}
+
+function verificaSenhaIgual( field ){
+	if( $('senhaNova1').value == field.value ){
+		$('saveOK').value = '1';
+	}else{
+		alert('Senhas devem ser iguais.');
+		$('saveOK').value = '0';
+	}
+}
+
 jQuery(window).resize(function() {
 	fixHeight();
 });

@@ -2,7 +2,6 @@
 <html lang="en">
 	<head>
 		<title> ERP <? print $Main->Padrao->nome; ?></title>
-<!-- 		<meta charset="utf-8"> -->
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 		<meta name="description" content="<? print $Main->Padrao->descricao; ?>" >
 		<meta name="keywords" content="<? print $Main->Padrao->keywords; ?>" >
@@ -74,19 +73,19 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li>
-										<a class="dropdown-toggle ng-binding" role="menuitem" ng-click="clickMenuNavBar($event, 1)">
-											<span class="fa fa-key submenu-icon"></span>
-											Alterar Senha
-										</a>
-									</li>
-									<li>
-										<a class="dropdown-toggle ng-binding" role="menuitem" ng-click="clickMenuNavBar($event, 2)">
+										<a class="dropdown-toggle" href="javascript:doAjaxSemRetorno('ajax_com/user.php?acao=editar&id=<?=$_SESSION["iduser"]?>',1,'addPop');addPop_open(550);">
 											<span class="fa fa-pencil-square-o submenu-icon"></span>
 											Meus Dados
 										</a>
 									</li>
 									<li>
-										<a href="logout.php" class="dropdown-toggle ng-binding" role="menuitem">
+										<a class="dropdown-toggle" href="javascript:doAjaxSemRetorno('ajax_com/user.php?acao=editarSenha&id=<?=$_SESSION["iduser"]?>',1,'addPop');addPop_open(550);">
+											<span class="fa fa-key submenu-icon"></span>
+											Alterar Senha
+										</a>
+									</li>
+									<li>
+										<a href="logout.php" class="dropdown-toggle" role="menuitem">
 											<span class="fa fa-sign-out submenu-icon"></span>
 											Sair
 										</a>

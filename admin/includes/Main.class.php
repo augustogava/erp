@@ -35,6 +35,7 @@ include "Relatorios.class.php";
 include "Imagem.class.php";
 include "Compras.class.php";
 include "Composicao.class.php";
+include "User.class.php";
 
 /**
  * Classe principal
@@ -61,6 +62,7 @@ class Main {
     public $Imagem;
     public $Composicao;
     public $FluxoBanco;
+    public $User;
     
     /**
 	 * M�todo construtor.
@@ -91,6 +93,7 @@ class Main {
         $this->Imagem 			= new Imagem($this->ConexaoSQL);
         $this->Composicao 		= new Composicao($this->ConexaoSQL);
         $this->Compras 			= new Compras($this->ConexaoSQL, $this->Configuracoes);
+        $this->User 			= new User($this->ConexaoSQL);
     }
     
      /**
