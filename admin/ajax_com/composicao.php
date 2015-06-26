@@ -19,7 +19,7 @@ if($_GET["acao"] == "listar"){
 		<tr class="titulo">
 			<td width="60%">Produto</td>
 			<td width="30%" >Qtd</td>
-			<td width="10%">
+			<td width="10%" align="right">
 				<a title="Anterior" href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>itensBusca=<?=$_GET["itensBusca"]?>&limite=<?=($limite-15)?>',1,'Saida');">
 					<span class="glyphicon fa fa-arrow-circle-left" aria-hidden="true"></span>
 				</a>
