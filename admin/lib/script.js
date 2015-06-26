@@ -306,18 +306,13 @@ function excluirPedido(id) {
 }
 
 function excluirItemPedido(id, idPedido) {
+	doAjaxSemRetorno('ajax_com/pedidos_acao.php?acao=deletarItemPedido&id='
+			+ id, 1, '');
 
-	if (confirm('Deseja deletar item do pedido?')) {
+	doAjaxSemRetorno('ajax_com/pedidos.php?acao=listarItens&idPedido='
+			+ idPedido, 1, 'bodyID');
 
-		doAjaxSemRetorno('ajax_com/pedidos_acao.php?acao=deletarItemPedido&id='
-				+ id, 1, '');
-
-		doAjaxSemRetorno('ajax_com/pedidos.php?acao=listarItens&idPedido='
-				+ idPedido, 1, 'bodyID');
-
-		alert('Excluído com sucesso!');
-
-	}
+	alert('Excluído com sucesso!');
 
 }
 
@@ -446,50 +441,62 @@ function calculaPrecoPedidoTotal() {
 }
 
 function salvaPedido(idPedido, status) {
-
-	if (confirm('Deseja salvar o Pedido?')) {
-
-		if ((status == 4 || status == 5)
-				&& !confirm('Pedido fechado, certeza que deseja alterar?')) {
-
-			return;
-
-		}
-
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-
-			if (verificaPreco()) {
-				doAjaxSemRetorno(
-						'ajax_com/pedidos_acao.php?acao=salvarPedido&tipo_entrega='
-								+ $('tipoentrega').value + '&obs='
-								+ $('obs').value + '&codigo='
-								+ $('codigo').value + '&status='
-								+ $('status').value + '&clientes='
-								+ $('clientes').value + '&representantes='
-								+ $('representantes').value + '&idPedido='
-								+ idPedido + '&formaPagamento='
-								+ $('formapagamento').value + '&imposto='
-								+ $('imposto').value + '&valorEntrega='
-								+ $('valorEntrega').value + '&comissao='
-								+ $('comissao').value + '&dataimposto='
-								+ $('dataimposto').value, 1, 'bodyID');
-
-				doAjaxSemRetorno(
-						'ajax_com/pedidos.php?acao=listarItens&idPedido='
-								+ idPedido, 1, 'bodyID');
-
-				doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes='
-						+ $('clientesBusca').value + '&status='
-						+ $('statusBusca').value, 1, 'SaidaMain');
-
-				alert('Salvo com sucesso!');
-
-			}
-
-		}
-
+	if ((status == 4 || status == 5) ) {
+		(new PNotify({
+		    title: 'Confirmação',
+		    text: 'Pedido fechado, certeza que deseja alterar?',
+		    icon: 'glyphicon glyphicon-question-sign',
+		    hide: false,
+		    type: 'error',
+		    confirm: {
+		        confirm: true
+		    },
+		    buttons: {
+		        closer: false,
+		        sticker: false
+		    },
+		    history: {
+		        history: false
+		    }
+		})).get().on('pnotify.confirm', function() {
+			salvaPedidoAposVerify(idPedido, status);
+		}).on('pnotify.cancel', function() {
+			return false;
+		});
+	}else{
+		salvaPedidoAposVerify(idPedido, status);
 	}
+}
 
+function salvaPedidoAposVerify(idPedido, status){
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		if (verificaPreco()) {
+			doAjaxSemRetorno(
+					'ajax_com/pedidos_acao.php?acao=salvarPedido&tipo_entrega='
+							+ $('tipoentrega').value + '&obs='
+							+ $('obs').value + '&codigo='
+							+ $('codigo').value + '&status='
+							+ $('status').value + '&clientes='
+							+ $('clientes').value + '&representantes='
+							+ $('representantes').value + '&idPedido='
+							+ idPedido + '&formaPagamento='
+							+ $('formapagamento').value + '&imposto='
+							+ $('imposto').value + '&valorEntrega='
+							+ $('valorEntrega').value + '&comissao='
+							+ $('comissao').value + '&dataimposto='
+							+ $('dataimposto').value, 1, 'bodyID');
+	
+			doAjaxSemRetorno(
+					'ajax_com/pedidos.php?acao=listarItens&idPedido='
+							+ idPedido, 1, 'bodyID');
+	
+			doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar&clientes='
+					+ $('clientesBusca').value + '&status='
+					+ $('statusBusca').value, 1, 'SaidaMain');
+	
+			alert('Salvo com sucesso!');
+		}
+	}
 }
 
 function verificaPreco() {
@@ -552,37 +559,33 @@ function verificaPrecoEspecifico(valorItem) {
 
 function fecharPedido(idPedido, status) {
 
-	if (confirm('Deseja realmente enviar para separação?\nOperação não pode ser cancelada posteriormente!')) {
+	if (status != 5) {
 
-		if (status != 5) {
+		if (status != 4) {
 
-			if (status != 4) {
+			if (status == 1) {
 
-				if (status == 1) {
-
-					doAjaxSemRetorno(
-							'ajax_com/pedidos_acao.php?acao=fecharPedido&id='
-									+ idPedido, 1, '');
-					doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar', 1,
-							'SaidaMain');
-
-				} else {
-
-					alert('Status do pedido deve estar Aberto para poder ser fechado.');
-
-				}
+				doAjaxSemRetorno(
+						'ajax_com/pedidos_acao.php?acao=fecharPedido&id='
+								+ idPedido, 1, '');
+				doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar', 1,
+						'SaidaMain');
 
 			} else {
 
-				alert('Pedido já separando!');
+				alert('Status do pedido deve estar Aberto para poder ser fechado.');
 
 			}
 
 		} else {
 
-			alert('Pedido já enviado!');
+			alert('Pedido já separando!');
 
 		}
+
+	} else {
+
+		alert('Pedido já enviado!');
 
 	}
 
@@ -590,29 +593,25 @@ function fecharPedido(idPedido, status) {
 
 function enviarPedido(idPedido, status) {
 
-	if (confirm('Deseja realmente mudar status do pedido para enviado?\nOperação não pode ser cancelada posteriormente!')) {
+	if (status != 5) {
 
-		if (status != 5) {
+		if (status == 6) {
 
-			if (status == 6) {
-
-				doAjaxSemRetorno(
-						'ajax_com/pedidos_acao.php?acao=enviarPedido&id='
-								+ idPedido, 1, '');
-				doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar', 1,
-						'SaidaMain');
-
-			} else {
-
-				alert('Status do pedido deve estar Separado para poder ser alterado para enviado.\nFeche todas separações na tela de Ordem de Separação!');
-
-			}
+			doAjaxSemRetorno(
+					'ajax_com/pedidos_acao.php?acao=enviarPedido&id='
+							+ idPedido, 1, '');
+			doAjaxSemRetorno('ajax_com/pedidos.php?acao=listar', 1,
+					'SaidaMain');
 
 		} else {
 
-			alert('Pedido já enviado!');
+			alert('Status do pedido deve estar Separado para poder ser alterado para enviado.\nFeche todas separações na tela de Ordem de Separação!');
 
 		}
+
+	} else {
+
+		alert('Pedido já enviado!');
 
 	}
 
@@ -710,27 +709,21 @@ function refreshEstoque() {
 }
 
 function salvaEstoque() {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
-	if (confirm('Deseja salvar?')) {
+		doAjaxSemRetorno('ajax_com/estoque_acao.php?acao=salvar&descricao='
+				+ $('descricao').value + '&produto=' + $('produto').value
+				+ '&id=' + $('id').value + '&tipo=' + $('tipo').value
+				+ '&qtd=' + $('qtd').value + '&preco=' + $('preco').value
+				+ '&data=' + $('data').value, 1, '');
 
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		refreshEstoque();
 
-			doAjaxSemRetorno('ajax_com/estoque_acao.php?acao=salvar&descricao='
-					+ $('descricao').value + '&produto=' + $('produto').value
-					+ '&id=' + $('id').value + '&tipo=' + $('tipo').value
-					+ '&qtd=' + $('qtd').value + '&preco=' + $('preco').value
-					+ '&data=' + $('data').value, 1, '');
+		addPop_close();
 
-			refreshEstoque();
-
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
+		alert('Salvo com sucesso!');
 
 	}
-
 }
 
 function excluirEstoque(id) {
@@ -765,48 +758,34 @@ function refreshOrdemProducao() {
 }
 
 function salvaOrdemProducao() {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
-	if (confirm('Deseja salvar?')) {
-
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-
-			doAjaxSemRetorno(
-					'ajax_com/ordem_producao_acao.php?acao=salvar&descricao='
-							+ $('descricao').value + '&produto='
-							+ $('produto').value + '&id=' + $('id').value
-							+ '&pedido=' + $('pedido').value + '&qtd='
-							+ $('qtd').value + '&data=' + $('data').value, 1,
-					'');
-
-			refreshOrdemProducao();
-
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
-
-	}
-
-}
-
-function excluirOrdemProducao(id, status) {
-
-	if (status != 2) {
-
-		doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=deletar&id='
-				+ id, 1, '');
+		doAjaxSemRetorno(
+				'ajax_com/ordem_producao_acao.php?acao=salvar&descricao='
+						+ $('descricao').value + '&produto='
+						+ $('produto').value + '&id=' + $('id').value
+						+ '&pedido=' + $('pedido').value + '&qtd='
+						+ $('qtd').value + '&data=' + $('data').value, 1,
+				'');
 
 		refreshOrdemProducao();
 
-		alert('Excluío com sucesso!');
+		addPop_close();
 
-	} else {
-
-		alert('Ordem já fechado!');
+		alert('Salvo com sucesso!');
 
 	}
+}
 
+function excluirOrdemProducao(id, status) {
+	if (status != 2) {
+
+		doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=deletar&id=' + id, 1, '');
+		refreshOrdemProducao();
+		alert('Excluío com sucesso!');
+	} else {
+		alert('Ordem já fechado!');
+	}
 }
 
 function fecharOrdemProducao(id, status) {
@@ -814,19 +793,47 @@ function fecharOrdemProducao(id, status) {
 	if (status != 2) {
 
 		if (status == 1) {
-			if (confirm('Deseja Alterar ordem para Produzindo?')) {
-				doAjaxSemRetorno(
-						'ajax_com/ordem_producao_acao.php?acao=produzirOrdem&id='
-								+ id, 1, '');
+			(new PNotify({
+			    title: 'Confirmação',
+			    text: 'Deseja Alterar ordem para Produzindo?',
+			    icon: 'glyphicon glyphicon-question-sign',
+			    hide: false,
+			    type: "success",
+			    confirm: {
+			        confirm: true
+			    },
+			    buttons: {
+			        closer: false,
+			        sticker: false
+			    },
+			    history: {
+			        history: false
+			    }
+			})).get().on('pnotify.confirm', function() {
+				doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=produzirOrdem&id=' + id, 1, '');
 				refreshOrdemProducao();
-			}
+			});
 		} else if (status == 4) {
-			if (confirm('Deseja realmente fechar Ordem?\nIr? ser dada entrada no estoque\nOperação não pode ser cancelada posteriormente!')) {
-				doAjaxSemRetorno(
-						'ajax_com/ordem_producao_acao.php?acao=fecharOrdem&id='
-								+ id, 1, '');
+			(new PNotify({
+			    title: 'Confirmação',
+			    text: 'Deseja realmente fechar Ordem?\nIr? ser dada entrada no estoque\nOperação não pode ser cancelada posteriormente?',
+			    icon: 'glyphicon glyphicon-question-sign',
+			    hide: false,
+			    type: "success",
+			    confirm: {
+			        confirm: true
+			    },
+			    buttons: {
+			        closer: false,
+			        sticker: false
+			    },
+			    history: {
+			        history: false
+			    }
+			})).get().on('pnotify.confirm', function() {
+				doAjaxSemRetorno('ajax_com/ordem_producao_acao.php?acao=fecharOrdem&id=' + id, 1, '');
 				refreshOrdemProducao();
-			}
+			});
 		} else {
 
 			alert('Status da ordem de produção deve estar A fabricar para poder ser fechado.');
@@ -864,25 +871,21 @@ function refreshOrdemSeparacao() {
 
 function salvaOrdemSeparacao() {
 
-	if (confirm('Deseja salvar?')) {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno(
+				'ajax_com/ordem_separacao_acao.php?acao=salvar&descricao='
+						+ $('descricao').value + '&produto='
+						+ $('produto').value + '&id=' + $('id').value
+						+ '&pedido=' + $('pedido').value + '&qtd='
+						+ $('qtd').value + '&data=' + $('data').value, 1,
+				'');
 
-			doAjaxSemRetorno(
-					'ajax_com/ordem_separacao_acao.php?acao=salvar&descricao='
-							+ $('descricao').value + '&produto='
-							+ $('produto').value + '&id=' + $('id').value
-							+ '&pedido=' + $('pedido').value + '&qtd='
-							+ $('qtd').value + '&data=' + $('data').value, 1,
-					'');
+		refreshOrdemSeparacao();
 
-			refreshOrdemSeparacao();
+		addPop_close();
 
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
+		alert('Salvo com sucesso!');
 
 	}
 
@@ -910,12 +913,26 @@ function excluirOrdemSeparacao(id, status) {
 function fecharOrdemSeparacao(id, status) {
 	if (status != 2) {
 		if (status == 1) {
-			if (confirm('Deseja realmente fechar?\nIrá ser dada saida no estoque')) {
-				doAjaxSemRetorno(
-						'ajax_com/ordem_separacao_acao.php?acao=fecharOrdem&id='
-								+ id, 1, '');
+			(new PNotify({
+			    title: 'Confirmação',
+			    text: 'Deseja realmente fechar?\nIrá ser dada saida no estoque',
+			    icon: 'glyphicon glyphicon-question-sign',
+			    hide: false,
+			    type: "success",
+			    confirm: {
+			        confirm: true
+			    },
+			    buttons: {
+			        closer: false,
+			        sticker: false
+			    },
+			    history: {
+			        history: false
+			    }
+			})).get().on('pnotify.confirm', function() {
+				doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=fecharOrdem&id=' + id, 1, '');
 				refreshOrdemSeparacao();
-			}
+			});
 		}
 	} else {
 		alert('Ordem já fechada!');
@@ -924,12 +941,26 @@ function fecharOrdemSeparacao(id, status) {
 
 function cancelarOrdemSeparacao(id, status) {
 	if (status == 2) {
-		if (confirm('Deseja realmente cancelar Separação?\nIrá ser dada entrada no estoque')) {
-			doAjaxSemRetorno(
-					'ajax_com/ordem_separacao_acao.php?acao=cancelarOrdem&id='
-							+ id, 1, '');
+		(new PNotify({
+		    title: 'Confirmação',
+		    text: 'Deseja realmente cancelar Separação?\nIrá ser dada entrada no estoque',
+		    icon: 'glyphicon glyphicon-question-sign',
+		    hide: false,
+		    type: "success",
+		    confirm: {
+		        confirm: true
+		    },
+		    buttons: {
+		        closer: false,
+		        sticker: false
+		    },
+		    history: {
+		        history: false
+		    }
+		})).get().on('pnotify.confirm', function() {
+			doAjaxSemRetorno('ajax_com/ordem_separacao_acao.php?acao=cancelarOrdem&id=' + id, 1, '');
 			refreshOrdemSeparacao();
-		}
+		});
 	}
 
 }
@@ -994,24 +1025,20 @@ function refreshFluxoBancoFluxo(idBanco) {
 
 function salvarFluxoBanco(idFluxo) {
 
-	if (confirm('Deseja salvar?')) {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=salvar&id='
+				+ $('id').value + '&idBanco=' + $('banco').value + '&tipo='
+				+ $('tipo').value + '&tipoFluxo=' + $('tipoFluxo').value
+				+ '&ocorrencia=' + $('ocorrencia').value + '&valor='
+				+ $('valor').value + '&data=' + $('data').value
+				+ '&numeroDoc=' + $('numero_doc').value, 1, '');
 
-			doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=salvar&id='
-					+ $('id').value + '&idBanco=' + $('banco').value + '&tipo='
-					+ $('tipo').value + '&tipoFluxo=' + $('tipoFluxo').value
-					+ '&ocorrencia=' + $('ocorrencia').value + '&valor='
-					+ $('valor').value + '&data=' + $('data').value
-					+ '&numeroDoc=' + $('numero_doc').value, 1, '');
+		refreshFluxoBancoFluxo($('idBanco').value);
 
-			refreshFluxoBancoFluxo($('idBanco').value);
+		addPop_close();
 
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
+		alert('Salvo com sucesso!');
 
 	}
 
@@ -1019,22 +1046,16 @@ function salvarFluxoBanco(idFluxo) {
 
 function excluirFluxoBanco(id, idBanco) {
 
-	doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=deletar&id=' + id, 1,
-			'');
-
+	doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=deletar&id=' + id, 1, '');
 	refreshFluxoBancoFluxo(idBanco);
-
 	alert('Excluído com sucesso!');
 
 }
 
 function pagarBanco(id, idBanco) {
-	if (confirm('Deseja Pagar?')) {
-		var valorP = prompt('Adicionar alguma informação adicional ?');
-		doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=pagar&id=' + id
-				+ '&info=' + valorP, 1, '');
-		refreshFluxoBancoFluxo(idBanco);
-	}
+	var valorP = prompt('Adicionar alguma informação adicional ?');
+	doAjaxSemRetorno('ajax_com/fluxoBanco_acao.php?acao=pagar&id=' + id + '&info=' + valorP, 1, '');
+	refreshFluxoBancoFluxo(idBanco);
 }
 
 // /////////////////////////////////////////////
@@ -1059,20 +1080,18 @@ function cancelarContasReceber(id) {
 }
 
 function salvarContasReceber(idFluxo) {
-	if (confirm('Deseja salvar?')) {
-		// radioInput.selecionaValor('filtro1');
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-			doAjaxSemRetorno('ajax_com/fluxo_acao.php?acao=salvar&cliente='
-					+ $('clientes').value + '&id=' + $('id').value + '&banco='
-					+ $('banco').value + '&tipo=' + $('tipo').value
-					+ '&tipoFluxo=' + $('tipoFluxo').value + '&ocorrencia='
-					+ $('ocorrencia').value + '&valor=' + $('valor').value
-					+ '&data=' + $('data').value + '&statusFluxo='
-					+ $('statusFluxo').value, 1, '');
-			refreshContasReceber();
-			addPop_close();
-			alert('Salvo com sucesso!');
-		}
+	// radioInput.selecionaValor('filtro1');
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno('ajax_com/fluxo_acao.php?acao=salvar&cliente='
+				+ $('clientes').value + '&id=' + $('id').value + '&banco='
+				+ $('banco').value + '&tipo=' + $('tipo').value
+				+ '&tipoFluxo=' + $('tipoFluxo').value + '&ocorrencia='
+				+ $('ocorrencia').value + '&valor=' + $('valor').value
+				+ '&data=' + $('data').value + '&statusFluxo='
+				+ $('statusFluxo').value, 1, '');
+		refreshContasReceber();
+		addPop_close();
+		alert('Salvo com sucesso!');
 	}
 }
 
@@ -1095,20 +1114,24 @@ function excluirContasPagar(id) {
 	alert('Cancelado com sucesso!');
 }
 
+function cancelarContasPagar(id) {
+	doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=cancelar&id=' + id,
+			1, '');
+	refreshContasPagar();
+	alert('Cancelado com sucesso!');
+}
 function salvarContasPagar(idFluxo) {
-	if (confirm('Deseja salvar?')) {
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-			doAjaxSemRetorno('ajax_com/fluxo_acao.php?acao=salvar&banco='
-					+ $('banco').value + '&id=' + $('id').value
-					+ '&fornecedor=' + $('fornecedor').value + '&tipo='
-					+ $('tipo').value + '&tipoFluxo=' + $('tipoFluxo').value
-					+ '&ocorrencia=' + $('ocorrencia').value + '&valor='
-					+ $('valor').value + '&data=' + $('data').value
-					+ '&statusFluxo=' + $('statusFluxo').value, 1, '');
-			refreshContasPagar();
-			addPop_close();
-			alert('Salvo com sucesso!');
-		}
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno('ajax_com/fluxo_acao.php?acao=salvar&banco='
+				+ $('banco').value + '&id=' + $('id').value
+				+ '&fornecedor=' + $('fornecedor').value + '&tipo='
+				+ $('tipo').value + '&tipoFluxo=' + $('tipoFluxo').value
+				+ '&ocorrencia=' + $('ocorrencia').value + '&valor='
+				+ $('valor').value + '&data=' + $('data').value
+				+ '&statusFluxo=' + $('statusFluxo').value, 1, '');
+		refreshContasPagar();
+		addPop_close();
+		alert('Salvo com sucesso!');
 	}
 }
 
@@ -1130,34 +1153,23 @@ function refreshComposicao(id) {
 }
 
 function salvaComposicao() {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno(
+				'ajax_com/composicao_acao.php?acao=salvar&descricao='
+						+ $('descricao').value + '&produto='
+						+ $('produto').value + '&id=' + $('id').value
+						+ '&qtd=' + $('qtd').value + '&idComposicao='
+						+ $('idComposicao').value, 1, '');
 
-	if (confirm('Deseja salvar?')) {
-
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-
-			doAjaxSemRetorno(
-					'ajax_com/composicao_acao.php?acao=salvar&descricao='
-							+ $('descricao').value + '&produto='
-							+ $('produto').value + '&id=' + $('id').value
-							+ '&qtd=' + $('qtd').value + '&idComposicao='
-							+ $('idComposicao').value, 1, '');
-
-			refreshComposicao($('id').value);
-
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
-
+		refreshComposicao($('id').value);
+		addPop_close();
+		alert('Salvo com sucesso!');
 	}
-
 }
 
 function excluirComposicao(id, idpai) {
 
-	doAjaxSemRetorno('ajax_com/composicao_acao.php?acao=deletar&id=' + id, 1,
-			'');
+	doAjaxSemRetorno('ajax_com/composicao_acao.php?acao=deletar&id=' + id, 1, '');
 
 	refreshComposicao(idpai);
 
@@ -1488,49 +1500,41 @@ function adicionarFormaPgtoCompra(id, itemVerificar) {
 }
 
 function pagarContasPagar(id) {
-	if (confirm('Deseja Pagar?')) {
-		doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id
-				+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
-		
-		refreshContasPagar();
-		addPop_close();
-		alert('Salvo com sucesso!');
-	}
+	doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id
+			+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
+	
+	refreshContasPagar();
+	addPop_close();
+	alert('Salvo com sucesso!');
 }
 
 function descontarContasPagar(id) {
-	if (confirm('Deseja Descontar?')) {
-		doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id='+ id 
-				+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
-		refreshContasPagar();
-		
-		refreshContasPagar();
-		addPop_close();
-		alert('Salvo com sucesso!');
-	}
+	doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id='+ id 
+			+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
+	refreshContasPagar();
+	
+	refreshContasPagar();
+	addPop_close();
+	alert('Salvo com sucesso!');
 }
 
 
 function pagarContasReceber(id) {
-	if (confirm('Deseja Pagar?')) {
-		doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id
-				 + '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
-		
-		refreshContasReceber();
-		addPop_close();
-		alert('Salvo com sucesso!');
-	}
+	doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=pagar&id=' + id
+			 + '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
+	
+	refreshContasReceber();
+	addPop_close();
+	alert('Salvo com sucesso!');
 }
 
 function descontarContasReceber(id) {
-	if (confirm('Deseja Descontar?')) {
-		doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=' + id
-				+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
-		
-		refreshContasReceber();
-		addPop_close();
-		alert('Salvo com sucesso!');
-	}
+	doAjaxSemRetorno('ajax_com/contas_receber_acao.php?acao=descontar&id=' + id
+			+ '&tipoPagamento='+ $('tipoPagamento').value + '&ocorrencia='+ $('ocorrencia').value  + '&valor='+ $('valor').value, 1, '');
+	
+	refreshContasReceber();
+	addPop_close();
+	alert('Salvo com sucesso!');
 }
 
 // /////////////////////////////////////////////
@@ -1629,12 +1633,69 @@ function verificaSenhaIgual( field ){
 		$('saveOK').value = '0';
 	}
 }
+var _alert, _confirm;
+function consume_alert() {
+    if (_alert) return;
+//    if (_confirm) return;
+    
+    _alert = window.alert;
+//    _confirm = window.confirm;
+    
+    window.alert = function(message) {
+        new PNotify({
+            title: 'Alert',
+            text: message,
+            type: 'success',
+    		animate_speed: 'fast'
+        });
+    };
+}
+function verifyPnotifyConfirm( message, f ){ pnotifyConfirm(message, f); }
+
+function pnotifyConfirm( message, f){
+	(new PNotify({
+	    title: 'Confirmação',
+	    text: message,
+	    icon: 'glyphicon glyphicon-question-sign',
+	    hide: false,
+	    type: "success",
+	    confirm: {
+	        confirm: true
+	    },
+	    buttons: {
+	        closer: false,
+	        sticker: false
+	    },
+	    history: {
+	        history: false
+	    }
+	})).get().on('pnotify.confirm', function() {
+//	    f.call();
+		eval(f);
+	}).on('pnotify.cancel', function() {
+		return false;
+	});
+}
 
 jQuery(window).resize(function() {
 	fixHeight();
 });
 jQuery(document).ready(function() {
+	PNotify.prototype.options.styling = "fontawesome";
+	consume_alert();
+	
 	setTimeout("fixHeight()", 500);
+	
+//	new PNotify({
+//		title: 'Regular Success',
+//		text: 'That thing that you were trying to do worked!',
+//		type: 'success',
+//		animate_speed: 'fast'
+//	});
+//	
+
+//	alert('Teste')
+	
 	makeAnimationMenu();
 });
 
@@ -1682,4 +1743,64 @@ function makeAnimationMenu() {
 function changeMenu(id) {
 	jQuery(".container").hide();
 	jQuery("#menuFilho" + id).toggle();
+}
+
+function salvarDataGrid( tipo, params, campo, tabela ){
+	if(formm.verificaF(this.id,'require efeitos','erro')){ 
+		(new PNotify({
+		    title: 'Confirmação',
+		    text: 'Deseja Salvar',
+		    icon: 'glyphicon glyphicon-question-sign',
+		    hide: false,
+		    type: "success",
+		    confirm: {
+		        confirm: true
+		    },
+		    buttons: {
+		        closer: false,
+		        sticker: false
+		    },
+		    history: {
+		        history: false
+		    }
+		})).get().on('pnotify.confirm', function() {
+			if(tipo == "adicionarPopUp"){
+				dataGrid.EnviarEdit(params, campo, tabela);
+			}else{
+				dataGrid.EnviarEdit(params);
+			}
+			
+			dataGrid.EnviarEdit(params, campo, tabela);
+			
+			alert('Salvo com sucesso.');
+			
+		}).on('pnotify.cancel', function() {
+			return false;
+		});
+	}
+}
+
+function excluirDataGrid( p1, p2, p3 ){
+	(new PNotify({
+	    title: 'Confirmação',
+	    text: 'Deseja Excluir',
+	    icon: 'glyphicon glyphicon-question-sign',
+	    hide: false,
+	    type: 'error',
+	    confirm: {
+	        confirm: true
+	    },
+	    buttons: {
+	        closer: false,
+	        sticker: false
+	    },
+	    history: {
+	        history: false
+	    }
+	})).get().on('pnotify.confirm', function() {
+		efeitos.sumirIE(p1, p2);
+		dataGrid.Deletar('&idData=' + p3);
+	}).on('pnotify.cancel', function() {
+		return false;
+	});
 }

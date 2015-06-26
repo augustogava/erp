@@ -82,7 +82,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-money" aria-hidden="true"></span>
 				</a>
 
-				<a title="Cancelar" onclick="if(confirm('Deseja Cancelar?')){ cancelarContasReceber(<?=$fluxo[$j]->getId()?>);  }" href="#">
+				<a title="Cancelar" onclick="verifyPnotifyConfirm( 'Deseja cancelar?', 'cancelarContasReceber(<?=$fluxo[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-close" aria-hidden="true"></span>
 				</a>
 				
@@ -90,7 +90,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxo(<?=$fluxo[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'excluirFluxo(<?=$fluxo[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -202,7 +202,7 @@ if($_GET["acao"] == "listar"){
 				<?
 				if($fluxoReceber[$j]->getStatus()==0){
                 ?>
-				<a title="Cancelar" onclick="if(confirm('Deseja Cancelar?')){ cancelarContasReceber(<?=$fluxoReceber[$j]->getId()?>);  }" href="#">
+				<a title="Cancelar" onclick="verifyPnotifyConfirm( 'Deseja cancelar?', 'cancelarContasReceber(<?=$fluxoReceber[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-close" aria-hidden="true"></span>
 				</a>
 				<?
@@ -213,7 +213,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxo(<?=$fluxoReceber[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'excluirFluxo(<?=$fluxoReceber[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -361,7 +361,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvarContasReceber(<?=$_GET["id"]?>)" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'salvarContasReceber(<?=$_GET["id"]?>)' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						<input type="hidden" name="id" id="id" value="<?=$_GET["id"]?>"/>
@@ -431,11 +431,11 @@ if($_GET["acao"] == "listar"){
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
 							<?php if( $_GET["acao"]  == "pagar"){?>
-								<input class="btn btn-success btn-sm " type="button" onclick="pagarContasReceber(<?=$_GET["id"]?>)" value="Pagar" />
+								<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja pagar?', 'pagarContasReceber(<?=$_GET["id"]?>)' );" value="Pagar" />
 							<?php } ?>
 							
 							<?php if( $_GET["acao"]  == "descontar"){?>
-								<input class="btn btn-success btn-sm " type="button" onclick="descontarContasReceber(<?=$_GET["id"]?>)" value="Descontar" />
+								<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja descontar?', 'descontarContasReceber(<?=$_GET["id"]?>)' );" value="Descontar" />
 							<?php } ?>
 							 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>

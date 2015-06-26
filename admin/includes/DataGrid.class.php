@@ -101,7 +101,7 @@ class DataGrid {
     	if($this->verificaCadastroDuplicado($Dados)){
     		$this->ConexaoSQL->Inserir($fields, $this->getTabela());
     	}else{
-    		print "<script>window.alert('".ucfirst($this->getTabela())." j� cadastrado')</script>";
+    		print "<script>alert('".ucfirst($this->getTabela())." já cadastrado')</script>";
     	}
     }//end function
     
@@ -385,7 +385,7 @@ class DataGrid {
     	if($Acao != "abrir")
     		$this->Html .= "<tr><td align=\"center\" colspan=\"3\">
     								<div class=\"btn-group\" role=\"group\" aria-label=\"...\">
-    									<button class=\"btn btn-success btn-sm\" type=\"button\" value=\"Salvar\" onclick=\"if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'require efeitos','erro')){ ".$FuncJava." } }\">
+    									<button class=\"btn btn-success btn-sm\" type=\"button\" value=\"Salvar\" onclick=\"salvarDataGrid('".$Acao."', '".$Paramentros."', '".$Campo."', '".$this->getTabela()."');\">
 											<span class=\"glyphicon fa fa-save\" aria-hidden=\"true\"></span> Salvar
 										</button>  
     									<input class=\"btn btn-danger btn-sm\" type=\"button\" value=\"Cancelar\" onclick=\"addPop_close();\">
@@ -401,7 +401,6 @@ class DataGrid {
     	$this->Html .= "</table>  </form> <script>
 					document.onkeypress = function (evt){
 						if(main.procuraTecla(evt,13)){
-							//if(confirm('Deseja salvar?')){ if(formm.verificaF(this.id,'efeitos','erro')){ ".$FuncJava." } }
 						}
 					} 
 					".$scriptAdicionar."
@@ -660,7 +659,7 @@ class DataGrid {
 									</a>";
 	    		
 	    		if($this->getExcluir())
-	    			$this->Html .= "<a href=\"javascript:if(confirm('Deseja Excluir?')){efeitos.sumirIE('linhaDataGrid_".$i."', ".count($this->Colunas).");dataGrid.Deletar('&idData=".$RetornoConsulta[$i]["id"].$Paramentros."'); }\">
+	    			$this->Html .= "<a href=\"#\" onclick=\"excluirDataGrid('linhaDataGrid_".$i."', ".count($this->Colunas).", '".$RetornoConsulta[$i]["id"].$Paramentros."' );\">
 										<span class=\"glyphicon fa fa-trash\" aria-hidden=\"true\"></span>
 									</a>";
 	    	$this->Html .= "</td>";

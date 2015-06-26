@@ -11,7 +11,7 @@ if($_GET["acao"] == "listar"){
 	
 	
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest">
+<table width="100%" cellspacing="0" cellpadding="0" border="1" id="tabletest" class="table-erp">
 	<tbody>
 		<tr class="titulo">
 			<td width="100%" class="ColunaInfo" colspan="4">Exibindo de <?=$limite?> a <?=($limite+15)?></td>
@@ -19,14 +19,13 @@ if($_GET["acao"] == "listar"){
 		<tr class="titulo">
 			<td width="60%">Produto</td>
 			<td width="30%" >Qtd</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>itensBusca=<?=$_GET["itensBusca"]?>&limite=<?=($limite-15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreenleft.gif"/>
+			<td width="10%">
+				<a title="Anterior" href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>itensBusca=<?=$_GET["itensBusca"]?>&limite=<?=($limite-15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-left" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td width="4%">
-				<a href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>itensBusca=<?=$_GET["itensBusca"]?>&limite=<?=($limite+15)?>',1,'Saida');" href="#">
-					<img border="0" alt="Próximo" src="layout/incones/bulletgreen.gif"/>
+				
+				<a title="Próximo" href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>itensBusca=<?=$_GET["itensBusca"]?>&limite=<?=($limite+15)?>',1,'Saida');">
+					<span class="glyphicon fa fa-arrow-circle-right" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -39,20 +38,19 @@ if($_GET["acao"] == "listar"){
 				}
 		?>
 		<tr id="linhaDataGrid_<?=$j?>" class="<?=$linha?>" width="60%">
-			<td width="60%"  id="linhaDataGrid_<?=$j?>_0">
+			<td  id="linhaDataGrid_<?=$j?>_0">
 				<?=$composicao[$j]->getProdutoNome()?>
 			</td>
-			<td width="30%" id="linhaDataGrid_<?=$j?>_1"/>
+			<td id="linhaDataGrid_<?=$j?>_1"/>
 				<?=$composicao[$j]->getQtd()?>
 			</td>
-			<td width="4%" align="center"> 
-				<a href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=editar&id=<?=$_GET["id"]?>&idComposicao=<?=$composicao[$j]->getId()?>',1,'addPop');addPop_open(630);">
-					<img border="0" src="layout/incones/edit.png"/>
+			<td align="right"> 
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=editar&id=<?=$_GET["id"]?>&idComposicao=<?=$composicao[$j]->getId()?>',1,'addPop');addPop_open(630);">
+					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
-			</td>
-			<td  width="4%" align="center"> 
-				<a onclick="if(confirm('Deseja Excluir?')){ excluirComposicao(<?=$composicao[$j]->getId()?>, <?=$_GET["id"]?>);  }" href="#">
-					<img border="0" src="layout/incones/button_cancel.png"/>
+
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'excluirComposicao(<?=$composicao[$j]->getId()?>, <?=$_GET["id"]?>)' );" href="#">
+					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -124,7 +122,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm"  type="button" onclick="salvaComposicao()" value="Salvar" /> 
+							<input class="btn btn-success btn-sm"  type="button" onclick="verifyPnotifyConfirm( 'Deseja salvar?', 'salvaComposicao()' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						
@@ -138,7 +136,6 @@ if($_GET["acao"] == "listar"){
 	<script>
 	document.onkeypress = function (evt){
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvaComposicao(); } 
 		}
 	}
 	</script>

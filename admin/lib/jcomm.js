@@ -304,6 +304,7 @@ var dataGrid = {
 		var url = ''; 
 		url = $('queryB').value;
 		doAjaxSemRetorno('ajax_com/acaoDataGrid.php' + PegarCampos() + param , 2, 'addPop');
+		
 		dataGrid.Enviar(param);
 	},
 	EnviarEditPopUP: function( param, campo, tabela){

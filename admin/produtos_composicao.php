@@ -20,10 +20,11 @@ include($Main->Configuracoes->HEADER_NADMIN);
 	<div id="content">
 	
 			<div class="linhaConfig" id="busca">  
-				<a href="javascript:main.trocad('buscaDiv');" class="button"><span>Consultar</span></a> 
-				
-				<a href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=adicionar&id=<?=$_GET["id"]?>',1,'addPop');addPop_open(630);" class="button"><span>Incluir</span></a><br /><br /> 
-				
+				<ul class="nav nav-tabs" role="tablist">
+    				<li role="presentation" class=""><a href="#"  onclick="main.trocad('buscaDiv');" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-search" aria-hidden="true"></span> Consultar</a></li>
+    				<li role="presentation" class=""><a href="#"  onclick="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=adicionar&id=<?=$_GET["id"]?>',1,'addPop');addPop_open(630);" aria-controls="home" role="tab" data-toggle="tab"><span class="glyphicon fa fa-file" aria-hidden="true"></span> Cadastrar Novo</a></li>
+    			</ul>
+    			
 				<div id="buscaDiv" style="display:none;">
 					<div class="form-group form-inline">
 						<label for="itensBusca">Produtos</label>
@@ -39,9 +40,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 							?>
 						</select>
 						
-						<a href="javascript:doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>&itensBusca=' + $('itensBusca').value , 1, 'Saida');" href="#">
-							<img border="0" src="layout/incones/find.png"/>
-						</a>
+						<button type="button" class="btn btn-sm btn-default" onClick="doAjaxSemRetorno('ajax_com/composicao.php?acao=listar&id=<?=$_GET["id"]?>&itensBusca=' + $('itensBusca').value , 1, 'Saida');">Buscar</button>
 						
 					</div>
 				</div>

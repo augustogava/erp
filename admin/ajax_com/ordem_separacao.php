@@ -81,7 +81,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirOrdemSeparacao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'excluirOrdemSeparacao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)' )" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -188,7 +188,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<? if(!$ordem[0] || ($ordem[0] && $ordem[0]->getStatusId() != 2)){ ?><input class="btn btn-success btn-sm " type="button" onclick="salvaOrdemSeparacao(<?=$_GET["id"]?>)" value="Salvar" /><? } ?> 
+							<? if(!$ordem[0] || ($ordem[0] && $ordem[0]->getStatusId() != 2)){ ?><input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja salvar?', 'salvaOrdemSeparacao(<?=$_GET["id"]?>)' )" value="Salvar" /><? } ?> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						
@@ -202,7 +202,6 @@ if($_GET["acao"] == "listar"){
 	<script>
 	document.onkeypress = function (evt){
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvaOrdemSeparacao(<?=$_GET["id"]?>); } 
 		}
 	}
 	</script>

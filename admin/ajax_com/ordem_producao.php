@@ -80,7 +80,7 @@ if($_GET["acao"] == "listar"){
 				</a>
 
 				<? if(!$ordem[$j] || ($ordem[$j] && $ordem[$j]->getStatusId() != 2)){ ?>
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?','excluirOrdemProducao(<?=$ordem[$j]->getId()?>, <?=$ordem[$j]->getStatusId()?>)');" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
@@ -190,7 +190,7 @@ if($_GET["acao"] == "listar"){
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
 							<? if(!$ordem[0] || ($ordem[0] && $ordem[0]->getStatusId() != 2)){ ?>
-								<button class="btn btn-success btn-sm " type="button" onclick="salvaOrdemProducao(<?=$_GET["id"]?>)" value="Salvar">
+								<button class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaOrdemProducao()');" value="Salvar">
 									<span class="glyphicon fa fa-save" aria-hidden="true"></span> Salvar
 								</button>
 							<? } ?> 
@@ -207,7 +207,7 @@ if($_GET["acao"] == "listar"){
 	<script>
 	document.onkeypress = function (evt){
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvaOrdemProducao(<?=$_GET["id"]?>); } 
+			verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaOrdemProducao()');
 		}
 	}
 	</script>

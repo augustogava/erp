@@ -102,7 +102,7 @@ if($_GET["acao"] == "listarBancos"){
 			<td align="right">
 
 				<? if($fluxo[$j]->getStatus() == 0){ ?>
-				<a title="Pagar" onclick="pagarBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>)" href="#">
+				<a title="Pagar" onclick="verifyPnotifyConfirm( 'Deseja pagar?', 'pagarBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>)' );" href="#">
 					<span class="glyphicon fa fa-usd" aria-hidden="true"></span>
 				</a>
 				<? } ?>
@@ -111,7 +111,7 @@ if($_GET["acao"] == "listarBancos"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxoBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'excluirFluxoBanco(<?=$fluxo[$j]->getId()?>, <?=$_GET["idBanco"]?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -231,7 +231,7 @@ if($_GET["acao"] == "listarBancos"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvarFluxoBanco(<?=$_GET["id"]?>)" value="Salvar" />
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja salvar?', 'salvarFluxoBanco(<?=$_GET["id"]?>)' );" value="Salvar" />
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						

@@ -6,15 +6,14 @@
 		<meta name="description" content="<? print $Main->Padrao->descricao; ?>" >
 		<meta name="keywords" content="<? print $Main->Padrao->keywords; ?>" >
 		<meta name="author" content="Augusto Gava" >
+		<link REL="SHORTCUT ICON" HREF="layout/favicon.ico">
 		
-		<link rel="stylesheet" type="text/css" media="screen, projection" href="css/css.css" >
-	    <link rel="stylesheet" type="text/css" href="codebase/dhtmlxcalendar.css">
-	    
+		<link rel="stylesheet" href="css/css.css" media="screen, projection" type="text/css">
+	    <link rel="stylesheet" href="codebase/dhtmlxcalendar.css" type="text/css">
 	    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
-	    
-		<link REL="SHORTCUT ICON" HREF="layout/favicon.ico">
-	    
+		<link rel="stylesheet" href="lib/pnotify/pnotify.custom.min.css" media="all" type="text/css" />
+		
 		<script>
 			function loadJs(filename){
 	
@@ -31,14 +30,13 @@
 		<script src="lib/jcomm.js" type="text/javascript"></script>
 		<script src="lib/ajax.js" type="text/javascript"></script>
 	
-		<script src="lib/jquery/jquery-2.1.3.min.js"></script>
-		<script src="lib/jquery/jquery-ui.min.js"></script>
+		<script src="lib/jquery/jquery-2.1.3.min.js" type="text/javascript"></script>
+		<script src="lib/pnotify/pnotify.custom.min.js" type="text/javascript"></script>		
 
 		<script src="lib/script.js?t=11" type="text/javascript"></script>
 		
 	    <script>
 			window.dhx_globalImgPath = "codebase/imgs/";
-	
 			$.noConflict();
 		</script>
 		<script type="text/javascript" src="codebase/dhtmlxcommon.js"></script>

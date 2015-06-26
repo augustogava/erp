@@ -121,7 +121,7 @@ if($_GET["acao"] == "listar"){
 				<?php 
 				if( $pedidos[$j]->getStatusId() == 1 ){
 				?>
-				<a title="Fechar Pedido" href="javascript:fecharPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
+				<a title="Fechar Pedido" href="javascript:verifyPnotifyConfirm( 'Deseja realmente enviar para separação?\nOperação não pode ser cancelada posteriormente!', 'fecharPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)' );">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
@@ -129,7 +129,7 @@ if($_GET["acao"] == "listar"){
 				<?php 
 				if( $pedidos[$j]->getStatusId() == 6 ){
 				?>
-				<a title="Enviar Pedido" href="javascript:enviarPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)">
+				<a title="Enviar Pedido" href="javascript:verifyPnotifyConfirm( 'Deseja realmente mudar status do pedido para enviado?\nOperação não pode ser cancelada posteriormente!', 'enviarPedido(<?=$pedidos[$j]->getId()?>, <?=$pedidos[$j]->getStatusID()?>)' );">
 					<span class="glyphicon fa fa-truck" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
@@ -146,7 +146,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirPedido(<?=$pedidos[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirPedido(<?=$pedidos[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 
@@ -466,7 +466,7 @@ if($_GET["acao"] == "listar"){
 					<td align="center" colspan="3">
 
 						<div class="btn-group" role="group" aria-label="...">
-							<button class="btn btn-success btn-sm " type="button" onclick="salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>)" >
+							<button class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>)' );" >
 								<span class="glyphicon fa fa-save" aria-hidden="true"></span> Salvar
 							</button> 
 							
@@ -495,7 +495,6 @@ if($_GET["acao"] == "listar"){
 	document.onkeypress = function (evt){
 
 		if(main.procuraTecla(evt,13)){
-
 			if(confirm('Deseja salvar?')){ salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>); }
 
 		}
@@ -587,7 +586,7 @@ if($_GET["acao"] == "listar"){
 		</td>
 
 		<td  class="ColunaInfo">
-			<a href="javascript:excluirItemPedido(<?=$itens[$i]->getId()?>, <?=$_GET["idPedido"]?>);"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
+			<a href="javascript:verifyPnotifyConfirm( 'Deseja deletar item do pedido?', 'excluirItemPedido(<?=$itens[$i]->getId()?>, <?=$_GET["idPedido"]?>)' );"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
 		</td>
 	</tr>
 <?

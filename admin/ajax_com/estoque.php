@@ -154,7 +154,8 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvaEstoque(<?=$_GET["id"]?>)" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaEstoque()' );" value="Salvar" />
+							 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						
@@ -167,7 +168,7 @@ if($_GET["acao"] == "listar"){
 	<script>
 	document.onkeypress = function (evt){
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvaEstoque(<?=$_GET["id"]?>); } 
+			if(confirm('Deseja salvar?')){ verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaEstoque()' ); } 
 		}
 	}
 	</script>
