@@ -50,7 +50,7 @@ if($_GET["acao"] == "editar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvarUsuario(<?=$_GET["id"]?>)" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja Salvar?', 'salvarUsuario(<?=$_GET["id"]?>)' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						
@@ -115,7 +115,7 @@ if($_GET["acao"] == "editar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvarUsuarioSenha(<?=$_GET["id"]?>)" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja salvar ?', 'salvarUsuarioSenha(<?=$_GET["id"]?>)' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						

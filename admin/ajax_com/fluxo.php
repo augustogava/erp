@@ -96,7 +96,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a> -->
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirFluxo(<?=$fluxo[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirFluxo(<?=$fluxo[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -257,13 +257,6 @@ if($_GET["acao"] == "listar"){
 		</table>
 	</form>
 	<script>
-	document.onkeypress = function (evt){
-		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvafluxo(<?=$_GET["id"]?>); } 
-		}
-	}
-	</script>
-</div>
 <? 
 }
 ?>

@@ -495,8 +495,7 @@ if($_GET["acao"] == "listar"){
 	document.onkeypress = function (evt){
 
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>); }
-
+			verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaPedido(<?=$idPedido?>, <?= ($pedidos[0] && $pedidos[0]->getStatusId()) ? $pedidos[0]->getStatusId() : 0 ?>)' );
 		}
 
 	}

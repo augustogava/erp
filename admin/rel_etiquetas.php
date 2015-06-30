@@ -24,16 +24,6 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				</form>
 			</div>
 			<button type="button" onClick="abrirRelatorioEtiquetas();" class="btn btn-success" style="margin-top: 10px">Gerar Relatório</button>
-				
-				<script>
-					document.onkeypress = function (evt){
-						if(main.procuraTecla(evt,13)){
-							if(confirm('Deseja gerar o relatório?')){ abrirRelatorioEtiquetas() }
-						}
-					}
-					
-				</script>
-		
 		
 		<div id="SaidaMain">
 	

@@ -245,7 +245,7 @@ if($_GET["acao"] == "listarBancos"){
 	<script>
 	document.onkeypress = function (evt){
 		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ salvafluxoBanco(<?=$_GET["id"]?>); }
+
 		}
 	}
 	</script>

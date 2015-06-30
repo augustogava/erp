@@ -58,7 +58,7 @@ if($_GET["acao"] == "listar"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirEstoque(<?=$estoque[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirEstoque(<?=$estoque[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 			</td>
@@ -165,13 +165,6 @@ if($_GET["acao"] == "listar"){
 			</tbody>
 		</table>
 	</form>
-	<script>
-	document.onkeypress = function (evt){
-		if(main.procuraTecla(evt,13)){
-			if(confirm('Deseja salvar?')){ verifyPnotifyConfirm( 'Deseja Salvar ?', 'salvaEstoque()' ); } 
-		}
-	}
-	</script>
 </div>
 <? 
 }

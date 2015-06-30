@@ -61,15 +61,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<button type="button" onClick="abrirRelatorioVendas();" class="btn btn-success" style="margin-top: 0px">Gerar Relatório</button>
 				
 				<br/>
-				
-					<script>
-						document.onkeypress = function (evt){
-							if(main.procuraTecla(evt,13)){
-								if(confirm('Deseja gerar o relatório?')){ abrirRelatorioVendas() }
-							}
-						}
-						
-					</script>
+
 			</div>
 		
 		<div id="SaidaMain">

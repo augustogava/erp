@@ -112,7 +112,7 @@ if($_GET["acao"] == "listarCotacao"){
 				<?php 
 				if( $compras[$j]->getStatus() == 0 ){
 				?>
-				<a title="Fechar" href="javascript:virarCompra(<?=$compras[$j]->getId()?>)">
+				<a title="Fechar" href="javascript:verifyPnotifyConfirm( 'Deseja realmente fechar cotacao e virar Compra? Operação não pode ser cancelada posteriormente!', 'virarCompra(<?=$compras[$j]->getId()?>)' );">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
 				<?php } ?>
@@ -124,7 +124,7 @@ if($_GET["acao"] == "listarCotacao"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirCompraCotacao(<?=$compras[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirCompraCotacao(<?=$compras[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 
@@ -247,7 +247,7 @@ if($_GET["acao"] == "listarCotacao"){
 				<?php 
 				if( $compras[$j]->getStatus() == 0 ){
 				?>
-				<a title="Fechar" href="javascript:fecharCompra(<?=$compras[$j]->getId()?>, '<?=$compras[$j]->getStatus()?>')">
+				<a title="Fechar" href="javascript:verifyPnotifyConfirm( 'Deseja realmente fechar compra? Operação não pode ser cancelada posteriormente!', 'fecharCompra(<?=$compras[$j]->getId()?>, <?=$compras[$j]->getStatus()?>)' );">
 					<span class="glyphicon fa fa-check-circle" aria-hidden="true"></span>
 				</a>
 				<?php 
@@ -261,7 +261,7 @@ if($_GET["acao"] == "listarCotacao"){
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
 				</a>
 
-				<a title="Excluir" onclick="if(confirm('Deseja Excluir?')){ excluirCompraCompra(<?=$compras[$j]->getId()?>);  }" href="#">
+				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirCompraCompra(<?=$compras[$j]->getId()?>)');" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
 				</a>
 
@@ -509,7 +509,6 @@ if($_GET["acao"] == "listarCotacao"){
 
 		if(main.procuraTecla(evt,13)){
 
-			if(confirm('Deseja salvar?')){ salvaCompra(<?=$idCompra?>, <?= ($compra[0] && $compra[0]->getStatus()) ? $compra[0]->getStatus() : 0 ?>, <?=$_GET["local"]?>); }
 
 		}
 
@@ -689,7 +688,7 @@ if($_GET["acao"] == "listarCotacao"){
 
 		<td class="ColunaInfo">
 
-			<a href="javascript:excluirItemCompra(<?=$itens[$i]->getId()?>, <?=$_GET["idCompra"]?>);"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
+			<a href="javascript:verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirItemCompra(<?=$itens[$i]->getId()?>, <?=$_GET["idCompra"]?>)');"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
 
 		</td>
 
@@ -778,7 +777,7 @@ if($_GET["acao"] == "listarCotacao"){
 				&nbsp;<? if($i == count($formasPagto)-1){ ?><a onclick="javascript:adicionarFormaPgtoCompra(<?=$_GET["idCompra"]?>, <?=$i-1?>)" href="#"><img src="layout/incones/add16.png" border="0" alt="Adicioar Item" title="Adicionar Item"></a><? } ?>
 			</td>
 			<td class="ColunaInfo">
-				<a href="javascript:excluirFormaPgtoCompra(<?=$formasPagto[$i]->getId()?>, <?=$_GET["idCompra"]?>);"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
+				<a href="javascript:verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirFormaPgtoCompra(<?=$formasPagto[$i]->getId()?>, <?=$_GET["idCompra"]?>);' );"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
 			</td>
         </tr>
         <? } ?>
@@ -803,8 +802,6 @@ if($_GET["acao"] == "listarCotacao"){
 }else if($_GET["acao"] == "selecionaProduto"){
 
 	$produtos = $Main->Compras->pegaProduto($_GET["idProduto"]);
-
-	print_r($produtos);
 
 	if($produtos){
 

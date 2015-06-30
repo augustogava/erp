@@ -508,21 +508,31 @@ function verificaPreco() {
 		var precoIten = $('preco' + i).value;
 
 		if (precoIten == '0,00') {
-
-			if (confirm('Este produto é garantia?')) {
-
+			
+			(new PNotify({
+			    title: 'Confirmação',
+			    text: 'Este produto é garantia?',
+			    icon: 'glyphicon glyphicon-question-sign',
+			    hide: false,
+			    type: 'error',
+			    confirm: {
+			        confirm: true
+			    },
+			    buttons: {
+			        closer: false,
+			        sticker: false
+			    },
+			    history: {
+			        history: false
+			    }
+			})).get().on('pnotify.confirm', function() {
 				return true;
-
-			} else {
-
+			}).on('pnotify.cancel', function() {
 				$('preco' + i).focus();
-
+				
 				return false;
-
-			}
-
+			});
 		}
-
 	}
 
 	return true;
@@ -537,20 +547,30 @@ function verificaPrecoEspecifico(valorItem) {
 
 		if (precoIten == '0,00') {
 
-			if (confirm('Este produto é garantia?')) {
-
+			(new PNotify({
+			    title: 'Confirmação',
+			    text: 'Este produto é garantia?',
+			    icon: 'glyphicon glyphicon-question-sign',
+			    hide: false,
+			    type: 'error',
+			    confirm: {
+			        confirm: true
+			    },
+			    buttons: {
+			        closer: false,
+			        sticker: false
+			    },
+			    history: {
+			        history: false
+			    }
+			})).get().on('pnotify.confirm', function() {
 				return true;
-
-			} else {
-
-				$('preco' + valorItem).focus();
-
+			}).on('pnotify.cancel', function() {
+				$('preco' + i).focus();
+				
 				return false;
-
-			}
-
+			});
 		}
-
 	}
 
 	return true;
@@ -727,13 +747,9 @@ function salvaEstoque() {
 }
 
 function excluirEstoque(id) {
-
 	doAjaxSemRetorno('ajax_com/estoque_acao.php?acao=deletar&id=' + id, 1, '');
-
 	refreshEstoque();
-
 	alert('Excluído com sucesso!');
-
 }
 
 // /////////////////////////////////////////////
@@ -1213,34 +1229,21 @@ function excluirCompraCompra(id) {
 
 function excluirItemCompra(id, idCompra) {
 
-	if (confirm('Deseja deletar item?')) {
+	doAjaxSemRetorno('ajax_com/compras_acao.php?acao=deletarItemCompra&id='
+			+ id, 1, '');
 
-		doAjaxSemRetorno('ajax_com/compras_acao.php?acao=deletarItemCompra&id='
-				+ id, 1, '');
+	doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra='
+			+ idCompra, 1, 'bodyID');
 
-		doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra='
-				+ idCompra, 1, 'bodyID');
-
-		alert('Excluído com sucesso!');
-
-	}
+	alert('Excluído com sucesso!');
 
 }
 
 function excluirFormaPgtoCompra(id, idCompra) {
+	doAjaxSemRetorno('ajax_com/compras_acao.php?acao=deletarFormaPgto&id=' + id, 1, '');
+	doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra=' + idCompra, 1, 'bodyID');
 
-	if (confirm('Deseja deletar?')) {
-
-		doAjaxSemRetorno('ajax_com/compras_acao.php?acao=deletarFormaPgto&id='
-				+ id, 1, '');
-
-		doAjaxSemRetorno('ajax_com/compras.php?acao=listarItens&idCompra='
-				+ idCompra, 1, 'bodyID');
-
-		alert('Excluído com sucesso!');
-
-	}
-
+	alert('Excluído com sucesso!');
 }
 
 function salvaCampoCompra(campo, valor, idItem, indice) {
@@ -1358,15 +1361,26 @@ function calculaPrecoCompra() {
 
 function salvaCompra(idCompra, status, local) {
 
-	if (confirm('Deseja salvar ?')) {
-
-		if ((status == 1)
-				&& !confirm('Está fechado, certeza que deseja alterar?')) {
-
-			return;
-
-		}
-
+	if ((status == 1) && !confirm('Está fechado, certeza que deseja alterar?') )
+		return;
+	
+	(new PNotify({
+	    title: 'Confirmação',
+	    text: 'Deseja salvar?',
+	    icon: 'glyphicon glyphicon-question-sign',
+	    hide: false,
+	    type: "success",
+	    confirm: {
+	        confirm: true
+	    },
+	    buttons: {
+	        closer: false,
+	        sticker: false
+	    },
+	    history: {
+	        history: false
+	    }
+	})).get().on('pnotify.confirm', function() {
 		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
 			doAjaxSemRetorno(
@@ -1394,80 +1408,66 @@ function salvaCompra(idCompra, status, local) {
 			alert('Salvo com sucesso!');
 
 		}
-
-	}
-
+	});
+	
 }
 
 function virarCompra(idCotacao) {
-
-	if (confirm('Deseja realmente fechar cotacao e virar Compra?\nOperação não pode ser cancelada posteriormente!')) {
-
-		doAjaxSemRetorno('ajax_com/compras_acao.php?acao=virarCompra&id='
-				+ idCotacao, 1, '');
-
-		doAjaxSemRetorno('ajax_com/compras.php?acao=listarCotacao', 1,
-				'SaidaMain');
-
-	}
-
+	doAjaxSemRetorno('ajax_com/compras_acao.php?acao=virarCompra&id=' + idCotacao, 1, '');
+	doAjaxSemRetorno('ajax_com/compras.php?acao=listarCotacao', 1, 'SaidaMain');
 }
 
 function fecharCompra(idCompra, status) {
 
-	if (confirm('Deseja realmente fechar compra?\nOperação não pode ser cancelada posteriormente!')) {
-
-		if (status == 0) {
-			if (confirm('Deseja lancar fluxo?')) {
-				doAjaxSemRetorno(
-						'ajax_com/compras_acao.php?acao=fecharCompra&fluxo=s&id='
-								+ idCompra, 1, '');
-
-				doAjaxSemRetorno('ajax_com/compras.php?acao=listarCompras', 1,
-						'SaidaMain');
-			} else {
-				doAjaxSemRetorno(
-						'ajax_com/compras_acao.php?acao=fecharCompra&fluxo=n&id='
-								+ idCompra, 1, '');
-
-				doAjaxSemRetorno('ajax_com/compras.php?acao=listarCompras', 1,
-						'SaidaMain');
-			}
-
-		} else {
-
-			alert('Status da compra deve estar Aberto para poder ser fechado.');
-
-		}
-
+	if (status == 0) {
+		(new PNotify({
+		    title: 'Confirmação',
+		    text: 'Deseja lancar fluxo?',
+		    icon: 'glyphicon glyphicon-question-sign',
+		    hide: false,
+		    type: 'error',
+		    confirm: {
+		        confirm: true
+		    },
+		    buttons: {
+		        closer: false,
+		        sticker: false
+		    },
+		    history: {
+		        history: false
+		    }
+		})).get().on('pnotify.confirm', function() {
+			
+			doAjaxSemRetorno( 'ajax_com/compras_acao.php?acao=fecharCompra&fluxo=s&id=' + idCompra, 1, '');
+			doAjaxSemRetorno('ajax_com/compras.php?acao=listarCompras', 1, 'SaidaMain');
+			
+		}).on('pnotify.cancel', function() {
+			
+			doAjaxSemRetorno( 'ajax_com/compras_acao.php?acao=fecharCompra&fluxo=n&id=' + idCompra, 1, '');
+			doAjaxSemRetorno('ajax_com/compras.php?acao=listarCompras', 1, 'SaidaMain');
+			
+		});
+	} else {
+		alert('Status da compra deve estar Aberto para poder ser fechado.');
 	}
-
 }
 
 function selecionaProdutoItenCompra(id, indice, idItem) {
-
-	doAjaxSemRetorno('ajax_com/compras.php?acao=selecionaProduto&idProduto='
-			+ id + '&indice=' + indice + '&idItem=' + idItem, 1, '');
-
+	doAjaxSemRetorno('ajax_com/compras.php?acao=selecionaProduto&idProduto=' + id + '&indice=' + indice + '&idItem=' + idItem, 1, '');
 	calculaPrecoCompra();
-
 }
 
 function impressaoCompra(idCompra, tipo) {
-
-	window.open('impressao.php?cadastro=compra&id=' + idCompra + '&tipo='
-			+ tipo, 'Email',
+	window.open('impressao.php?cadastro=compra&id=' + idCompra + '&tipo=' + tipo, 'Email',
 			"height=600, width=850, scrollbars=yes, resizable=yes")
 
 }
 
 function refreshCotacao() {
-
 	doAjaxSemRetorno('ajax_com/compras.php?acao=listarCotacao&fornecedores='
 			+ $('fornecedoresBusca').value + '&dataIni=' + $('dataIni').value
 			+ '&dataFim=' + $('dataFim').value + '&codigo='
 			+ $('codigoBusca').value, 1, 'SaidaMain');
-
 }
 
 function refreshCompras() {
@@ -1575,53 +1575,43 @@ function radioValue(radioButton) {
 }// end function
 
 function salvarUsuario() {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
 
-	if (confirm('Deseja salvar?')) {
+		doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvar'
+				+ '&id=' + $('id').value 
+				+ '&nome=' + $('nome').value 
+				+ '&email=' + $('email').value
+				+ '&login=' + $('login').value
+					, 1, '');
 
-		console.info( $('nome').value  )
-		if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		addPop_close();
 
-			doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvar'
-					+ '&id=' + $('id').value 
-					+ '&nome=' + $('nome').value 
-					+ '&email=' + $('email').value
-					+ '&login=' + $('login').value
-						, 1, '');
+		alert('Salvo com sucesso!');
 
-			addPop_close();
-
-			alert('Salvo com sucesso!');
-
-		}
 	}
 }
 
 function salvarUsuarioSenha() {
-
-	if (confirm('Deseja salvar?')) {
-		
-		if( $('saveOK').value == 1 ){
-			console.info( $('senhaNova').value.length )
-			if( $('senhaNova').value.length > 5 ){
-				if (formm.verificaF(this.id, 'erroForm', 'erro')) {
-		
-					doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvarSenha'
-							+ '&id=' + $('id').value 
-							+ '&senhaAntiga=' + $('senhaAntiga').value 
-							+ '&senhaNova=' + $('senhaNova').value
-								, 1, '');
-		
-					addPop_close();
-		
-					alert('Salvo com sucesso!');
-		
-				}
-			}else{
-				alert('Senha deve ser maior que 5 digitos.');
+	if( $('saveOK').value == 1 ){
+		if( $('senhaNova').value.length > 5 ){
+			if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+	
+				doAjaxSemRetorno('ajax_com/user_acao.php?acao=salvarSenha'
+						+ '&id=' + $('id').value 
+						+ '&senhaAntiga=' + $('senhaAntiga').value 
+						+ '&senhaNova=' + $('senhaNova').value
+							, 1, '');
+	
+				addPop_close();
+	
+				alert('Salvo com sucesso!');
+	
 			}
 		}else{
-			alert('Senhas devem ser iguais.');
+			alert('Senha deve ser maior que 5 digitos.');
 		}
+	}else{
+		alert('Senhas devem ser iguais.');
 	}
 }
 
@@ -1636,10 +1626,8 @@ function verificaSenhaIgual( field ){
 var _alert, _confirm;
 function consume_alert() {
     if (_alert) return;
-//    if (_confirm) return;
     
     _alert = window.alert;
-//    _confirm = window.confirm;
     
     window.alert = function(message) {
         new PNotify({

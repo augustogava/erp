@@ -192,7 +192,7 @@ class Relatorios {
     	$RetornoConsultaRel = $this->ConexaoSQL->Select($query);
     	 
     	$retorno["campos"] = array("Tipo", "Produto", "Estoque Atual" ,"Em Separaçao", "Total");
-    	$retorno["align"] = array("center", "left", "center" ,"center", "center");
+    	$retorno["align"] = array("center", "left", "right" ,"right", "right");
     	 
     	if(count($RetornoConsultaRel) > 0){
     		for($j=0; $j<count($RetornoConsultaRel); $j++){
