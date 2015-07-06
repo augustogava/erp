@@ -160,3 +160,8 @@ UPDATE `erp`.`menus` SET `ordem`='5' WHERE `id`='32';
 UPDATE `erp`.`menus` SET `ordem`='6' WHERE `id`='6';
 UPDATE `erp`.`menus` SET `id_menus`='10', `ordem`='0' WHERE `id`='6';
 UPDATE `erp`.`menus` SET `id_menus`='10', `ordem`='1' WHERE `id`='60';
+
+
+ALTER TABLE `pedidos_itens` ADD COLUMN `preco_especial` DOUBLE NOT NULL AFTER `preco`;
+ALTER TABLE `pedidos_itens` ADD COLUMN `total_especial` DOUBLE NOT NULL AFTER `total`;
+ALTER TABLE `pedidos` ADD COLUMN `valor_total_especial` DOUBLE NOT NULL AFTER `valor_total`;

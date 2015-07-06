@@ -31,6 +31,8 @@
 		<script src="lib/ajax.js" type="text/javascript"></script>
 	
 		<script src="lib/jquery/jquery-2.1.3.min.js" type="text/javascript"></script>
+		<script src="lib/jquery/plugins/jquery-mask-v1.11.4.js" type="text/javascript"></script>
+		
 		<script src="lib/pnotify/pnotify.custom.min.js" type="text/javascript"></script>		
 
 		<script src="lib/script.js?t=11" type="text/javascript"></script>

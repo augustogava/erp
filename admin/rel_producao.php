@@ -24,7 +24,6 @@ include($Main->Configuracoes->HEADER_NADMIN);
 				<div class="form-group form-inline">
 					<label for="filtro1">Tipo de Produto</label>
 					<select id="filtro1" name="filtro1" class="form-control input-xs normalsizeSelect">
-						<option value="0">Selecione</option>
 						<?
 						for($j=0; $j<count($tipos); $j++){
 						?>					

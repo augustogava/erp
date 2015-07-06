@@ -333,7 +333,7 @@ class Relatorios {
         }
 
         $retorno["align"] = array("left", "right", "right" );
-        
+
         $RetornoConsultaRel = $this->ConexaoSQL->Select($query);
         $RetornoConsultaRelTotal = $this->ConexaoSQL->Select($queryTotal);
         
@@ -370,7 +370,7 @@ class Relatorios {
 
         if($parametros["filtro1"] == 1){
 
-            $query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, produtos.codigo as nome FROM pedidos
+            $query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * ( pedidos_itens.preco + pedidos_itens.preco_especial ) ) as valor, produtos.codigo as nome FROM pedidos
                     INNER JOIN pedidos_itens ON pedidos_itens.id_pedidos = pedidos.id
                     INNER JOIN produtos ON produtos.id = pedidos_itens.id_produtos
                     WHERE pedidos.data_fechada >= '".Formata::date2banco($parametros["filtro2"])." 00:00:01'
@@ -385,11 +385,11 @@ class Relatorios {
         	$retorno["width"] = array("60%", "15%", "25%");
 			
         }else if($parametros["filtro1"] == 2){
-			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, representantes.nome as nome,
+			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * ( pedidos_itens.preco + pedidos_itens.preco_especial ) ) as valor, representantes.nome as nome,
                         SUM( CASE WHEN pedidos.comissao = 0 THEN
-                                                                                ( (pedidos_itens.total * 7) / 100 )
+                                                                                ( ((pedidos_itens.total+pedidos_itens.total_especial) * 7) / 100 )
                                                                         ELSE
-                                                                                ((pedidos_itens.total * pedidos.comissao) / 100)
+                                                                                (((pedidos_itens.total+pedidos_itens.total_especial) * pedidos.comissao) / 100)
                                                                         END )
                                                                   as comissao
                                 FROM pedidos
@@ -407,7 +407,7 @@ class Relatorios {
 			$retorno["width"] = array("60%", "10%", "15%", "15%");
 			
         }else if($parametros["filtro1"] == 3){
-			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor, clientes.nome as nome,
+			$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * ( pedidos_itens.preco + pedidos_itens.preco_especial ) ) as valor, clientes.nome as nome,
                             								SUM(CASE WHEN pedidos.comissao = 0 THEN
                                                                                 ( (pedidos_itens.total * 7) / 100 )
                                                                         ELSE
@@ -431,7 +431,7 @@ class Relatorios {
 			if( !empty($parametros["filtro4"]))
 				$cli = "AND pedidos.id_clientes = '".$parametros["filtro4"]."'";
         	
-			$query = "SELECT SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor,SUM(pedidos_itens.qtd) as qtd, clientes.nome as nome,pedidos.codigo, pedidos.data_fechada
+			$query = "SELECT SUM(pedidos_itens.qtd * ( pedidos_itens.preco + pedidos_itens.preco_especial ) ) as valor,SUM(pedidos_itens.qtd) as qtd, clientes.nome as nome,pedidos.codigo, pedidos.data_fechada
                             								
                                     FROM pedidos
                                     LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
@@ -460,7 +460,7 @@ class Relatorios {
 				$dtInicio 	= date("Y-m-d", mktime(0, 0, 0 , $i, 1, date("Y") ));
 				$dtFim 		= date("Y-m-d", mktime(0, 0, 0 , $i+1, 1-1, date("Y") ));
 				
-				$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * pedidos_itens.preco) as valor,SUM(pedidos_itens.qtd) as qtd 
+				$query = "SELECT SUM(pedidos_itens.qtd) as qtdTotal, SUM(pedidos_itens.qtd * ( pedidos_itens.preco + pedidos_itens.preco_especial ) ) as valor,SUM(pedidos_itens.qtd) as qtd 
                             								
                                     FROM pedidos
                                     LEFT JOIN clientes ON clientes.id = pedidos.id_clientes
@@ -600,11 +600,11 @@ class Relatorios {
             $queryCliente = "A.id_representantes = '".$parametros["filtro3"]."' AND ";
         }
 
-        $query = "SELECT A.codigo, A.data_fechada, B.nome, SUM( pedidos_itens.total ) as total,  
+        $query = "SELECT A.codigo, A.data_fechada, B.nome, SUM( pedidos_itens.total+pedidos_itens.total_especial ) as total,  
                                                                         SUM(CASE WHEN A.comissao = 0 THEN
-                                                                                ( (pedidos_itens.total * 7) / 100 )
+                                                                                ( ( ( pedidos_itens.total+pedidos_itens.total_especial) * 7) / 100 )
                                                                         ELSE
-                                                                                ((pedidos_itens.total * A.comissao) / 100)
+                                                                                ( ( ( pedidos_itens.total+pedidos_itens.total_especial) * A.comissao) / 100)
                                                                         END)
                                                                   as comissao, 
                                                                   CASE WHEN A.comissao = 0 THEN

@@ -21,7 +21,9 @@ class PropriedadesItensPedidos  {
 	var $produtos;
 	var $qtd;
 	var $preco;
+	var $precoEspecial;
 	var $total;
+	var $totalEspecial;
 	var $tipoComissao;
 	var $valorComissao;
 	
@@ -89,12 +91,28 @@ class PropriedadesItensPedidos  {
 		$this->preco = $preco;
 	}
 	
+	public function getPrecoEspecial(){
+		return $this->precoEspecial;
+	}
+	
+	public function setPrecoEspecial($precoEspecial){
+		$this->precoEspecial = $precoEspecial;
+	}
+	
 	public function getTotal(){
 		return $this->total;
 	}
 	
 	public function setTotal($total){
 		$this->total = $total;
+	}
+	
+	public function getTotalEspecial(){
+		return $this->totalEspecial;
+	}
+	
+	public function setTotalEspecial($totalEspecial){
+		$this->totalEspecial = $totalEspecial;
 	}
 }
 ?>

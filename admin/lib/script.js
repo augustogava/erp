@@ -351,59 +351,25 @@ function salvaCampo(campo, valor, idItem, indice) {
 function calculaPrecoPedido() {
 
 	var somaQtd = 0, somaPreco = 0;
-
-	/*
-	 * var valor = $('valorComissao').value;
-	 * 
-	 * v = valor.replace(/\./g,"");
-	 * 
-	 * v = v.replace(/\,/g,".");
-	 */
-
 	var contI = $('totalItens').value;
-
+	console.info("calculaPrecoPedido")
 	for (var i = 0; i < contI; i++) {
 
 		var precoIten = $('preco' + i).value;
-
-		precoIten = precoIten.replace(/\./g, "");
-
-		precoIten = precoIten.replace(/\,/g, ".");
+		var precoItenEspecial = $('precoEspecial' + i).value;
+		precoIten = precoIten.replace(/\./g, "").replace(/\,/g, ".");
+		precoItenEspecial = precoItenEspecial.replace(/\./g, "").replace(/\,/g, ".");
+//		precoIten = precoIten.replace(/\,/g, ".");
 
 		somaQtd += parseInt($('qtd' + i).value);
-
-		$('campoTotal_' + i).innerHTML = $('qtd' + i).value
-				* parseFloat(precoIten);
+		$('campoTotal_' + i).innerHTML = ( $('qtd' + i).value * parseFloat(precoIten) ) + ( $('qtd' + i).value * parseFloat(precoItenEspecial) );
 
 		somaPreco += parseInt($('campoTotal_' + i).innerHTML);
-
-		/*
-		 * 
-		 * //somaPreco += $('qtd'+i).value * $('preco'+i).value;
-		 * 
-		 * 
-		 * 
-		 * if($('tipoComissao1').checked == true){
-		 * 
-		 * $('campoTotal_'+i).innerHTML = ($('qtd'+i).value *
-		 * $('preco'+i).value) - ( ( ($('preco'+i).value * v ) / 100) *
-		 * $('qtd'+i).value );
-		 * 
-		 * somaPreco += parseFloat($('campoTotal_'+i).innerHTML);
-		 * 
-		 * }else{
-		 * 
-		 * $('campoTotal_'+i).innerHTML = ($('qtd'+i).value *
-		 * $('preco'+i).value) - (v * $('qtd'+i).value );
-		 * 
-		 * somaPreco += parseFloat($('campoTotal_'+i).innerHTML);
-		 *  }
-		 */
-
 	}
+	
+	console.info("calculaPrecoPedido2")
 
 	$('qtdTotalItens').innerHTML = somaQtd;
-
 	$('precoTotalItens').innerHTML = somaPreco;
 
 }
@@ -415,13 +381,10 @@ function calculaPrecoPedidoTotal() {
 	var valor = $('valorComissao').value;
 
 	v = valor.replace(/\./g, "");
-
 	v = v.replace(/\,/g, ".");
 
 	for (var i = 0; i < $('totalItens').value; i++) {
-
 		somaPreco += $('qtd' + i).value * $('preco' + i).value;
-
 	}
 
 	$('precoTotalItens').innerHTML = somaPreco;
@@ -506,8 +469,9 @@ function verificaPreco() {
 	for (var i = 0; i < contI; i++) {
 
 		var precoIten = $('preco' + i).value;
+		var precoItenEspecial = $('precoEspecial' + i).value;
 
-		if (precoIten == '0,00') {
+		if (precoIten == '0,00' && precoItenEspecial == '0,00' ) {
 			
 			(new PNotify({
 			    title: 'Confirmação',

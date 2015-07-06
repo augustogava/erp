@@ -447,7 +447,7 @@ if($_GET["acao"] == "listar"){
 
 					<td align="left" style="font-family: Lucida Grande,Verdana,sans-serif; font-size: 11px; color: rgb(56, 61, 68);" colspan="2">
 
-						<table width="100%" class="" cellspacing="0" cellpadding="0" border="1" id="bodyID">
+						<table width="100%" cellspacing="0" cellpadding="0" border="1" id="bodyID" class="table-erp">
 
 						</table>
 
@@ -457,7 +457,7 @@ if($_GET["acao"] == "listar"){
 
 				<tr>
 
-					<td align="center" colspan="3"></td>
+					<td align="center" colspan="3">&nbsp;</td>
 
 				</tr>
 
@@ -515,19 +515,18 @@ if($_GET["acao"] == "listar"){
 	<? } ?>
 	<tr class="titulo">
 
-		<td width="7%" class="ColunaInfo" style="text-align:left;">Qtd</td>
+		<td width="10%"  style="text-align:left;">Qtd</td>
 
-		<td width="50" class="ColunaInfo" style="text-align:left;">Produto</td>
+		<td width="70"  style="text-align:left;">Produto</td>
 
-		<td width="25%" class="ColunaInfo" style="text-align:left;">Comissão</td>
+		<td width="10%"  style="text-align:left;">Valor</td>
+		<td width="10%"  style="text-align:left;">Valor Especial</td>
 
-		<td width="10%" class="ColunaInfo" style="text-align:left;">Valor</td>
+		<td width="2%"  style="text-align:left;">Total</td>
 
-		<td width="2%" class="ColunaInfo" style="text-align:left;">Total</td>
+		<td width="2%"  style="text-align:left;">&nbsp;</td>
 
-		<td width="2%" class="ColunaInfo" style="text-align:left;">&nbsp;</td>
-
-		<td width="2%" class="ColunaInfo" style="text-align:left;">&nbsp;</td>	
+		<td width="2%"  style="text-align:left;">&nbsp;</td>	
 
 	</tr>
 	<?
@@ -535,7 +534,7 @@ if($_GET["acao"] == "listar"){
 		$produtoItem = $itens[$i]->getProdutos();
 
 		$qtdTotal += $itens[$i]->getQtd();
-		$precoTotal += $itens[$i]->getTotal();
+		$precoTotal += $itens[$i]->getTotal() + $itens[$i]->getTotalEspecial();
 		if(($i%2) == 0){
 			$linha = "linha";
 		}else{
@@ -543,11 +542,11 @@ if($_GET["acao"] == "listar"){
 		}
 	?>
 	<tr class="<?=$linha?>">
-		<td class="ColunaInfo" style="text-align:left;">
+		<td  style="text-align:left;">
 			<input class="form-control input-xs twodigits" type="text" size="2" id="qtd<?=$i?>" name="qtd[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getQtd()?>" title="qtd" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
 		</td>
 
-		<td  class="ColunaInfo" style="text-align:left;">
+		<td   style="text-align:left;">
 			<select class="form-control input-xs fullsize" id="produto<?=$i?>" name="produto[<?=$itens[$i]->getId()?>]" title="id_produtos" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);">
 				<option value="0" selected>Selecione</option>
 				<?
@@ -561,61 +560,61 @@ if($_GET["acao"] == "listar"){
 			</select>
 		</td>
 
-		<td  class="ColunaInfo form-inline" style="text-align:left;">
-			<label class="checkbox-inline">
-				<input type="radio" name="tipoComissao<?=$i?>" id="tipoComissao1<?=$i?>" value="1" <? if($itens[$i]->getTipoComissao() == 1) print "checked"; ?> title="tipo_comissao" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);"> %
-				</label>
-			<label class="checkbox-inline">
-				<input type="radio" name="tipoComissao<?=$i?>" id="tipoComissao2<?=$i?>" value="2" <? if($itens[$i]->getTipoComissao() == 2) print "checked"; ?> title="tipo_comissao" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);"> Valor
-			</label>	
-
-			<input class="form-control input-xs fourdigits " type="text" size="2" id="valorComissao<?=$i?>" name="valorComissao[<?=$itens[$i]->getId()?>]" value="<?=$itens[$i]->getValorComissao()?>" title="comissao_valor" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);" onkeypress="mascaras.Formata(this,20,event,2);">
+		<td  style="text-align:left;" id="precosProduto_<?=$i?>">
+			<input class="form-control input-xs fourdigits money" type="text" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+		</td>
+		
+		<td  style="text-align:left;" id="precosProduto_<?=$i?>">
+			<input class="form-control input-xs fourdigits money" type="text" size="6" id="precoEspecial<?=$i?>" name="precoEspecial[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPrecoEspecial())?>" title="preco_especial" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
 		</td>
 
-		<td class="ColunaInfo" style="text-align:left;" id="precosProduto_<?=$i?>">
-			<input class="form-control input-xs fourdigits" type="text" size="6" id="preco<?=$i?>" name="preco[<?=$itens[$i]->getId()?>]" value="<?=$Main->Formata->banco2valor($itens[$i]->getPreco())?>" title="preco" onkeypress="mascaras.Formata(this,20,event,2);" onChange="salvaCampo(this.title, this.value, <?=$itens[$i]->getId()?>, <?=$i?>);calculaPrecoPedido();">
+		<td   style="text-align:left;" id ="campoTotal_<?=$i?>">
+			<?=$itens[$i]->getTotal()+$itens[$i]->getTotalEspecial();?>
 		</td>
 
-		<td  class="ColunaInfo" style="text-align:left;" id ="campoTotal_<?=$i?>">
-			<?=$itens[$i]->getTotal();?>
+		<td >
+			<? if($i == count($itens)-1){ ?>
+			<a title="Excluir" onclick="adicionarItemPedido(<?=$idPedido?>, <?=$i-1?>)" href="#">
+				<span class="glyphicon fa fa-plus" aria-hidden="true"></span>
+			</a>
+			<? } ?>
 		</td>
 
-		<td  class="ColunaInfo">
-			&nbsp;<? if($i == count($itens)-1){ ?><a onclick="javascript:adicionarItemPedido(<?=$idPedido?>, <?=$i-1?>)" href="#"><img src="layout/incones/add16.png" border="0" alt="Adicioar Item" title="Adicionar Item"></a><? } ?>
-		</td>
-
-		<td  class="ColunaInfo">
-			<a href="javascript:verifyPnotifyConfirm( 'Deseja deletar item do pedido?', 'excluirItemPedido(<?=$itens[$i]->getId()?>, <?=$_GET["idPedido"]?>)' );"><img src="layout/incones/button_cancel.png" border="0" style="width: 14px;"></a>
+		<td  >
+			<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja deletar item do pedido?', 'excluirItemPedido(<?=$itens[$i]->getId()?>, <?=$_GET["idPedido"]?>)' );" href="#">
+				<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
+			</a>
 		</td>
 	</tr>
 <?
 	}
 ?>
-	<tr class="linha">
-		<td width="7%" class="ColunaInfo" style="text-align:left;" id = "qtdTotalItens">
+
+	<tr class="titulo">
+		<td  style="text-align:left;" id = "qtdTotalItens">
 			<?=$qtdTotal?>
 		</td>
 
-		<td width="40%" class="ColunaInfo" style="text-align:left;">&nbsp;
+		<td  style="text-align:left;">&nbsp;
 			<input type="hidden" name="totalItens" id="totalItens" value="<?=count($itens)?>">
 		</td>
 
-		<td width="25%" class="ColunaInfo" style="text-align:left;">&nbsp;
+		<td   style="text-align:left;" >&nbsp;
 		</td>
-
-		<td width="10%" class="ColunaInfo" style="text-align:left;" >&nbsp;
+<td   style="text-align:left;" >&nbsp;
 		</td>
-
-		<td width="10%" class="ColunaInfo" style="text-align:left;" id = "precoTotalItens">
+		<td  style="text-align:left;" id = "precoTotalItens">
 			<?=$precoTotal?>
 		</td>
 
-		<td width="5%" class="ColunaInfo">&nbsp;
+		<td >&nbsp;
 		</td>
 
-		<td width="5%" class="ColunaInfo">&nbsp;
+		<td  >&nbsp;
 		</td>
 	</tr>
+	
+	<script>jQuery('.money').mask('000.000.000.000.000,00', {reverse: true}); /*$('.money2').mask("#.##0,00", {reverse: true});*/ </script>
 <?
 
 }else if($_GET["acao"] == "selecionaProduto"){
