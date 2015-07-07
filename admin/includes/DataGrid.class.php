@@ -700,7 +700,7 @@ class DataGrid {
     	$Paramentros = $this->montaParametros();
     	
 		$this->Html .= "<tr class=\"titulo\">";
-		$this->Html .= "<td colspan=\"".(count($this->Colunas))."\" align=\"center\" width=\"96%\"> Exibindo ".$this->getLimiteAtual()." a ".($this->getLimiteAtual()+$this->getLimite())."  </td>";
+		$this->Html .= "<td colspan=\"".(count($this->Colunas))."\" align=\"center\"> Exibindo ".$this->getLimiteAtual()." a ".($this->getLimiteAtual()+$this->getLimite())."  </td>";
 		if($this->getExportar()){
 			$this->Html .= "<td align='right'><a href=\"#\" onClick=\"main.openWindow('exportarDataGrid.php?a=1&ordena=".$this->getOrder().$Paramentros."', '300', '150')\">
 								<span class=\"glyphicon fa fa-print\" style=\"font-size: 30px !important;\" aria-hidden=\"true\"></span>
