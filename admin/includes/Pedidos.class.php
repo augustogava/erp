@@ -705,13 +705,22 @@ class Pedidos  {
 
 		$precoTotal = $RetornoConsulta[0]["total"];
 		$precoTotalEspecial = $RetornoConsulta[0]["totalEspecial"];
+
 		if($dadosPedido[0]->getDataEnviada() != '0000-00-00 00:00:00'){
 			//GERA PARCELAS PARA FORMA PAGAMENTO
-			$saidaParcelas .= "<tr style=\"background:#CFDEFF;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"> Parcelamento</td>
+			$saidaParcelas .= "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento</b></td>
 							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
 							<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
 						</tr>";
+			
+			if( $dadosPedido[0]->getValorTotalEspecial() > 0 )
+				$saidaParcelasEspecial .= "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento Especial</b></td>
+							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+							<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+						</tr>";
+			
 			$formaPagamento = $this->pegaFormaPagamento($dadosPedido[0]->getFormaPagamento());
 			$parcela = $formaPagamento[0]->getParcelas();
 
@@ -724,10 +733,10 @@ class Pedidos  {
 				$valorParcelaEspecial = $precoTotalEspecial / count($dias);
 				if( ( $dadosPedido[0]->getDataImposto() != "00-00-0000" && $dadosPedido[0]->getDataImposto() != "00/00/0000" ) && Formata::valor2banco( $dadosPedido[0]->getImposto() ) > 0  ){
 					$saidaParcelas .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-						<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Imposto </td>
-						<td class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getDataImposto()."</td>
-						<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getImposto()."</td>
-					</tr>";
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Imposto </td>
+											<td class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getDataImposto()."</td>
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getImposto()."</td>
+										</tr>";
 				}
 
 				foreach($dias as $k=>$datas){
@@ -745,20 +754,21 @@ class Pedidos  {
 					}
 
 					$saidaParcelas .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela: ".($k+1)." de ".count($dias)."</td>
-							<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
-							<td  class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($valPar)."</td>
-						</tr>";
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela: ".($k+1)." de ".count($dias)."</td>
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($valPar)."</td>
+										</tr>";
 					
 					if( $valorParcelaEspecial > 0 )
-						$saidaParcelas .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-								<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela Especial: ".($k+1)." de ".count($dias)."</td>
-								<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
-								<td  class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($valorParcelaEspecial)."</td>
-							</tr>";
+						$saidaParcelasEspecial .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+												<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela Especial: ".($k+1)." de ".count($dias)."</td>
+												<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
+												<td  class=\"ColunaInfo\" style=\"text-align:left;\">".Formata::banco2valor($valorParcelaEspecial)."</td>
+											</tr>";
 
 				}
 			}
+			
 		}
 
 		$pt = explode("/", $dadosPedido[0]->getCodigo());
@@ -797,6 +807,8 @@ class Pedidos  {
 		$fluxoTemplateSaida = ereg_replace("%DATA%", Formata::banco2date($dadosPedido[0]->getDataEnviada()), $fluxoTemplateSaida); 
 		$fluxoTemplateSaida = ereg_replace("%ITENS%",$itens, $fluxoTemplateSaida);
 		$fluxoTemplateSaida = ereg_replace("%PARCELAS%",$saidaParcelas, $fluxoTemplateSaida);
+		$fluxoTemplateSaida = ereg_replace("%PARCELASESPECIAL%",$saidaParcelasEspecial, $fluxoTemplateSaida);
+		
 
 		
 		$padraoTemplate = file($this->Configuracoes->TemplateArquivoEmail);//chama o arquivo do p
@@ -865,7 +877,7 @@ class Pedidos  {
 			</tr>";
 			
 			$return .= "<tr style=\"background: #EBF0FD;height:32px;\">
-				<td colspan=\"6\" style=\"text-align:right;\">
+				<td colspan=\"4\" style=\"text-align:right;\">
 					<table width=\"20%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"right\">
 						<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Imposto</td>
@@ -873,7 +885,7 @@ class Pedidos  {
 						<tr style=\"background:#EBF0FD;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">".$dadosPedido[0]->getImposto()."</td>
 						</tr>
-						
+						 
 						<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 							<td width=\"100%\" class=\"ColunaInfo\" style=\"text-align:left;\">Frete</td>
 						</tr>
