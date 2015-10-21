@@ -621,8 +621,6 @@ if($_GET["acao"] == "listar"){
 
 	$produtos = $Main->Pedidos->pegaProduto($_GET["idProduto"]);
 
-	print_r($produtos);
-
 	if($produtos){
 
 		$codigo = $produtos[0]->getCodigo();

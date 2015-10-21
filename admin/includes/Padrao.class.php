@@ -18,7 +18,8 @@ include_once("properties/PropriedadesPadrao.php");
  */
 class Padrao {
     public $ConexaoSQL;
-	
+    public $ParametrosVAR;
+    
     /**
 	 * M�todo construtor.
 	 *
@@ -37,9 +38,8 @@ class Padrao {
 	 */
     private function pegarParametros(){
         $Dados = $this->ConexaoSQL->SelectAuto("param",array('nome','valor'));
-        
         for($i=0; $i<count($Dados); $i++){
-            $this->$Dados[$i]['nome'] = $Dados[$i]['valor'];
+        	$this->ParametrosVAR[$Dados[$i]['nome']] = $Dados[$i]['valor'];
         }//end for
     }//end function
     

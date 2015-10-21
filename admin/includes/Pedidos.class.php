@@ -27,6 +27,7 @@ include_once("properties/PropriedadesFormaPagamento.php");
 class Pedidos  {
 	public $ConexaoSQL;
     public $Configuracoes;
+    public $Padrao;
     
     /**
 	 * Método construtor.
@@ -34,9 +35,10 @@ class Pedidos  {
 	 * @param ConexaoSQL conexão com o banco
 	 */
 
-    public function Pedidos($ConexaoSQL, $Configuracoes){
+    public function Pedidos($ConexaoSQL, $Configuracoes, $Padrao){
         $this->ConexaoSQL = $ConexaoSQL;
         $this->Configuracoes = $Configuracoes;
+        $this->Padrao = $Padrao;
     }
 
 	/**
@@ -469,9 +471,6 @@ class Pedidos  {
 
 	public function voltaEstoqueAntigo($idPedido){
 		
-		//Só apaga ordens de produções abertas, as fechadas já foram feitas e estão no estoque já
-		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$idPedido."' AND id_status_ordem = '1' ");
-		
 		//Só pode remover do historio do estoque, as saidas (separacoes)
 		$this->ConexaoSQL->deleteQuery("DELETE FROM estoque WHERE id_pedidos = '".$idPedido."' AND tipo = '2'");
 		$ordens = OrdemSeparacao::pegaOrdemSeparacao("", $idPedido, null, null, null, null, 2 );
@@ -479,7 +478,7 @@ class Pedidos  {
 			$produto = $ordens[0]->getProdutos();
 			$this->ConexaoSQL->updateQuery("UPDATE produtos SET estoque_atual = estoque_atual + '". $ordens[0]->getQtd()."' WHERE id = '". $produto[0]->getId(). "'");
 		}
-		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id_pedido = '".$idPedido."'");
+		
 	}
 
 	/**
@@ -501,21 +500,25 @@ class Pedidos  {
 
 			//Deleta lixo
 			//normaliza estoque
-			$this->voltaEstoqueAntigo($idPedido);
+			if( $this->Padrao->ParametrosVAR["estoque_automatico"] === "true" )
+				$this->voltaEstoqueAntigo($idPedido);
 
 			//INSERE ESTOQUE
 			for($j=0; $j<count($RetornoConsulta); $j++){
-
-				$idOrdemProducao = null; 
-				$qtdEstoque = $this->pegaEstoqueProduto($RetornoConsulta[$j]["id_produtos"]);
-				if( $qtdEstoque > 0 && $qtdEstoque <= $RetornoConsulta[$j]["qtd"]){ // Estoque está acima de 0
-					$qtdEstoque = $RetornoConsulta[$j]["qtd"] - $qtdEstoque;
-					$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
-					$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
-				}else if( $qtdEstoque <= 0 ) {	//Nao tem nada estoque, faz tudo
-					$qtdEstoque = $RetornoConsulta[$j]["qtd"];
-					$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
-					$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
+				
+				
+				$idOrdemProducao = 0; 
+				if( $this->Padrao->ParametrosVAR["estoque_automatico"] === "true" ){
+					$qtdEstoque = $this->pegaEstoqueProduto($RetornoConsulta[$j]["id_produtos"]);
+					if( $qtdEstoque > 0 && $qtdEstoque <= $RetornoConsulta[$j]["qtd"]){ // Estoque está acima de 0
+						$qtdEstoque = $RetornoConsulta[$j]["qtd"] - $qtdEstoque;
+						$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
+						$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
+					}else if( $qtdEstoque <= 0 ) {	//Nao tem nada estoque, faz tudo
+						$qtdEstoque = $RetornoConsulta[$j]["qtd"];
+						$this->ConexaoSQL->insertQuery("INSERT INTO ordem_producao (id_produtos, id_pedido, descricao, qtd, data_cad, id_status_ordem) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$qtdEstoque."', NOW(), '1')");
+						$idOrdemProducao = $this->ConexaoSQL->pegaLastId();
+					}
 				}
 				
 				$this->ConexaoSQL->insertQuery("INSERT INTO ordem_separacao (id_produtos, id_pedido, id_ordem_producao, descricao, qtd, data_cad, id_status_separacao) VALUES('".$RetornoConsulta[$j]["id_produtos"]."', '".$idPedido."', '".$idOrdemProducao."', 'Pedido: ".$dadosPedido[0]->getCodigo()." ','".$RetornoConsulta[$j]["qtd"]."', NOW(), '1')");
@@ -651,8 +654,13 @@ class Pedidos  {
 	*@param id.
 	*/
 	public function excluirPedido($id){
-		//Exclui lixo
-		$this->voltaEstoqueAntigo($id);
+		if( $this->Padrao->ParametrosVAR["estoque_automatico"] === "true" )
+			$this->voltaEstoqueAntigo($id);
+		
+		//Só apaga ordens de produções abertas, as fechadas já foram feitas e estão no estoque já
+		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_producao WHERE id_pedido = '".$idPedido."' AND id_status_ordem = '1' ");
+		$this->ConexaoSQL->deleteQuery("DELETE FROM ordem_separacao WHERE id_pedido = '".$idPedido."'");
+		
 		$this->ConexaoSQL->deleteQuery("DELETE FROM fluxo WHERE id_pedidos = '".$id."'");
 		$this->ConexaoSQL->deleteQuery("DELETE FROM pedidos WHERE id = '".$id."'");
 

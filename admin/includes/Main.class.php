@@ -83,8 +83,8 @@ class Main {
         //prepara o objeto template
 		$this->Template 		= new Template($this->ConexaoSQL);
 		$this->Estoque 			= new Estoque($this->ConexaoSQL);
-    	$this->OrdemSeparacao 	= new OrdemSeparacao($this->ConexaoSQL);
-		$this->Pedidos 			= new Pedidos($this->ConexaoSQL, $this->Configuracoes);
+    	$this->OrdemSeparacao 	= new OrdemSeparacao($this->ConexaoSQL, $this->Padrao);
+		$this->Pedidos 			= new Pedidos($this->ConexaoSQL, $this->Configuracoes, $this->Padrao);
         $this->OrdemProducao 	= new OrdemProducao($this->ConexaoSQL);
         $this->DataGrid 		= new DataGrid($this->ConexaoSQL);
         $this->Fluxo 			= new Fluxo($this->ConexaoSQL);

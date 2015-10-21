@@ -361,7 +361,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja excluir?', 'salvarContasReceber(<?=$_GET["id"]?>)' );" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja Salvar?', 'salvarContasReceber(<?=$_GET["id"]?>)' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						<input type="hidden" name="id" id="id" value="<?=$_GET["id"]?>"/>
