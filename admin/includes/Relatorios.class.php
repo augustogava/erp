@@ -168,27 +168,23 @@ class Relatorios {
     private function montaRelEstoqueAtual($parametros){
     
     	if(!empty($parametros["filtro1"])){
-    		$where = " AND produtos.id_tipo_produdo = '".$parametros["filtro1"]."'";
+    		$where = " produtos.id_tipo_produdo = '".$parametros["filtro1"]."'";
     	}
     
-    	$query = "SELECT produtos.codigo, produtos.nome, produtos.descricao, tipo_produdo.nome as tipo_produto,
-					produtos.estoque_atual, case when os.qtd is null then 0 else sum(os.qtd) end as qtd
-					FROM produtos
-					INNER JOIN tipo_produdo ON tipo_produdo.id = produtos.id_tipo_produdo
-					LEFT JOIN ordem_separacao os on os.id_produtos = produtos.id
-					WHERE
-					case when os.id IS NOT NULL then
-						os.id_status_separacao = 1
-						else
-						1
-					end
-    				".$where."
-					group by produtos.id
-					ORDER By produtos.id_tipo_produdo, produtos.codigo
-					;";
-    
+    	
+    	$query = "select *, sum(t.qtdSoma) as qtd  FROM (
+    			SELECT produtos.id , produtos.codigo, produtos.nome, produtos.descricao,
+    			tipo_produdo.nome as tipo_produto, produtos.estoque_atual,
+    	case when os.qtd is null || os.id_status_separacao = 2 then 0 else os.qtd end as qtdSoma
+    	
+    			FROM produtos
+    			INNER JOIN tipo_produdo ON tipo_produdo.id = produtos.id_tipo_produdo
+    			LEFT JOIN ordem_separacao os on os.id_produtos = produtos.id
+    			WHERE ".$where." 
+    			ORDER By produtos.id_tipo_produdo, produtos.codigo) as t  group by t.id";
+    	
     	$retorno["titulo"] = "Estoque Atual";
-    
+   		//print $query;
     	$RetornoConsultaRel = $this->ConexaoSQL->Select($query);
     	 
     	$retorno["campos"] = array("Tipo", "Produto", "Estoque Atual" ,"Em Separaçao", "Total");
@@ -198,7 +194,7 @@ class Relatorios {
     		for($j=0; $j<count($RetornoConsultaRel); $j++){
     			$retorno["valores"][$j]["Tipo"] = $RetornoConsultaRel[$j]["tipo_produto"];
     			$retorno["valores"][$j]["Produto"] = $RetornoConsultaRel[$j]["codigo"]." - ".$RetornoConsultaRel[$j]["descricao"];
-    			$retorno["valores"][$j]["Estoque"] = $RetornoConsultaRel[$j]["estoque_atual"];
+    			$retorno["valores"][$j]["Estoque"] = $RetornoConsultaRel[$j]["estoque_atual"]+$RetornoConsultaRel[$j]["qtd"];
     			$retorno["valores"][$j]["Separacao"] = $RetornoConsultaRel[$j]["qtd"];
     			$retorno["valores"][$j]["Total"] = $RetornoConsultaRel[$j]["estoque_atual"]-$RetornoConsultaRel[$j]["qtd"];
     		}
