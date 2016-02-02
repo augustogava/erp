@@ -237,17 +237,27 @@ class Fluxo  {
 	*/
 	public function pegaContasReceber(){
 
-		$query = "SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome 
-						FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes 
-					LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores 
-					LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo 
-					WHERE fluxo.tipo = '1' AND 
-									 ( 
-										( status > '0' AND data < NOW() ) OR 
-                                        ( data > NOW() )
+// 		$query = "SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome 
+// 						FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes 
+// 					LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores 
+// 					LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo 
+// 					WHERE fluxo.tipo = '1' AND 
+// 									 ( 
+// 										( status > '0' AND data < NOW() ) OR 
+//                                         ( data > NOW() )
+// 									 )
+// 						ORDER By fluxo.status, fluxo.data ASC ";
+
+		$query = "SELECT fluxo.*, clientes.nome as clienteNome, fornecedores.nome as fornecedorNome,tipo_fluxo.nome as tipoFluxoNome
+						FROM fluxo LEFT JOIN clientes ON clientes.id = fluxo.id_clientes
+					LEFT JOIN fornecedores ON fornecedores.id = fluxo.id_fornecedores
+					LEFT JOIN tipo_fluxo ON tipo_fluxo.id = fluxo.id_tipo_fluxo
+					WHERE fluxo.tipo = '1' AND
+									 (
+										( status = '0' AND data >= NOW() )
 									 )
 						ORDER By fluxo.status, fluxo.data ASC ";
-
+		
 		//print $query;
 		$RetornoConsultaRel = $this->ConexaoSQL->Select($query);
 
@@ -364,8 +374,7 @@ class Fluxo  {
 					
 					WHERE fluxo.tipo = '2' AND 
 									 ( 
-										( status > '0' AND data < NOW() ) OR 
-                                        ( data > NOW() )
+										( status = '0' AND data >= NOW() )
 									 )
 						ORDER By fluxo.status, fluxo.data ASC";
 
