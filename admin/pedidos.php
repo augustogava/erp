@@ -86,7 +86,7 @@ include($Main->Configuracoes->HEADER_NADMIN);
 					</script>
 			</div>
 		
-		<div id="SaidaMain">
+		<div id="SaidaMain" style="overflow-y: scroll;">
 		</div>
 
 	</div> <!-- end #content -->
