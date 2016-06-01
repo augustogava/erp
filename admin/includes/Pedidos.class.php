@@ -1,4 +1,5 @@
 <?php
+ini_set('default_charset','UTF-8');
 # - - - - - - - - - - - - - - - - ERP - - - - - - - - - - - - - - - - - -
 # ERP
 #
@@ -560,7 +561,7 @@ class Pedidos  {
 		}
 
 		if($salvar){
-			if($campo == "preco" || $campo == "comissao_valor"){
+			if($campo == "preco" || $campo == "preco_especial" || $campo == "comissao_valor"){
 				$valor = Formata::valor2banco($valor);
 			}
 
@@ -725,18 +726,19 @@ class Pedidos  {
 
 		if($dadosPedido[0]->getDataEnviada() != '0000-00-00 00:00:00'){
 			//GERA PARCELAS PARA FORMA PAGAMENTO
-			$saidaParcelas .= "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento</b></td>
-							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
-							<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
-						</tr>";
+			$saidaParcelas .= "<table width=\"45%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"border: 3px solid #1E96CD;\"><tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+							   		<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento</b></td>
+							   		<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+							   		<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+						       	</tr>";
 			
 			if( $dadosPedido[0]->getValorTotalEspecial() > 0 )
-				$saidaParcelasEspecial .= "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-							<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento Especial</b></td>
-							<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
-							<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
-						</tr>";
+				$saidaParcelasEspecial .= "<table width=\"45%\ cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"border: 3px solid #1E96CD;\"><tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
+							               		<td width=\"60%\" class=\"ColunaInfo\" style=\"text-align:left;\"><b>Parcelamento Especial</b></td>
+							               		<td width=\"20%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+							               		<td width=\"30%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
+						                   	</tr>";
+						
 			
 			$formaPagamento = $this->pegaFormaPagamento($dadosPedido[0]->getFormaPagamento());
 			$parcela = $formaPagamento[0]->getParcelas();
@@ -776,9 +778,9 @@ class Pedidos  {
 					}
 
 					$saidaParcelas .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-											<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela: ".($k+1)." de ".count($dias)."</td>
+											<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela ".($k+1)." de ".count($dias)."</td>
 											<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
-											<td  class=\"ColunaInfo\" style=\"text-align:right;\">".Formata::banco2valor($valPar)."</td>
+											<td  class=\"ColunaInfo\" style=\"text-align:right;padding-left:15px\">".Formata::banco2valor($valPar)."</td>
 										</tr>";
 					
 					if( $valorParcelaEspecial > 0 ){
@@ -787,16 +789,19 @@ class Pedidos  {
 							$addFrete =Formata::valor2banco( $dadosPedido[0]->getValorEntrega() );
 						}
 						$saidaParcelasEspecial .= "<tr style=\"background:#EBF0FD;color:#215DF6;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
-												<td  class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela Especial: ".($k+1)." de ".count($dias)."</td>
-												<td  class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
-												<td  class=\"ColunaInfo\" style=\"text-align:right;\">".Formata::banco2valor($valorParcelaEspecial+$addFrete)."</td>
-											</tr>";
+												   		<td class=\"ColunaInfo\" style=\"text-align:left;\"> Parcela Esp.: ".($k+1)." de ".count($dias)."</td>
+												   		<td class=\"ColunaInfo\" style=\"text-align:left;\">".$data."</td>
+												   		<td class=\"ColunaInfo\" style=\"text-align:right;padding-left:15px\">".Formata::banco2valor($valorParcelaEspecial+$addFrete)."</td>
+											       </tr>";
 					}
 
 				}
 			}
 			
 		}
+		
+		$saidaParcelas .= "</table>";
+		$saidaParcelasEspecial .= "</table>";		
 
 		$pt = explode("/", $dadosPedido[0]->getCodigo());
 		if(count($pt) > 1){
@@ -855,22 +860,37 @@ class Pedidos  {
 
 		$dadosPedido =$this->pegaPedidos("", "", $idPedido);
 		$itens = $this->pegaItensPedido($idPedido);
-
+		
+		$exibirValorEspecial = false;
+		
+		for($i=0; $i<count($itens); $i++){			
+			if ($itens[$i]->getPrecoEspecial()>0) {
+				$exibirValorEspecial = true;
+			}
+		}
+		
+		$widthValor = ($exibirValorEspecial)?"20%":"15%";
+		$widthTotal = ($exibirValorEspecial)?"20%":"10%";
+		
 		$return = "<tr style=\"background:#1E96CD;color:white;border-bottom: 1px solid #000;font-weight: bold;height:26px;\">
 						<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">Cod</td>
 						<td width=\"50%\" class=\"ColunaInfo\" style=\"text-align:left;\">Produto</td>
 						<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">Qtd</td>
-						<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\">Valor</td>
-						<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\">Valor Espe.</td>
-						<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">Total</td>
+						<td width=\"".$widthValor."\" class=\"ColunaInfo\" style=\"text-align:left;\">Valor</td>";
+		if ($exibirValorEspecial) {	
+			$return .= "<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\">Valor Espe.</td>";
+		}
+			$return .= "<td width=\"".$widthTotal."\" class=\"ColunaInfo\" style=\"text-align:left;\">Total</td>
 					</tr>";
 
 		for($i=0; $i<count($itens); $i++){
 			$produtoItem = $itens[$i]->getProdutos();
 			if($produtoItem[0]){
 				$codigo = $produtoItem[0]->getCodigo();
-				$qtdTotal += $itens[$i]->getQtd();
-				$precoTotal += $itens[$i]->getTotal() + $itens[$i]->getTotalEspecial();
+				$qtdTotal      += $itens[$i]->getQtd();
+				$valorTotal    += ($itens[$i]->getPreco() * $itens[$i]->getQtd());
+				$valorEspTotal += ($itens[$i]->getPrecoEspecial() * $itens[$i]->getQtd());
+				$precoTotal    += $itens[$i]->getTotal() + $itens[$i]->getTotalEspecial();
 				$nomeItem = $produtoItem[0]->getNome();
 			}
 
@@ -882,25 +902,33 @@ class Pedidos  {
 				<td width=\"10%\" style=\"text-align:left;\">
 					".$itens[$i]->getQtd()."
 				</td>
-				<td width=\"15%\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
+				<td width=\"".$widthValor."\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
 					".Formata::banco2valor($itens[$i]->getPreco())."
-				</td>
-				<td width=\"15%\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
-					".Formata::banco2valor($itens[$i]->getPrecoEspecial())."
-				</td>
-				<td width=\"10%\" style=\"text-align:left;\" id =\"campoTotal_<?=$i?>\">
+				</td>";
+				
+				if ($exibirValorEspecial) {		
+				$return .=	"<td width=\"15%\" style=\"text-align:left;\" id=\"precosProduto_<?=$i?>\">
+						".Formata::banco2valor($itens[$i]->getPrecoEspecial())."
+					</td>";
+				}
+
+			$return .=	"<td width=\"".$widthTotal."\" style=\"text-align:left;\" id =\"campoTotal_<?=$i?>\">
 					".Formata::banco2valor($itens[$i]->getTotal() + $itens[$i]->getTotalEspecial())."
 				</td>
 			</tr>";
 		}
 			
-		$return .= "<tr style=\"background: #EBF0FD;height:32px;\">
+		$return .= "<tr style=\"background: #EBF0FD;height:40px;\">
 				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">&nbsp;<strong>Total</strong></td>
 				<td width=\"50%\" class=\"ColunaInfo\" style=\"text-align:left;\">&nbsp;</td>
-				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".$qtdTotal."</strong></td>
-				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" >&nbsp;</td>
-				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" >&nbsp;</td>
-				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".Formata::banco2valor( ($precoTotal))."</strong></td>
+				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".$qtdTotal."</strong></td>";
+				if ($exibirValorEspecial) {	
+					$return .= "<td width=\"".$widthValor."\" class=\"ColunaInfo\" style=\"text-align:left;\" ><strong>".Formata::banco2valor($valorTotal)."</strong></td>";
+					$return .= "<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" ><strong>".Formata::banco2valor($valorEspTotal)."</strong></td>";
+				} else {
+					$return .= "<td width=\"".$widthValor."\" class=\"ColunaInfo\" style=\"text-align:left;\">&nbsp;</td>";
+				}
+				$return .= "<td width=\"".$widthTotal."\" class=\"ColunaInfo\" style=\"text-align:left;\"><strong>".Formata::banco2valor( ($precoTotal))."</strong></td>
 			</tr>";
 		
 		$return .= "<tr >
@@ -934,9 +962,11 @@ class Pedidos  {
 				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\">&nbsp;<strong></strong></td>
 				<td width=\"50%\" class=\"ColunaInfo\" style=\"text-align:left;\">&nbsp;</td>
 				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"></td>
-				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" ></td>
-				<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" ></td>
-				<td width=\"10%\" class=\"ColunaInfo\" style=\"text-align:left;\"> <b>".Formata::banco2valor(Formata::valor2banco($dadosPedido[0]->getImposto())+$precoTotal+Formata::valor2banco($dadosPedido[0]->getValorEntrega()))."</b></td>
+				<td width=\"".$widthValor."\" class=\"ColunaInfo\" style=\"text-align:left;\" ></td>";
+				if ($exibirValorEspecial) {	
+					$return .= "<td width=\"15%\" class=\"ColunaInfo\" style=\"text-align:left;\" ></td>";
+				}
+				$return .= "<td width=\"".$widthTotal."\" class=\"ColunaInfo\" style=\"text-align:left;\"> <b>".Formata::banco2valor(Formata::valor2banco($dadosPedido[0]->getImposto())+$precoTotal+Formata::valor2banco($dadosPedido[0]->getValorEntrega()))."</b></td>
 			</tr>";
 		
 // 			$return .= "<tr style=\"background: #EBF0FD;height:32px;\">

@@ -1,4 +1,5 @@
 <?
+ini_set('default_charset','UTF-8');
 include "../includes/Main.class.php";
 // chama a classe principal
 $Main = new Main();
@@ -92,9 +93,9 @@ if($_GET["acao"] == "listar"){
 				<?=$fluxo[$j]->getData()?>
 			</td>
 			<td align="right"> 
-				<!--<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=editar&id=<?=$fluxo[$j]->getId()?>',1,'addPop');addPop_open(550);">
+				<a title="Editar" href="javascript:doAjaxSemRetorno('ajax_com/fluxo.php?acao=editar&id=<?=$fluxo[$j]->getId()?>',1,'addPop');addPop_open(550);">
 					<span class="glyphicon fa fa-edit" aria-hidden="true"></span>
-				</a> -->
+				</a>
 
 				<a title="Excluir" onclick="verifyPnotifyConfirm( 'Deseja Excluir ?', 'excluirFluxo(<?=$fluxo[$j]->getId()?>)' );" href="#">
 					<span class="glyphicon fa fa-trash" aria-hidden="true"></span>
@@ -247,7 +248,7 @@ if($_GET["acao"] == "listar"){
 				<tr>
 					<td align="center" colspan="3">
 						<div class="btn-group" role="group" aria-label="...">
-							<input class="btn btn-success btn-sm " type="button" onclick="salvarFluxo(<?=$_GET["id"]?>)" value="Salvar" /> 
+							<input class="btn btn-success btn-sm " type="button" onclick="verifyPnotifyConfirm( 'Deseja pagar?', 'salvarFluxo(<?=$_GET["id"]?>)' );" value="Salvar" /> 
 							<input class="btn btn-danger btn-sm" type="button" onclick="addPop_close();" value="Cancelar"/>
 						</div>
 						<input type="hidden" name="id" id="id" value="<?=$_GET["id"]?>"/>
@@ -256,7 +257,6 @@ if($_GET["acao"] == "listar"){
 			</tbody>
 		</table>
 	</form>
-	<script>
 <? 
 }
 ?>

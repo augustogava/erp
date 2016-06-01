@@ -974,6 +974,26 @@ function excluirFluxo(id) {
 
 }
 
+
+
+function salvarFluxo() {
+	if (formm.verificaF(this.id, 'erroForm', 'erro')) {
+		doAjaxSemRetorno('ajax_com/fluxo.php?acao=salvar&id=' + $('id').value
+				+ '&cliente='+ $('clientes').value 
+				+ '&fornecedor='+ $('fornecedor').value 
+				+ '&tipo='+ $('tipo').value 
+				+ '&tipoFluxo='+ $('tipoFluxo').value 
+				+ '&ocorrencia='+ $('ocorrencia').value  
+				+ '&valor='+ $('valor').value 
+				+ '&data='+ $('data').value 
+				+ '&statusFluxo='+ $('statusFluxo').value, '');
+	
+		refreshFluxo();
+		addPop_close();
+		alert('Salvo com sucesso!');
+	}
+}
+
 // /////////////////////////////////////////////
 
 // /////////////// Fim Fluxo ////////////////
